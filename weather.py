@@ -51,8 +51,8 @@ weather_icons_emoji = {
     'snowyIcyNight': ' ',
     'severe': '🌩️',
     'default': '☁️',
-    'feel': '️️🌡️',
-    'wind': '🍃',
+    'feel': '️️🥵',
+    'wind': '🌪️',
     'visibility': '👁️',
     'humidity': '💧',
     'rain': '☔'
@@ -276,7 +276,7 @@ def weather_to_waybar(wf: WeatherForecast) -> Dict:
 <span size="xx-large">{wf.icon}\t\t{wf.temperature.current}</span>
 
 {wf.status}
-{wf.temperature.max}/<small>{wf.temperature.max}</small>\t {weather_icons['feel']} {wf.temperature.feel}
+{wf.temperature.max}/<small>{wf.temperature.min}</small>   {weather_icons['feel']} {wf.temperature.feel}
 
 {weather_icons['wind']} {wf.wind_speed}\t{weather_icons['humidity']} {wf.humidity}
 {weather_icons['visibility']} {wf.visibility}\t AQI {wf.air_quality}
