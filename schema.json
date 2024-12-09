@@ -1,0 +1,73 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "lang": { "type": "string" },
+      "location": { "type": "string" },
+      "status": { "type": "string" },
+      "status_code": { "type": "string" },
+      "icon": { "type": "string" },
+      "wind_speed": { "type": "string" },
+      "humidity": { "type": "string" },
+      "visibility": { "type": "string" },
+      "air_quality": { "type": "string" },
+      "temperature": {
+        "type": "object",
+        "properties": {
+          "current": { "type": "string" },
+          "feel": { "type": "string" },
+          "max": { "type": "string" },
+          "min": { "type": "string" }
+        },
+        "required": ["current", "feel", "max", "min"]
+      },
+      "hourly_predictions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "moment": { "type": "string" },
+            "status": { "type": "string" },
+            "skycode": { "type": "integer" },
+            "icon": { "type": "string" },
+            "chance_of_rain": { "type": "string" },
+            "temperature": { "type": "string" },
+            "min": { "type": ["string", "null"] },
+            "max": { "type": ["string", "null"] }
+          },
+          "required": ["moment", "status", "skycode", "icon", "chance_of_rain", "temperature", "min", "max"]
+        }
+      },
+      "daily_predictions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "moment": { "type": "string" },
+            "status": { "type": "string" },
+            "skycode": { "type": "integer" },
+            "icon": { "type": "string" },
+            "chance_of_rain": { "type": "string" },
+            "temperature": { "type": ["string", "null"] },
+            "min": { "type": ["string", "null"] },
+            "max": { "type": ["string", "null"] }
+          },
+          "required": ["moment", "status", "skycode", "icon", "chance_of_rain", "temperature", "min", "max"]
+        }
+      }
+    },
+    "required": [
+      "lang",
+      "location",
+      "status",
+      "status_code",
+      "icon",
+      "wind_speed",
+      "humidity",
+      "visibility",
+      "air_quality",
+      "temperature",
+      "hourly_predictions",
+      "daily_predictions"
+    ]
+  }

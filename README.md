@@ -1,82 +1,164 @@
-# Write a Weather forecast widget for Waybar
+# Weather Forecast CLI Script
 
-## Write Python Script class
+## Overview
 
-First, let's define a WeatherForecast class to handle the forecast data
+This script fetches and parses weather forecast data from Weather.com and formats it for display in various environments such as a terminal or Waybar, a status bar tool. It leverages `pyquery` for HTML parsing and provides detailed weather information, including hourly and daily predictions, formatted for ease of use.
 
-```python
-class WeatherForecast:
-    class HourlyPrediction:
-        def __init__(self, moment: str, temperature: float, status: str, chance_of_rain: float):
-            self.moment = moment
-            self.temperature = temperature
-            self.status = status
-            self.chance_of_rain = chance_of_rain
-    
-    class Temperature:
-        def __init__(self, current, feel, min, max):
-            self.current = current
-            self.feel = feel
-            self.min = min
-            self.max = max
+### Waybar widget
 
-    def __init__(
-        self,
-        weather_id: str,
-        lang: str,
-        location: str,
-        status: str,
-        status_code: int,
-        wind_speed: float,
-        humidity: float,
-        visibility: float,
-        air_quality: str,
-        temperature : Dict = None,
-        hourly_predictions: List[Dict] = None,
-    ):
-        self.weather_id = weather_id
-        self.lang = lang
-        self.location = location
-        self.status = status
-        self.status_code = status_code
-        self.wind_speed = wind_speed
-        self.humidity = humidity
-        self.visibility = visibility
-        self.air_quality = air_quality
-        self.temperature = WeatherForecast.Temperature(**temperature),
-        self.hourly_predictions = [
-            WeatherForecast.HourlyPrediction(**prediction) for prediction in (hourly_predictions or [])
-        ]
+![Weather widget on Waybar](image.png)
+
+### Terminal Console
+
+![Weather widget on terminal console](image-1.png)
+
+## Features
+
+- Retrieves current weather and forecasts for a specified location.
+- Displays weather data in different formats:
+  - **Console output**: Richly formatted weather data with icons.
+  - **Waybar JSON**: For integration with Waybar.
+- Supports multiple languages for Weather.com data.
+- Includes data such as:
+  - Current temperature and "feels-like" temperature.
+  - Wind speed, humidity, visibility, and air quality.
+  - Hourly and daily forecasts with icons and precipitation chances.
+
+## Requirements
+
+- Python 3.8+
+- Dependencies:
+  - `pyquery`
+  - `argparse`
+  - `urllib`
+
+Install dependencies using:
+
+```bash
+pip install -r requirements.txt
 ```
 
-Create a function to grab the forecast data from weather.com. The routine will do as follows
+## Usage
 
-1. Check if the weather id was provided and is correctly formatted (hex format 64 characters long)
-2. Check for the computer's language.
+### Command-Line Arguments
 
-If no `weather_id` was provided, it defaults to current location defined by weather.com itself.
+- `--lang`: Specify the language for Weather.com data (e.g., `en-US`, `pt-BR`). If not specified, the language will be the system default.
+- `--weather_id`: Specify the 64-bit hex unique location ID for Weather.com. (Obtain from Weather.com URL for your location.)
 
-If no language was defined, it defaults to`en_IL`.
+### Examples
 
-```python
-def grab_weather_data(lang, weather_id = None) -> str :
-    url = f"https://weather.com/{lang}/weather/today/l/{weather_id}"
-    if not weather_id:
-        url = f"https://weather.com/{lang}/weather/today"
-    elif len(weather_id) < 64 :
-        raise ValueError("Invalid weather_id")
-    if not lang:
-        raise ValueError("lang must be specified")
-    try:
-        return pq(url=url)
-    except HTTPError as e:
-        if(e.code == 404):
-            raise ValueError(f"HTTP error {e.code} when fetching weather data. Check for the location_id or lang data.")
-    
+1. **Fetch weather data for a specific location:**
 
-def get_weather_forecast(lang, weather_id = None) -> WeatherForecast:
-    grab_weather_data(lang, weather_id)
-```
+   ```bash
+   python weather.py --lang en-IL --weather_id WEATHER_LOCATION_ID
+   ```
 
-Having the weather information, let's extract the intended data. To this, we will create a bunch of functions that receives the HTML data and extract those DOM objects with the wanted data.
+   The `WEATHER_LOCATION_ID` is a 640bit hex unique location. To get the intended location, go to Weather.com, search for your location, and check the URL. the `LOCATION_ID` will be at the URL. Example:
 
+   - For **São Paulo**, the URL is: `https://weather.com/pt-BR/weather/today/l/ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`
+   - The `WEATHER_LOCATION_ID` is  `ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`.
+
+   Optionally, you can set the value as the environment variable `WEATHER_LOCATION_ID` and omit the `--weather_id` parameter instead. If no enviroment variable nor parameter is specified, the weather data will be the default one from Weather.com.
+
+2. **Display formatted weather in the console:**
+
+   ```bash
+   python weather.py --lang en-US
+   ```
+
+   With the addition of `--persist` option, the weather script will keep open and updating its information with new data every 10 minutes.
+
+3. **Generate JSON for Waybar:**
+
+   ```bash
+   python weather.py --output waybar --lang pt-BR --weather_id WEATHER_LOCATION_ID
+   ```
+
+4. **Generate JSON output for general usage:**
+
+  ```bash
+  python weather.py --output json --weather_id WEATHER_LOCATION_ID | jq
+  ```
+
+  Above the **JSON Schema** output of this json.
+
+### Output Formats
+
+#### Console Output
+
+The script displays a formatted weather summary, including:
+
+- Current weather status.
+- Temperature (current, max/min).
+- Wind, humidity, visibility, and air quality.
+- Hourly and daily forecasts with icons.
+
+#### Waybar JSON
+
+The JSON includes:
+
+- `text`: Current weather icon and temperature.
+- `alt`: Weather status.
+- `tooltip`: Detailed weather information.
+- `class`: Status code for further customization.
+
+### JSON General output
+
+Here the following [JSON Schema](schema.json) for this output.
+
+The key values for this json is:
+
+- `temperature`: An object containing the temperature information with the following fields:
+  - `current`: The current temperature.
+  - `feel`: The temperature feel
+  - `max` : The maximum temperature
+  - `min` : The minimum temperature
+
+There's also other fields like `hourly_predictions` and `daily_predictions` containing lists of predictions informations. More defaults on [JSON Schema](schema.json).
+
+### Integration with Waybar
+
+To integrate the script with Waybar:
+
+1. Add a custom script module in Waybar's configuration:
+
+   ```json
+   {
+       "modules-left": ["custom/weather"],
+       "custom/weather": {
+           "exec": "python /path/to/weather_script.py --output waybar",
+           "interval": 600
+       }
+   }
+   ```
+
+2. Reload Waybar to apply the changes.
+
+## Implementation Details
+
+### Class Structure
+
+- **`WeatherForecast`**: Represents weather data, including:
+  - Current temperature and status.
+  - Hourly and daily predictions.
+- **`WeatherForecastExtractor`**: Parses HTML data from Weather.com to extract relevant weather information.
+
+### Key Functions
+
+- `grab_weather_data(lang, weather_id)`: Fetches HTML data from Weather.com.
+- `get_weather_forecast(lang, weather_id)`: Extracts weather data and returns a `WeatherForecast` object.
+- `format_weather(wf)`: Formats weather data for console display.
+- `waybar(wf)`: Generates Waybar-compatible JSON.
+
+### Customization
+
+- The script uses `FontAwesome` and emoji-based icons. Customize these icons by editing the `weather_icons_fa` and `weather_icons_emoji` dictionaries.
+
+## Error Handling
+
+- Validates `weather_id` and `lang` inputs.
+- Handles HTTP errors gracefully, including 404 errors for invalid locations.
+
+## License
+
+This script is open-source and available under the MIT License.
