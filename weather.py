@@ -53,7 +53,7 @@ weather_icons_emoji = {
     'default': '☁️',
     'feel': '️️🥵',
     'wind': '🌪️',
-    'visibility': '👁️'
+    'visibility': '👁️',
     'humidity': '💧',
     'rain': '☔'
 }
