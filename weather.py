@@ -41,21 +41,21 @@ weather_icons_fa = {
 }
 
 weather_icons_emoji = {
-  "sunnyDay": "\u2600\ufe0f",            # ☀️
-  "clearNight": "\ud83c\udf19",          # 🌙
-  "cloudyFoggyDay": "\u26c5",            # ⛅
-  "cloudyFoggyNight": "\u2601\ufe0f",    # ☁️
-  "rainyDay": "\ud83c\udf27\ufe0f",      # 🌧️
-  "rainyNight": "\ud83c\udf27\ufe0f",    # 🌧️
-  "snowyIcyDay": "\u2744\ufe0f",         # ❄️
-  "snowyIcyNight": "\ud83c\udf28\ufe0f", # 🌨️
-  "severe": "\ud83c\udf29\ufe0f",        # 🌩️
-  "default": "\u2601\ufe0f",             # ☁️
-  "feel": "\ufe0f\ufe0f\ud83e\udd75",    # 🥵
-  "wind": "\ud83c\udf2a\ufe0f",          # 🌪️
-  "visibility": "\ud83d\udc41\ufe0f",    # 👁️
-  "humidity": "\ud83d\udca7",            # 💧
-  "rain": "\ud83c\udf27\ufe0f"           # 🌧️
+    'sunnyDay': '☀️',
+    'clearNight': '🌙',
+    'cloudyFoggyDay': '⛅',
+    'cloudyFoggyNight':'☁️',
+    'rainyDay': '🌧️',
+    'rainyNight': '🌧️',
+    'snowyIcyDay': '❄️',
+    'snowyIcyNight': ' ',
+    'severe': '🌩️',
+    'default': '☁️',
+    'feel': '️️🥵',
+    'wind': '🌪️',
+    'visibility': '👁️',
+    'humidity': '💧',
+    'rain': '☔'
 }
 
 class WeatherForecast:
@@ -94,7 +94,6 @@ class WeatherForecast:
 
     def __init__(
         self,
-        weather_id: str,
         lang: str,
         location: str,
         status: str,
@@ -108,7 +107,6 @@ class WeatherForecast:
         hourly_predictions: List[Prediction] = None,
         daily_predictions: List[Prediction] = None
     ):
-        self.weather_id = weather_id
         self.lang = lang
         self.location = location
         self.status = status
@@ -195,9 +193,8 @@ class WeatherForecastExtractor:
             ]
         return predictions
 
-    def to_weather_forecast(self, weather_id: str, lang: str) -> WeatherForecast:
+    def to_weather_forecast(self, lang: str) -> WeatherForecast:
         return WeatherForecast(
-            weather_id=weather_id,
             lang=lang,
             location=self.location(),
             status=self.status(),
@@ -262,7 +259,7 @@ def grab_weather_data(lang, weather_id = None) -> str :
 def get_weather_forecast(lang, weather_id = None) -> WeatherForecast:
     html_data = grab_weather_data(lang, weather_id)
     forecast = WeatherForecastExtractor(html_data) 
-    return forecast.to_weather_forecast(weather_id,lang)
+    return forecast.to_weather_forecast(lang)
 
 def format_weather(wf: WeatherForecast) -> str:
     hourly_predictions = "\n".join(
@@ -330,8 +327,8 @@ if __name__ == "__main__":
 
     weather_icons = weather_icons_emoji if args.icons == 'emoji' else weather_icons_fa
     lang = args.lang if args.lang else os.getenv("LANG","en_IL.UTF-8").split(".")[0].replace("_","-")
-    location = args.location if args.location else os.getenv('WEATHER_LOCATION_ID')
-    weather_forecast = get_weather_forecast(lang=lang, weather_id=location)
+    weather_id = args.location if args.location else os.getenv('WEATHER_LOCATION_ID')
+    weather_forecast = get_weather_forecast(lang=lang, weather_id=weather_id)
     if args.output == 'console':
         if args.persist:
             console_persist(weather_forecast)
