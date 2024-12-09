@@ -44,7 +44,7 @@ weather_icons_emoji = {
     'sunnyDay': '\u2600\ufe0f',
     'clearNight': '🌙',
     'cloudyFoggyDay': '⛅',
-    'cloudyFoggyNight': '🌥️',
+    'cloudyFoggyNight': '☁️',
     'rainyDay': '🌧️',
     'rainyNight': '🌧️',
     'snowyIcyDay': '❄️',
@@ -183,29 +183,14 @@ class WeatherForecastExtractor:
     
     def hourly_predictions(self):
         predictions = [
-            {
-                'moment': pq(span)("h3 > span").text(),
-                'temperature': pq(span)("span[data-testid='TemperatureValue']").text(),
-                'status' : pq(span)("svg[data-testid='Icon'] title").contents()[0],
-                'skycode' :  pq(span)("svg[data-testid='Icon']").attr('skycode'),
-                'icon' : self.__icon_predictions(int(pq(span)("svg[data-testid='Icon']").attr('skycode'))),
-                'chance_of_rain' : pq(span)("div[data-testid='SegmentPrecipPercentage'] > span").contents()[1],
-            }
+            self.__predictions(span)
                 for span in self.html_data("section[data-testid='HourlyWeatherModule'] ul[data-testid='WeatherTable'] li")
             ]
         return predictions
     
     def daily_predictions(self):
         predictions = [
-            {
-                'moment': pq(span)("h3 > span").text(),
-                'max': pq(span)("div[data-testid='SegmentHighTemp'] span[data-testid='TemperatureValue']").eq(0).text(),
-                'min': pq(span)("div[data-testid='SegmentHighTemp'] span[data-testid='TemperatureValue']").eq(1).text(),
-                'status' : pq(span)("svg[data-testid='Icon'] title").contents()[0],
-                'skycode' :  pq(span)("svg[data-testid='Icon']").attr('skycode'),
-                'icon' : self.__icon_predictions(int(pq(span)("svg[data-testid='Icon']").attr('skycode'))),
-                'chance_of_rain' : pq(span)("div[data-testid='SegmentPrecipPercentage'] span").contents()[1],
-            }
+            self.__predictions(span, min_max = True)
                 for span in self.html_data("section[data-testid='DailyWeatherModule'] ul[data-testid='WeatherTable'] li")
             ]
         return predictions
@@ -235,6 +220,24 @@ class WeatherForecastExtractor:
     def __icon_predictions(self,skycode: int) -> str:
         status_code = skycodes[skycode] if skycode in skycodes else 'default'
         return weather_icons[status_code]
+    
+    def __predictions(self, span, min_max: bool = False) -> dict:
+        skycode = int(pq(span)("svg[data-testid='Icon']").attr('skycode'))
+        icon = self.__icon_predictions(skycode)
+        temp_max = pq(span)("div[data-testid='SegmentHighTemp'] span[data-testid='TemperatureValue']").eq(0).text()
+        temp_min = pq(span)("div[data-testid='SegmentHighTemp'] span[data-testid='TemperatureValue']").eq(1).text()
+        temperature = pq(span)("span[data-testid='TemperatureValue']").text()
+
+        return {
+                'moment': pq(span)("h3 > span").text(),
+                'min' : temp_min if min_max else None,
+                'max' : temp_max if min_max else None,
+                'temperature' : temperature if not min_max else None,
+                'status' : pq(span)("svg[data-testid='Icon'] title").contents()[0],
+                'skycode' :  skycode,
+                'icon' : icon,
+                'chance_of_rain' : pq(span)("div[data-testid='SegmentPrecipPercentage'] > span").contents()[1],
+        }
 
 
 def serializer(obj):
@@ -263,11 +266,11 @@ def get_weather_forecast(lang, weather_id = None) -> WeatherForecast:
 
 def weather_to_waybar(wf: WeatherForecast) -> Dict:
     hourly_predictions = "\n".join(
-        f"{h.moment}\t{'\t' if len(h.moment) < 4 else ''}  {h.temperature}\t\t{h.icon}\t{weather_icons['rain']} {h.chance_of_rain}"
+        f"{h.moment}\t{'\t' if len(h.moment) < 5 else ''}  {h.temperature}\t\t{h.icon} \t{weather_icons['rain']} {h.chance_of_rain}"
         for h in wf.hourly_predictions
     )
     daily_predictions = "\n".join(
-        f"{h.moment}\t{'\t' if len(h.moment) < 5 else ''}{h.max}/<small>{h.min}</small>\t{h.icon}\t{weather_icons['rain']} {h.chance_of_rain}"
+        f"{h.moment}\t{'\t' if len(h.moment) < 5 else ''}{h.max}/<small>{h.min}</small> \t{h.icon}\t{weather_icons['rain']} {h.chance_of_rain}"
         for h in wf.daily_predictions
     )
     
@@ -278,7 +281,7 @@ def weather_to_waybar(wf: WeatherForecast) -> Dict:
 {wf.status}
 {wf.temperature.max}/<small>{wf.temperature.min}</small>   {weather_icons['feel']} {wf.temperature.feel}
 
-{weather_icons['wind']} {wf.wind_speed}\t{weather_icons['humidity']} {wf.humidity}
+{weather_icons['wind']} {wf.wind_speed} \t{weather_icons['humidity']} {wf.humidity}
 {weather_icons['visibility']} {wf.visibility}\t AQI {wf.air_quality}
 
 {hourly_predictions}
@@ -305,7 +308,8 @@ if __name__ == "__main__":
 
     weather_icons = weather_icons_emoji if args.icons == 'emoji' else weather_icons_fa
     lang = args.lang if args.lang else os.getenv("LANG","en_IL.UTF-8").split(".")[0].replace("_","-")
-    weather_forecast = get_weather_forecast(lang=lang, weather_id=args.location)
+    location = args.location if args.location else os.getenv('WEATHER_LOCATION_ID')
+    weather_forecast = get_weather_forecast(lang=lang, weather_id=location)
 
     if args.output == 'waybar':
         waybar_data = weather_to_waybar(weather_forecast)
