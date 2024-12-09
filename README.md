@@ -42,23 +42,26 @@ pip install -r requirements.txt
 
 ### Command-Line Arguments
 
-- `--lang`: Specify the language for Weather.com data (e.g., `en-US`, `pt-BR`). If not specified, the language will be the system default.
-- `--weather_id`: Specify the 64-bit hex unique location ID for Weather.com. (Obtain from Weather.com URL for your location.)
+- `--location`: Specify the 64-bit hex unique location ID for Weather.com. (Obtain from Weather.com URL for your location.)
+- `--lang`: Specify the language for Weather.com data (e.g., `en-US`, `pt-BR`). If not specified, the language used will be the system default.
+- `--output` : Choose between `console`, `waybar` or `json`. Forther explanation below. The default one is `console`.
+- `--persist` : Instead of executing and closing, keep the process running and retrieve new information from Weather.com every 10 minutes. Only makes sense when output is `console`.
+- `--icons` : Specify the icons set for the output. Choose between `emoji` or `fa` for using `font-awesome` icons insted. default is `emoji`.
 
 ### Examples
 
 1. **Fetch weather data for a specific location:**
 
    ```bash
-   python weather.py --lang en-IL --weather_id WEATHER_LOCATION_ID
+   python weather.py --lang en-IL --location WEATHER_LOCATION_ID
    ```
 
-   The `WEATHER_LOCATION_ID` is a 640bit hex unique location. To get the intended location, go to Weather.com, search for your location, and check the URL. the `LOCATION_ID` will be at the URL. Example:
+   The `WEATHER_LOCATION_ID` is a 64-bit hex unique location. To get the intended location, go to Weather.com, search for your location, and check the URL. the `LOCATION_ID` will be at the URL. Example:
 
    - For **São Paulo**, the URL is: `https://weather.com/pt-BR/weather/today/l/ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`
    - The `WEATHER_LOCATION_ID` is  `ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`.
 
-   Optionally, you can set the value as the environment variable `WEATHER_LOCATION_ID` and omit the `--weather_id` parameter instead. If no enviroment variable nor parameter is specified, the weather data will be the default one from Weather.com.
+   Optionally, you can set the value as the environment variable `WEATHER_LOCATION_ID` and omit the `--location` parameter instead. If no enviroment variable nor parameter is specified, the weather data will be the default one from Weather.com.
 
 2. **Display formatted weather in the console:**
 
@@ -71,13 +74,13 @@ pip install -r requirements.txt
 3. **Generate JSON for Waybar:**
 
    ```bash
-   python weather.py --output waybar --lang pt-BR --weather_id WEATHER_LOCATION_ID
+   python weather.py --output waybar --lang pt-BR --location WEATHER_LOCATION_ID
    ```
 
 4. **Generate JSON output for general usage:**
 
   ```bash
-  python weather.py --output json --weather_id WEATHER_LOCATION_ID | jq
+  python weather.py --output json --location WEATHER_LOCATION_ID | jq
   ```
 
   Above the **JSON Schema** output of this json.
