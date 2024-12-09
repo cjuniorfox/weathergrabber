@@ -1,5 +1,4 @@
-import json, os
-import argparse
+import json, os, re, argparse
 from typing import List, Dict
 from pyquery import PyQuery as pq
 from urllib.error import HTTPError
@@ -41,36 +40,35 @@ weather_icons_fa = {
     'rain' :  '\uf0e9'            # FA Weather Light raining
 }
 
-# Define weather emojis
 weather_icons_emoji = {
-    'sunnyDay': '☀️',
-    'clearNight': '🌙',
-    'cloudyFoggyDay': '⛅',
-    'cloudyFoggyNight':'☁️',
-    'rainyDay': '🌧️',
-    'rainyNight': '🌧️',
-    'snowyIcyDay': '❄️',
-    'snowyIcyNight': ' ',
-    'severe': '🌩️',
-    'default': '☁️',
-    'feel': '️️🥵',
-    'wind': '🌪️',
-    'visibility': '👁️',
-    'humidity': '💧',
-    'rain': '☔'
+  "sunnyDay": "\u2600\ufe0f",            # ☀️
+  "clearNight": "\ud83c\udf19",          # 🌙
+  "cloudyFoggyDay": "\u26c5",            # ⛅
+  "cloudyFoggyNight": "\u2601\ufe0f",    # ☁️
+  "rainyDay": "\ud83c\udf27\ufe0f",      # 🌧️
+  "rainyNight": "\ud83c\udf27\ufe0f",    # 🌧️
+  "snowyIcyDay": "\u2744\ufe0f",         # ❄️
+  "snowyIcyNight": "\ud83c\udf28\ufe0f", # 🌨️
+  "severe": "\ud83c\udf29\ufe0f",        # 🌩️
+  "default": "\u2601\ufe0f",             # ☁️
+  "feel": "\ufe0f\ufe0f\ud83e\udd75",    # 🥵
+  "wind": "\ud83c\udf2a\ufe0f",          # 🌪️
+  "visibility": "\ud83d\udc41\ufe0f",    # 👁️
+  "humidity": "\ud83d\udca7",            # 💧
+  "rain": "\ud83c\udf27\ufe0f"           # 🌧️
 }
 
 class WeatherForecast:
     class Prediction:
         def __init__(
-                self, 
-                moment: str, 
+                self,
+                moment: str,
                 status: str,
                 skycode : str,
                 icon : str,
-                chance_of_rain: str, 
-                temperature: str = None, 
-                min: str = None, 
+                chance_of_rain: str,
+                temperature: str = None,
+                min: str = None,
                 max: str = None
         ):
             self.moment = moment
@@ -81,13 +79,13 @@ class WeatherForecast:
             self.temperature = temperature
             self.min = min
             self.max = max
-    
+
     class Temperature:
         def __init__(
-                self, 
-                current: str, 
-                feel: str, 
-                max: str, 
+                self,
+                current: str,
+                feel: str,
+                max: str,
                 min: str):
             self.current = current
             self.feel = feel
@@ -132,10 +130,10 @@ class WeatherForecastExtractor:
     class TemperatureExtractor:
         def __init__(self, html_data):
             self.html_data = html_data
-        
+
         def current(self):
             return self.html_data("span[data-testid='TemperatureValue']").eq(0).text()
-        
+
         def feel(self):
             return self.html_data(
                 "div[data-testid='FeelsLikeSection'] > span > span[data-testid='TemperatureValue']"
@@ -148,7 +146,7 @@ class WeatherForecastExtractor:
             return self.html_data(
                 "div[data-testid='wxData'] > span[data-testid='TemperatureValue']"
                 ).eq(1).text()
-        
+
     def __init__(self, html_data):
         self.html_data = html_data
         self.temperature = WeatherForecastExtractor.TemperatureExtractor(self.html_data)
@@ -160,11 +158,11 @@ class WeatherForecastExtractor:
         status = self.html_data("div[data-testid='wxPhrase']").text()
         status = f"{status[:16]}.." if len(status) > 17 else status
         return status
-    
+
     def status_code(self):
         self.__status_code = self.html_data("#regionHeader").attr("class").split(" ")[2].split("-")[2]
         return self.__status_code
-    
+
     def icon(self):
         status_code = self.__status_code
         return (
@@ -173,30 +171,30 @@ class WeatherForecastExtractor:
 
     def wind_speed(self):
         return self.html_data("span[data-testid='Wind']").text().split("\n")[1]
-    
+
     def humidity(self):
         return self.html_data("span[data-testid='PercentageValue']").text()
-    
+
     def visibility(self):
         return self.html_data("span[data-testid='VisibilityValue']").text()
 
     def air_quality(self):
         return self.html_data("text[data-testid='DonutChartValue']").text()
-    
+
     def hourly_predictions(self):
         predictions = [
             self.__predictions(span)
                 for span in self.html_data("section[data-testid='HourlyWeatherModule'] ul[data-testid='WeatherTable'] li")
             ]
         return predictions
-    
+
     def daily_predictions(self):
         predictions = [
             self.__predictions(span, min_max = True)
                 for span in self.html_data("section[data-testid='DailyWeatherModule'] ul[data-testid='WeatherTable'] li")
             ]
         return predictions
-    
+
     def to_weather_forecast(self, weather_id: str, lang: str) -> WeatherForecast:
         return WeatherForecast(
             weather_id=weather_id,
@@ -216,13 +214,13 @@ class WeatherForecastExtractor:
                 "min": self.temperature.min(),
             },
             hourly_predictions=self.hourly_predictions(),
-            daily_predictions=self.daily_predictions()  
+            daily_predictions=self.daily_predictions()
         )
 
     def __icon_predictions(self,skycode: int) -> str:
         status_code = skycodes[skycode] if skycode in skycodes else 'default'
         return weather_icons[status_code]
-    
+
     def __predictions(self, span, min_max: bool = False) -> dict:
         skycode = int(pq(span)("svg[data-testid='Icon']").attr('skycode'))
         icon = self.__icon_predictions(skycode)
@@ -275,7 +273,7 @@ def format_weather(wf: WeatherForecast) -> str:
         f"{h.moment}\t{'\t' if len(h.moment) < 5 else ''}{h.max}/<small>{h.min}</small> \t{h.icon}\t{weather_icons['rain']} {h.chance_of_rain}"
         for h in wf.daily_predictions
     )
-    
+
     return f"""{wf.location}
 
 <span size="xx-large">{wf.icon}\t\t{wf.temperature.current}</span>
@@ -292,8 +290,6 @@ def format_weather(wf: WeatherForecast) -> str:
 """
 
 def waybar(wf: WeatherForecast) -> Dict:
-    
-
     return {
         "text": f"{wf.icon} {wf.temperature.current}",
         "alt": wf.status,
@@ -302,18 +298,20 @@ def waybar(wf: WeatherForecast) -> Dict:
     }
 
 def console(wf: WeatherForecast) -> str:
-    return (format_weather(wf)
+    weather = ("\n"+format_weather(wf)
             .replace("<small>","").replace("</small>","")
             .replace('<span size="xx-large">',"\033[1m").replace("</span>","\033[0m")
-            .replace("\t\t","\t"))
+    )
+    return re.sub(r'(?: +\t|\t+ *|\t{2,})', '\t',weather)
+
 
 def console_persist(weather_forecast: WeatherForecast) -> None:
     while True:
         forecast = console(weather_forecast)
-        
         print(forecast)
-        sleep(3)
+        sleep(600) # every 10 minutes
         line_count = len(forecast.splitlines()) + 1
+        # Clear all the lines and print a new weather forecast
         LINE_UP = '\033[1A'
         LINE_CLEAR = '\x1b[2K'
         for _ in range(line_count):
@@ -334,7 +332,6 @@ if __name__ == "__main__":
     lang = args.lang if args.lang else os.getenv("LANG","en_IL.UTF-8").split(".")[0].replace("_","-")
     location = args.location if args.location else os.getenv('WEATHER_LOCATION_ID')
     weather_forecast = get_weather_forecast(lang=lang, weather_id=location)
-
     if args.output == 'console':
         if args.persist:
             console_persist(weather_forecast)
