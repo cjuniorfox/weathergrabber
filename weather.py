@@ -1,8 +1,10 @@
-from typing import List, Dict
 import json, os
+import argparse
+from typing import List, Dict
 from pyquery import PyQuery as pq
 from urllib.error import HTTPError
-import argparse
+from time import sleep
+
 
 skycodes = {
     32: 'sunnyDay',
@@ -22,29 +24,29 @@ skycodes = {
 }
 
 weather_icons_fa = {
-    'sunnyDay': '\uf185',        # FA Sun
-    'clearNight': '\uf186',      # FA Moon
-    'cloudyFoggyDay': '\uf6c4',  # FA Cloud-Sun
-    'cloudyFoggyNight': '\uf6c3',# FA Cloud-Moon
-    'rainyDay': '\uf73d',        # FA Cloud-Sun-Rain
-    'rainyNight': '\uf73c',      # FA Cloud-Moon-Rain
-    'snowyIcyDay': '\uf2dc',     # FA Snowflake
-    'snowyIcyNight': '\uf2dc',   # FA Snowflake (reuse)
-    'severe': '\uf76c',          # FA Cloud-Showers-Heavy
-    'default': '\uf0c2',         # FA Cloud
-    'feel' : '\uf2c9',           # FA Thermometer
-    'wind' : '\uf72e',           # FA Wind
-    'visibility' : '\uf06e',     # FA Eye
-    'humidity' : '\uf043',       # FA Humidity
-    'rain' :  '\uf0e9'           # FA Weather Light raining
+    'sunnyDay': '\uf185',         # FA Sun
+    'clearNight': '\uf186',       # FA Moon
+    'cloudyFoggyDay': '\uf6c4',   # FA Cloud-Sun
+    'cloudyFoggyNight': '\uf6c3', # FA Cloud-Moon
+    'rainyDay': '\uf73d',         # FA Cloud-Sun-Rain
+    'rainyNight': '\uf73c',       # FA Cloud-Moon-Rain
+    'snowyIcyDay': '\uf2dc',      # FA Snowflake
+    'snowyIcyNight': '\uf2dc',    # FA Snowflake (reuse)
+    'severe': '\uf76c',           # FA Cloud-Showers-Heavy
+    'default': '\uf0c2',          # FA Cloud
+    'feel' : '\uf2c9',            # FA Thermometer
+    'wind' : '\uf72e',            # FA Wind
+    'visibility' : '\uf06e',      # FA Eye
+    'humidity' : '\uf043',        # FA Humidity
+    'rain' :  '\uf0e9'            # FA Weather Light raining
 }
 
 # Define weather emojis
 weather_icons_emoji = {
-    'sunnyDay': '\u2600\ufe0f',
+    'sunnyDay': '☀️',
     'clearNight': '🌙',
     'cloudyFoggyDay': '⛅',
-    'cloudyFoggyNight': '☁️',
+    'cloudyFoggyNight':'☁️',
     'rainyDay': '🌧️',
     'rainyNight': '🌧️',
     'snowyIcyDay': '❄️',
@@ -264,7 +266,7 @@ def get_weather_forecast(lang, weather_id = None) -> WeatherForecast:
     forecast = WeatherForecastExtractor(html_data) 
     return forecast.to_weather_forecast(weather_id,lang)
 
-def weather_to_waybar(wf: WeatherForecast) -> Dict:
+def format_weather(wf: WeatherForecast) -> str:
     hourly_predictions = "\n".join(
         f"{h.moment}\t{'\t' if len(h.moment) < 5 else ''}  {h.temperature}\t\t{h.icon} \t{weather_icons['rain']} {h.chance_of_rain}"
         for h in wf.hourly_predictions
@@ -274,7 +276,7 @@ def weather_to_waybar(wf: WeatherForecast) -> Dict:
         for h in wf.daily_predictions
     )
     
-    tooltip_text = f"""{wf.location}
+    return f"""{wf.location}
 
 <span size="xx-large">{wf.icon}\t\t{wf.temperature.current}</span>
 
@@ -289,20 +291,42 @@ def weather_to_waybar(wf: WeatherForecast) -> Dict:
 {daily_predictions}
 """
 
+def waybar(wf: WeatherForecast) -> Dict:
+    
+
     return {
         "text": f"{wf.icon} {wf.temperature.current}",
         "alt": wf.status,
-        "tooltip": tooltip_text,
+        "tooltip": format_weather(wf),
         "class": wf.status_code,
     }
+
+def console(wf: WeatherForecast) -> str:
+    return (format_weather(wf)
+            .replace("<small>","").replace("</small>","")
+            .replace('<span size="xx-large">',"\033[1m").replace("</span>","\033[0m")
+            .replace("\t\t","\t"))
+
+def console_persist(weather_forecast: WeatherForecast) -> None:
+    while True:
+        forecast = console(weather_forecast)
+        
+        print(forecast)
+        sleep(3)
+        line_count = len(forecast.splitlines()) + 1
+        LINE_UP = '\033[1A'
+        LINE_CLEAR = '\x1b[2K'
+        for _ in range(line_count):
+            print(LINE_UP, end=LINE_CLEAR)
 
 if __name__ == "__main__":
     ## Get current locale, or use the default one
     parser = argparse.ArgumentParser(description="Weather forecast grabber from weather.com")
     parser.add_argument("--location", "-l", type=str, help="64-character-hex code for location obtained from weather.com")
     parser.add_argument("--lang", "-L", type=str, help="Language (pt-BR, fr-FR, etc.), If not set, uses the machine one.")
-    parser.add_argument("--output", "-o", type=str, choices=['json','waybar'], default='json', help="Output format. json or waybar")
+    parser.add_argument("--output", "-o", type=str, choices=['console','json','waybar'], default='console', help="Output format. console, json or waybar")
     parser.add_argument("--icons", "-i", type=str, choices=['fa','emoji'], default='emoji', help="Icon set. 'fa' for Font-Awesome, or 'widget'")
+    parser.add_argument("--persist", "-p",action='store_true', default=False, help="Keep waybar open instead of exiting after execution. Does only makes sense for --output=console")
 
     args = parser.parse_args()
 
@@ -311,8 +335,13 @@ if __name__ == "__main__":
     location = args.location if args.location else os.getenv('WEATHER_LOCATION_ID')
     weather_forecast = get_weather_forecast(lang=lang, weather_id=location)
 
-    if args.output == 'waybar':
-        waybar_data = weather_to_waybar(weather_forecast)
+    if args.output == 'console':
+        if args.persist:
+            console_persist(weather_forecast)
+        else:
+            print(console(weather_forecast))
+    elif args.output == 'waybar':
+        waybar_data = waybar(weather_forecast)
         print(json.dumps(waybar_data))
     else:
         print(json.dumps(weather_forecast,default=serializer, indent=2))
