@@ -48,12 +48,12 @@ weather_icons_emoji = {
     'rainyDay': '🌧️',
     'rainyNight': '🌧️',
     'snowyIcyDay': '❄️',
-    'snowyIcyNight': ' ',
+    'snowyIcyNight': '❄️',
     'severe': '🌩️',
     'default': '☁️',
     'feel': '️️🥵',
     'wind': '🌪️',
-    'visibility': '👁️',
+    'visibility': '👁️'
     'humidity': '💧',
     'rain': '☔'
 }
