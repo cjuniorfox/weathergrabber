@@ -168,7 +168,7 @@ class WeatherForecastExtractor:
         )
 
     def wind_speed(self):
-        return self.html_data("span[data-testid='Wind']").text().split("\n")[1]
+        return self.html_data("div[data-testid='WeatherDetailsListItem'] span[data-testid='Wind']").text().split("\n")[1]
 
     def humidity(self):
         return self.html_data("span[data-testid='PercentageValue']").text()
