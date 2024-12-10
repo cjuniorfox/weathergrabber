@@ -23,21 +23,21 @@ skycodes = {
 }
 
 weather_icons_fa = {
-    'sunnyDay': '\uf185',         # FA Sun
-    'clearNight': '\uf186',       # FA Moon
-    'cloudyFoggyDay': '\uf6c4',   # FA Cloud-Sun
-    'cloudyFoggyNight': '\uf6c3', # FA Cloud-Moon
-    'rainyDay': '\uf73d',         # FA Cloud-Sun-Rain
-    'rainyNight': '\uf73c',       # FA Cloud-Moon-Rain
-    'snowyIcyDay': '\uf2dc',      # FA Snowflake
-    'snowyIcyNight': '\uf2dc',    # FA Snowflake (reuse)
-    'severe': '\uf76c',           # FA Cloud-Showers-Heavy
-    'default': '\uf0c2',          # FA Cloud
-    'feel' : '\uf2c9',            # FA Thermometer
-    'wind' : '\uf72e',            # FA Wind
-    'visibility' : '\uf06e',      # FA Eye
-    'humidity' : '\uf043',        # FA Humidity
-    'rain' :  '\uf0e9'            # FA Weather Light raining
+    'sunnyDay': chr(0xF0599),         # Weather Sunny
+    'clearNight': chr(0xF0594),       # Weather Night
+    'cloudyFoggyDay': chr(0xF0595),   # Weather Partially Cloudy
+    'cloudyFoggyNight': chr(0xF0F31), # Weather Night Partially Cloudy
+    'rainyDay': chr(0x1F326),         # FA Cloud-Sun-Rain
+    'rainyNight': '\ue323',           # FA Night Alt rain mix
+    'snowyIcyDay': '\uf2dc',          # FA Snowflake
+    'snowyIcyNight': '\uf2dc',        # FA Snowflake (reuse)
+    'severe': '\ue317',               # FA Rain Wind
+    'default': '\uf0c2',              # FA Cloud
+    'feel' : '\uf2c9',                # FA Thermometer
+    'wind' : chr(0xf059d),            # FA Weather Wind
+    'visibility' : '\uf06e',          # FA Eye
+    'humidity' : '\uf043',            # FA Humidity
+    'rain' :  '\uf0e9'                # FA Weather Light raining
 }
 
 weather_icons_emoji = {
