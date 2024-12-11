@@ -91,6 +91,36 @@ class WeatherForecast:
             self.feel = feel
             self.max = max
             self.min = min
+    
+    class AirQuality:
+        class Color:
+            def __init__(
+                self,
+                hex: str,
+                r: str,
+                g: str,
+                b: str
+            ):
+                self.hex = hex
+                self.r = r
+                self.g = g
+                self.b = b
+
+        def __init__(
+                self,
+                title: str,
+                acronym: str,
+                aqi: str,
+                color: Color,
+                category: str,
+                severity: str
+        ):
+            self.title = title
+            self.acronym = acronym
+            self.aqi = aqi
+            self.color = WeatherForecast.AirQuality.Color(**color)
+            self.category = category
+            self.severity = severity
 
     def __init__(
         self,
@@ -102,7 +132,7 @@ class WeatherForecast:
         wind_speed: str,
         humidity: str,
         visibility: str,
-        air_quality: str,
+        air_quality: AirQuality = None,
         temperature : Temperature = None,
         hourly_predictions: List[Prediction] = None,
         daily_predictions: List[Prediction] = None
@@ -115,7 +145,7 @@ class WeatherForecast:
         self.wind_speed = wind_speed
         self.humidity = humidity
         self.visibility = visibility
-        self.air_quality = air_quality
+        self.air_quality = WeatherForecast.AirQuality(**air_quality)
         self.temperature = WeatherForecast.Temperature(**temperature)
         self.hourly_predictions = [
             WeatherForecast.Prediction(**hourly_prediction) for hourly_prediction in (hourly_predictions or [])
@@ -125,29 +155,9 @@ class WeatherForecast:
         ]
 
 class WeatherForecastExtractor:
-    class TemperatureExtractor:
-        def __init__(self, html_data):
-            self.html_data = html_data
-
-        def current(self):
-            return self.html_data("span[data-testid='TemperatureValue']").eq(0).text()
-
-        def feel(self):
-            return self.html_data(
-                "div[data-testid='FeelsLikeSection'] > span > span[data-testid='TemperatureValue']"
-                ).text()
-        def max(self):
-            return self.html_data(
-                "div[data-testid='wxData'] > span[data-testid='TemperatureValue']"
-                ).eq(0).text()
-        def min(self):
-            return self.html_data(
-                "div[data-testid='wxData'] > span[data-testid='TemperatureValue']"
-                ).eq(1).text()
 
     def __init__(self, html_data):
         self.html_data = html_data
-        self.temperature = WeatherForecastExtractor.TemperatureExtractor(self.html_data)
 
     def location(self):
         return self.html_data("h1").text()
@@ -172,12 +182,41 @@ class WeatherForecastExtractor:
 
     def humidity(self):
         return self.html_data("span[data-testid='PercentageValue']").text()
+    
+    def temperature(self):
+        current = self.html_data("span[data-testid='TemperatureValue']").eq(0).text()
+        feel = self.html_data(
+                "div[data-testid='FeelsLikeSection'] > span > span[data-testid='TemperatureValue']"
+                ).text()
+        max_temp = self.html_data(
+                "div[data-testid='wxData'] > span[data-testid='TemperatureValue']"
+                ).eq(0).text()
+        min_temp = self.html_data(
+                "div[data-testid='wxData'] > span[data-testid='TemperatureValue']"
+                ).eq(1).text()
+
+        return {
+                "current": current,
+                "feel": feel,
+                "max": max_temp,
+                "min": min_temp,
+            }
 
     def visibility(self):
         return self.html_data("span[data-testid='VisibilityValue']").text()
 
     def air_quality(self):
-        return self.html_data("text[data-testid='DonutChartValue']").text()
+        title = self.html_data("section[data-testid='AirQualityModule'] header h2").text()
+        acronym = "".join(word[0] for word in title.split())
+        category = self.html_data("span[data-testid='AirQualityCategory']").text()
+        return {
+            "title" : title,
+            "acronym" : acronym,
+            "color" : self.__aqi_color(),
+            "category" : category,
+            "aqi": self.html_data("text[data-testid='DonutChartValue']").text(),
+            "severity": self.html_data("p[data-testid='AirQualitySeverity']").text()
+        }
 
     def hourly_predictions(self):
         predictions = [
@@ -204,12 +243,7 @@ class WeatherForecastExtractor:
             humidity=self.humidity(),
             visibility=self.visibility(),
             air_quality=self.air_quality(),
-            temperature={
-                "current": self.temperature.current(),
-                "feel": self.temperature.feel(),
-                "max": self.temperature.max(),
-                "min": self.temperature.min(),
-            },
+            temperature=self.temperature(),
             hourly_predictions=self.hourly_predictions(),
             daily_predictions=self.daily_predictions()
         )
@@ -217,6 +251,20 @@ class WeatherForecastExtractor:
     def __icon_predictions(self,skycode: int) -> str:
         status_code = skycodes[skycode] if skycode in skycodes else 'default'
         return weather_icons[status_code]
+    
+    def __aqi_color(self) -> dict:
+        color_pattern = r"#([0-9A-Fa-f]{6})"        
+        color_style_attribute = self.html_data("svg[data-testid='DonutChart'] circle:nth-of-type(2)").attr("style")
+        match = re.search(color_pattern, color_style_attribute)
+        color = f"#{match.group(1)}"
+        hex_color = color.lstrip('#')
+        r, g, b = int(hex_color[:2], 16), int(hex_color[2:4], 16), int(hex_color[4:], 16)
+        return {
+            "hex" : color,
+            "r" : r,
+            "g" : g,
+            "b" : b,
+        }
 
     def __predictions(self, span, min_max: bool = False) -> dict:
         skycode = int(pq(span)("svg[data-testid='Icon']").attr('skycode'))
@@ -279,7 +327,7 @@ def format_weather(wf: WeatherForecast) -> str:
 {wf.temperature.max}/<small>{wf.temperature.min}</small>   {weather_icons['feel']} {wf.temperature.feel}
 
 {weather_icons['wind']} {wf.wind_speed} \t{weather_icons['humidity']} {wf.humidity}
-{weather_icons['visibility']} {wf.visibility}\t AQI {wf.air_quality}
+{weather_icons['visibility']} {wf.visibility}\t {wf.air_quality.acronym} {wf.air_quality.aqi} <span color="{wf.air_quality.color.hex}">{wf.air_quality.category}</span>
 
 {hourly_predictions}
 
@@ -295,9 +343,12 @@ def waybar(wf: WeatherForecast) -> Dict:
     }
 
 def console(wf: WeatherForecast) -> str:
+    hex_color = wf.air_quality.color.hex
+    r,g,b = wf.air_quality.color.r, wf.air_quality.color.g, wf.air_quality.color.b
     weather = ("\n"+format_weather(wf)
             .replace("<small>","").replace("</small>","")
             .replace('<span size="xx-large">',"\033[1m").replace("</span>","\033[0m")
+            .replace(f'<span color="{hex_color}">',f"\033[38;2;{r};{g};{b}m")
     )
     return re.sub(r'(?: +\t|\t+ *|\t{2,})', '\t',weather)
 
