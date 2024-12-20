@@ -5,21 +5,20 @@ from urllib.error import HTTPError
 from time import sleep
 
 
-skycodes = {
-    32: 'sunnyDay',
-    34: 'sunnyDay',
-    31: 'clearNight',
-    26: 'cloudyFoggyDay',
-    30: 'cloudyFoggyDay' ,
-    27: 'cloudyFoggyNight',
-    11: 'rainyDay',
-    39: 'rainyDay' ,
-    12: 'rainyNight',
-    16: 'snowyIcyDay',
-    14: 'snowyIcyNight',
-    3:  'severe',
-    4:  'severe',
-    44: 'default'
+skynames = {
+    'sunny': 'sunnyDay',
+    'clear': 'clearNight',
+    'partly-cloudy-day': 'cloudyFoggyDay',
+    'mostly-cloudy-day': 'cloudyFoggyNight',
+    'partly-cloudy-night': 'cloudyFoggyNight',
+    'mostly-cloudy-night': 'cloudyFoggyNight',
+    'rainy': 'rainyDay',
+    'rain' : 'rainyDay',
+    'snow': 'snowyIcyNight',
+    'showers': 'rainyNight',
+    'scattered-thunderstorms-day':  'severe',
+    'thunderstorms':  'severe',
+    'default': 'default'
 }
 
 weather_icons_fa = {
@@ -64,7 +63,7 @@ class WeatherForecast:
                 self,
                 moment: str,
                 status: str,
-                skycode : str,
+                name : str,
                 icon : str,
                 chance_of_rain: str,
                 temperature: str = None,
@@ -73,7 +72,7 @@ class WeatherForecast:
         ):
             self.moment = moment
             self.status = status
-            self.skycode = skycode
+            self.name = name
             self.icon = icon
             self.chance_of_rain = chance_of_rain
             self.temperature = temperature
@@ -248,8 +247,8 @@ class WeatherForecastExtractor:
             daily_predictions=self.daily_predictions()
         )
 
-    def __icon_predictions(self,skycode: int) -> str:
-        status_code = skycodes[skycode] if skycode in skycodes else 'default'
+    def __icon_predictions(self,name: str) -> str:
+        status_code = skynames[name] if name in skynames else 'default'
         return weather_icons[status_code]
     
     def __aqi_color(self) -> dict:
@@ -267,8 +266,9 @@ class WeatherForecastExtractor:
         }
 
     def __predictions(self, span, min_max: bool = False) -> dict:
-        skycode = int(pq(span)("svg[data-testid='Icon']").attr('skycode'))
-        icon = self.__icon_predictions(skycode)
+        data = pq(span)("svg[data-testid='Icon']").attr('name')
+        name = str(data) if data else 'cloudy'
+        icon = self.__icon_predictions(name)
         temp_max = pq(span)("div[data-testid='SegmentHighTemp'] span[data-testid='TemperatureValue']").eq(0).text()
         temp_min = pq(span)("div[data-testid='SegmentHighTemp'] span[data-testid='TemperatureValue']").eq(1).text()
         temperature = pq(span)("span[data-testid='TemperatureValue']").text()
@@ -279,7 +279,7 @@ class WeatherForecastExtractor:
                 'max' : temp_max if min_max else None,
                 'temperature' : temperature if not min_max else None,
                 'status' : pq(span)("svg[data-testid='Icon'] title").contents()[0],
-                'skycode' :  skycode,
+                'name' :  name,
                 'icon' : icon,
                 'chance_of_rain' : pq(span)("div[data-testid='SegmentPrecipPercentage'] > span").contents()[1],
         }
