@@ -9,9 +9,9 @@ skynames = {
     'sunny': 'sunnyDay',
     'clear': 'clearNight',
     'partly-cloudy-day': 'cloudyFoggyDay',
-    'mostly-cloudy-day': 'cloudyFoggyNight',
+    'mostly-cloudy-day': 'cloudy',
     'partly-cloudy-night': 'cloudyFoggyNight',
-    'mostly-cloudy-night': 'cloudyFoggyNight',
+    'mostly-cloudy-night': 'cloudy',
     'rainy': 'rainyDay',
     'rain' : 'rainyDay',
     'snow': 'snowyIcyNight',
@@ -26,6 +26,7 @@ weather_icons_fa = {
     'clearNight': chr(0xF0594),       # Weather Night
     'cloudyFoggyDay': chr(0xF0595),   # Weather Partially Cloudy
     'cloudyFoggyNight': chr(0xF0F31), # Weather Night Partially Cloudy
+    'cloudy' : '\uf0c2',              # FA Cloud
     'rainyDay': chr(0x1F326),         # FA Cloud-Sun-Rain
     'rainyNight': '\ue323',           # FA Night Alt rain mix
     'snowyIcyDay': '\uf2dc',          # FA Snowflake
@@ -44,6 +45,7 @@ weather_icons_emoji = {
     'clearNight': '🌙',
     'cloudyFoggyDay': '⛅',
     'cloudyFoggyNight':'☁️',
+    'cloudy': '☁️',
     'rainyDay': '🌧️',
     'rainyNight': '🌧️',
     'snowyIcyDay': '❄️',
