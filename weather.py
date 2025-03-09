@@ -282,7 +282,7 @@ class WeatherForecastExtractor:
                 'status' : pq(span)("svg").attr("name"),
                 'name' :  name,
                 'icon' : icon,
-                'chance_of_rain' : pq(span)("div[data-testid='SegmentPrecipPercentage'] > span").contents()[1],
+                'chance_of_rain' : pq(span)('div[data-testid="SegmentPrecipPercentage"] > span:nth-of-type(2)').contents()[1],
         }
 
 
