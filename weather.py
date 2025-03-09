@@ -274,13 +274,12 @@ class WeatherForecastExtractor:
         temp_max = pq(span)("div[data-testid='SegmentHighTemp'] span[data-testid='TemperatureValue']").eq(0).text()
         temp_min = pq(span)("div[data-testid='SegmentHighTemp'] span[data-testid='TemperatureValue']").eq(1).text()
         temperature = pq(span)("span[data-testid='TemperatureValue']").text()
-
         return {
                 'moment': pq(span)("h3 > span").text(),
                 'min' : temp_min if min_max else None,
                 'max' : temp_max if min_max else None,
                 'temperature' : temperature if not min_max else None,
-                'status' : pq(span)("svg[data-testid='Icon'] title").contents()[0],
+                'status' : pq(span)("svg").attr("name"),
                 'name' :  name,
                 'icon' : icon,
                 'chance_of_rain' : pq(span)("div[data-testid='SegmentPrecipPercentage'] > span").contents()[1],
