@@ -26,8 +26,5 @@ class UVIndex:
         else:
             raise ValueError("Invalid UV index string format")
     
-    def __str__(self) -> str:
-        return f"{self._index} of {self._of}"
-    
     def __repr__(self) -> str:
         return f"UVIndex(string_value={self.string_value!r}, index={self.index!r}, of={self.of!r})"
