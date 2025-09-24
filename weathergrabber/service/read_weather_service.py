@@ -1,6 +1,7 @@
 from weathergrabber.adapter.client.weather_api import WeatherApi
 import logging
 import os
+from pyquery import PyQuery
 from typing import Tuple
 
 class ReadWeatherService:
@@ -17,7 +18,7 @@ class ReadWeatherService:
         return lang, loc
         
 
-    def execute(self, language: str, location: str) -> dict:
+    def execute(self, language: str, location: str) -> PyQuery:
 
         lang, loc = self._define_language_location(language, location)
 

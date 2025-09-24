@@ -11,7 +11,7 @@
             "module": "weathergrabber.cli",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
-            "args": "${command:pickArgs}"
+            "args": "${command:pickArgs} --log debug"
         }
     ]
 }

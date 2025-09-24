@@ -3,19 +3,35 @@ from weathergrabber.domain.adapter.params import Params
 from weathergrabber.domain.output_enum import OutputEnum
 from weathergrabber.adapter.client.weather_api import WeatherApi
 from weathergrabber.service.read_weather_service import ReadWeatherService
+from weathergrabber.service.extract_location_service import ExtractLocationService
+from weathergrabber.service.extract_temperature_service import ExtractTemperatureService
+from weathergrabber.service.extract_feelslike_temperature_service import ExtractFeelslikeTemperatureService
+from weathergrabber.service.extract_icon_service import ExtractIconService
+from weathergrabber.service.extract_today_details_service import ExtractTodayDetailsService 
+
 
 class WeatherGrabberApplication:
 
     def _beans(self):
         self.weather_api = WeatherApi()
         self.read_weather_service = ReadWeatherService(self.weather_api)
+        self.extract_city_location_service = ExtractLocationService()
+        self.extract_temperatura_service = ExtractTemperatureService()
+        self.extract_feelslike_temperature_service = ExtractFeelslikeTemperatureService()
+        self.extract_icon_service = ExtractIconService()
+        self.extract_today_details_service = ExtractTodayDetailsService()
         pass
         
     def _define_uc(self, output_format: OutputEnum):
         if output_format == OutputEnum.CONSOLE:
             from weathergrabber.usecase.console_uc import ConsoleUC
             self.use_case = ConsoleUC(
-                self.read_weather_service
+                self.read_weather_service,
+                self.extract_city_location_service,
+                self.extract_temperatura_service,
+                self.extract_feelslike_temperature_service,
+                self.extract_icon_service,
+                self.extract_today_details_service
             )
 
         elif output_format == OutputEnum.JSON:
