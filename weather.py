@@ -1,3 +1,5 @@
+# This file contains the main functionality of the weather library. It includes classes such as WeatherForecast, WeatherForecastExtractor, and various methods for fetching and formatting weather data.
+
 import json, os, re, argparse
 from typing import List, Dict
 from pyquery import PyQuery as pq
@@ -5,58 +7,66 @@ from urllib.error import HTTPError
 from time import sleep
 
 
-skynames = {
-    'sunny': 'sunnyDay',
-    'clear': 'clearNight',
-    'partly-cloudy-day': 'cloudyFoggyDay',
-    'mostly-cloudy-day': 'cloudy',
-    'partly-cloudy-night': 'cloudyFoggyNight',
-    'mostly-cloudy-night': 'cloudy',
-    'rainy': 'rainyDay',
-    'rain' : 'rainyDay',
-    'snow': 'snowyIcyNight',
-    'showers': 'rainyNight',
-    'scattered-thunderstorms-day':  'severe',
-    'thunderstorms':  'severe',
-    'default': 'default'
-}
-
 weather_icons_fa = {
-    'sunnyDay': chr(0xF0599),         # Weather Sunny
-    'clearNight': chr(0xF0594),       # Weather Night
-    'cloudyFoggyDay': chr(0xF0595),   # Weather Partially Cloudy
-    'cloudyFoggyNight': chr(0xF0F31), # Weather Night Partially Cloudy
-    'cloudy' : '\uf0c2',              # FA Cloud
-    'rainyDay': chr(0x1F326),         # FA Cloud-Sun-Rain
-    'rainyNight': '\ue323',           # FA Night Alt rain mix
-    'snowyIcyDay': '\uf2dc',          # FA Snowflake
-    'snowyIcyNight': '\uf2dc',        # FA Snowflake (reuse)
-    'severe': '\ue317',               # FA Rain Wind
-    'default': '\uf0c2',              # FA Cloud
-    'feel' : '\uf2c9',                # FA Thermometer
-    'wind' : chr(0xf059d),            # FA Weather Wind
-    'visibility' : '\uf06e',          # FA Eye
-    'humidity' : '\uf043',            # FA Humidity
-    'rain' :  '\uf0e9'                # FA Weather Light raining
+    'mostly-clear-day': chr(0xF0599),        # Weather Sunny
+    'mostly-clear-night': chr(0xF0594),      # Weather Night
+    'sunny': chr(0xF0599),                   # Weather Sunny
+    'clear': chr(0xF0599),                   # Weather Sunny
+    'clear-night': chr(0xF0594),             # Weather Night
+    'partly-cloudy-day': chr(0xF0595),       # Weather Partly Cloudy Day
+    'partly-cloudy-night': chr(0xF0F31),     # Weather Partly Cloudy Night
+    'mostly-cloudy-day': chr(0xf013),        # FA Cloud (day)
+    'mostly-cloudy-night': chr(0xf013),      # FA Cloud (night)
+    'cloudy': '\uf0c2',                      # FA Cloud
+    'cloudy-foggy-day': '\u200B',            # Transparent icon
+    'cloudy-foggy-night': '\u200B',          # Transparent icon
+    'rainy-day': chr(0x1F326),               # FA Cloud-Sun-Rain
+    'rainy-night': chr(0x1F326),             # FA Cloud-Moon-Rain
+    'scattered-showers-day': chr(0x1F326),   # FA Cloud-Sun-Rain
+    'scattered-showers-night': chr(0x1F326), # FA Cloud-Moon-Rain
+    'showers': '\u26c6',                     # Rain
+    'snowy-icy-day': '\uf2dc',               # FA Snowflake
+    'snowy-icy-night': '\uf2dc',             # FA Snowflake
+    'snow': '\uf2dc',                        # FA Snowflake
+    'severe': '\ue317',                      # FA Rain Wind
+    'thunderstorm': '\uf0e7',                # FA Bolt
+    'wind': chr(0xf059d),                    # FA Weather Wind
+    'visibility': '\uf06e',                  # FA Eye
+    'humidity': '\uf043',                    # FA Humidity
+    'rain': '\uf0e9',                        # FA Weather Light Raining
+    'feel': '\uf2c9',                        # FA Thermometer
+    'default': '\uf0c2',                     # FA Cloud
 }
 
 weather_icons_emoji = {
-    'sunnyDay': '☀️',
-    'clearNight': '🌙',
-    'cloudyFoggyDay': '⛅',
-    'cloudyFoggyNight':'☁️',
+    'mostly-clear-day': '☀️',
+    'mostly-clear-night': '🌙',
+    'sunny': '☀️',
+    'clear': '☀️',
+    'clear-night': '🌙',
+    'partly-cloudy-day': '⛅',
+    'partly-cloudy-night': '☁️',
+    'mostly-cloudy-day': '☁️',
+    'mostly-cloudy-night': '☁️',
     'cloudy': '☁️',
-    'rainyDay': '🌧️',
-    'rainyNight': '🌧️',
-    'snowyIcyDay': '❄️',
-    'snowyIcyNight': '❄️',
+    'cloudy-foggy-day': '\u200B',      # Transparent icon
+    'cloudy-foggy-night': '\u200B',    # Transparent icon
+    'rainy-day': '🌧️',
+    'rainy-night': '🌧️',
+    'scattered-showers-day': '🌦️',
+    'scattered-showers-night': '🌦️',
+    'showers': '🌧️',
+    'snowy-icy-day': '❄️',
+    'snowy-icy-night': '❄️',
+    'snow': '❄️',
     'severe': '🌩️',
-    'default': '☁️',
-    'feel': '️️🥵',
+    'thunderstorm': '⛈️',
     'wind': '🌪️',
     'visibility': '👁️',
     'humidity': '💧',
-    'rain': '☔'
+    'rain': '🌧️',
+    'feel': '🥵',
+    'default': '☁️',
 }
 
 class WeatherForecast:
@@ -169,7 +179,9 @@ class WeatherForecastExtractor:
         return status
 
     def status_code(self):
-        self.__status_code = self.html_data("#regionHeader").attr("class").split(" ")[2].split("-")[2]
+        #self.__status_code = self.html_data("#regionHeader").attr("class").split(" ")[2].split("-")[2]
+        self.__status_code = self.html_data("div[data-testid='CurrentConditionsContainer'] span[data-testid='TemperatureValue'] + span svg[name]").attr("name")
+        #self.__status_code = "rain"
         return self.__status_code
 
     def icon(self):
@@ -179,7 +191,7 @@ class WeatherForecastExtractor:
         )
 
     def wind_speed(self):
-        return self.html_data("div[data-testid='WeatherDetailsListItem'] span[data-testid='Wind']").text().split("\n")[1]
+        return self.html_data("div[data-testid='WeatherDetailsListItem'] span[data-testid='Wind'] span").text().strip()
 
     def humidity(self):
         return self.html_data("span[data-testid='PercentageValue']").text()
@@ -250,8 +262,7 @@ class WeatherForecastExtractor:
         )
 
     def __icon_predictions(self,name: str) -> str:
-        status_code = skynames[name] if name in skynames else 'default'
-        return weather_icons[status_code]
+        return weather_icons[name]
     
     def __aqi_color(self) -> dict:
         color_pattern = r"#([0-9A-Fa-f]{6})"        
@@ -268,7 +279,7 @@ class WeatherForecastExtractor:
         }
 
     def __predictions(self, span, min_max: bool = False) -> dict:
-        data = pq(span)("svg[data-testid='Icon']").attr('name')
+        data = pq(span)('div.columnSkycodeIconWrapper svg').attr('name')
         name = str(data) if data else 'cloudy'
         icon = self.__icon_predictions(name)
         temp_max = pq(span)("div[data-testid='SegmentHighTemp'] span[data-testid='TemperatureValue']").eq(0).text()
