@@ -6,6 +6,8 @@ from weathergrabber.service.extract_temperature_service import ExtractTemperatur
 from weathergrabber.service.extract_feelslike_temperature_service import ExtractFeelslikeTemperatureService
 from weathergrabber.service.extract_icon_service import ExtractIconService
 from weathergrabber.service.extract_today_details_service import ExtractTodayDetailsService
+from weathergrabber.service.extract_aqi_service import ExtractAQIService
+from weathergrabber.service.extract_health_activities_service import ExtractHealthActivitiesService
 
 class UseCase:
     def __init__(
@@ -17,6 +19,8 @@ class UseCase:
         extract_feelslike_temperature_service: ExtractFeelslikeTemperatureService,
         extract_icon_service: ExtractIconService,
         extract_today_details_service: ExtractTodayDetailsService,
+        extract_aqi_service: ExtractAQIService,
+        extract_health_activities_service: ExtractHealthActivitiesService,
     ):
         self.read_weather_service = read_weather_service
         self.extract_location_service = extract_location_service
@@ -25,6 +29,8 @@ class UseCase:
         self.extract_icon_service = extract_icon_service
         self.extract_today_details_service = extract_today_details_service
         self.search_location_service = search_location_service
+        self.extract_aqi_service = extract_aqi_service
+        self.extract_health_activities_service = extract_health_activities_service
 
     def execute(self, params: Params) -> None:
 
@@ -39,4 +45,6 @@ class UseCase:
         feelslike_temperature = self.extract_feelslike_temperature_service.execute(weather_data)
         icon = self.extract_icon_service.execute(weather_data)
         today_details = self.extract_today_details_service.execute(weather_data)
+        air_quality_index = self.extract_aqi_service.execute(weather_data)
+        health_activities = self.extract_health_activities_service.execute(weather_data)
         

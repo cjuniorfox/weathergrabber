@@ -2,14 +2,17 @@ import logging
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.domain.output_enum import OutputEnum
 from weathergrabber.adapter.client.weather_api import WeatherApi
+from weathergrabber.adapter.client.weather_search_api import WeatherSearchApi
+from weathergrabber.service.search_location_service import SearchLocationService
 from weathergrabber.service.read_weather_service import ReadWeatherService
 from weathergrabber.service.extract_location_service import ExtractLocationService
 from weathergrabber.service.extract_temperature_service import ExtractTemperatureService
 from weathergrabber.service.extract_feelslike_temperature_service import ExtractFeelslikeTemperatureService
 from weathergrabber.service.extract_icon_service import ExtractIconService
 from weathergrabber.service.extract_today_details_service import ExtractTodayDetailsService
-from weathergrabber.adapter.client.weather_search_api import WeatherSearchApi
-from weathergrabber.service.search_location_service import SearchLocationService
+from weathergrabber.service.extract_aqi_service import ExtractAQIService
+from weathergrabber.service.extract_health_activities_service import ExtractHealthActivitiesService
+
 from weathergrabber.usecase.use_case import UseCase
 
 
@@ -25,6 +28,8 @@ class WeatherGrabberApplication:
         self.extract_feelslike_temperature_service = ExtractFeelslikeTemperatureService()
         self.extract_icon_service = ExtractIconService()
         self.extract_today_details_service = ExtractTodayDetailsService()
+        self.extract_aqi_service = ExtractAQIService()
+        self.extract_health_activities_service = ExtractHealthActivitiesService()
         self.use_case = UseCase(
                 self.search_location_service,
                 self.read_weather_service,
@@ -32,7 +37,9 @@ class WeatherGrabberApplication:
                 self.extract_temperatura_service,
                 self.extract_feelslike_temperature_service,
                 self.extract_icon_service,
-                self.extract_today_details_service
+                self.extract_today_details_service,
+                self.extract_aqi_service,
+                self.extract_health_activities_service,
             )
         pass
         
