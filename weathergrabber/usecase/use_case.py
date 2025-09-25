@@ -8,6 +8,8 @@ from weathergrabber.service.extract_icon_service import ExtractIconService
 from weathergrabber.service.extract_today_details_service import ExtractTodayDetailsService
 from weathergrabber.service.extract_aqi_service import ExtractAQIService
 from weathergrabber.service.extract_health_activities_service import ExtractHealthActivitiesService
+from weathergrabber.service.extract_hourly_forecast_service import ExtractHourlyForecastService
+#from weathergrabber.service.extract_daily_forecast_service import ExtractDailyForecastService
 
 class UseCase:
     def __init__(
@@ -21,6 +23,8 @@ class UseCase:
         extract_today_details_service: ExtractTodayDetailsService,
         extract_aqi_service: ExtractAQIService,
         extract_health_activities_service: ExtractHealthActivitiesService,
+        extract_hourly_forecast_service: ExtractHourlyForecastService,
+        #extract_daily_forecast_service: ExtractDailyForecastService --- IGNORE ---
     ):
         self.read_weather_service = read_weather_service
         self.extract_location_service = extract_location_service
@@ -31,6 +35,8 @@ class UseCase:
         self.search_location_service = search_location_service
         self.extract_aqi_service = extract_aqi_service
         self.extract_health_activities_service = extract_health_activities_service
+        self.extract_hourly_forecast_service = extract_hourly_forecast_service
+        #self.extract_daily_forecast_service = extract_daily_forecast_service --- IGNORE ---
 
     def execute(self, params: Params) -> None:
 
@@ -47,4 +53,6 @@ class UseCase:
         today_details = self.extract_today_details_service.execute(weather_data)
         air_quality_index = self.extract_aqi_service.execute(weather_data)
         health_activities = self.extract_health_activities_service.execute(weather_data)
+        hourly_forecast = self.extract_hourly_forecast_service.execute(weather_data)
+        daily_forecast = None   # Placeholder for future implementation
         
