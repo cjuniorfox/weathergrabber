@@ -13,7 +13,7 @@ from weathergrabber.service.extract_today_details_service import ExtractTodayDet
 from weathergrabber.service.extract_aqi_service import ExtractAQIService
 from weathergrabber.service.extract_health_activities_service import ExtractHealthActivitiesService
 from weathergrabber.service.extract_hourly_forecast_service import ExtractHourlyForecastService
-#from weathergrabber.service.extract_daily_forecast_service import ExtractDailyForecastService
+from weathergrabber.service.extract_daily_forecast_service import ExtractDailyForecastService
 
 
 from weathergrabber.usecase.use_case import UseCase
@@ -34,7 +34,7 @@ class WeatherGrabberApplication:
         self.extract_aqi_service = ExtractAQIService()
         self.extract_health_activities_service = ExtractHealthActivitiesService()
         self.extract_hourly_forecast_service = ExtractHourlyForecastService()
-        #self.extract_daily_forecast_service = ExtractDailyForecastService()
+        self.extract_daily_forecast_service = ExtractDailyForecastService()
         self.use_case = UseCase(
                 self.search_location_service,
                 self.read_weather_service,
@@ -46,7 +46,7 @@ class WeatherGrabberApplication:
                 self.extract_aqi_service,
                 self.extract_health_activities_service,
                 self.extract_hourly_forecast_service,
-                #self.extract_daily_forecast_service
+                self.extract_daily_forecast_service
             )
         pass
         
