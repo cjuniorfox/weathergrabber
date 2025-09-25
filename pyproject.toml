@@ -10,7 +10,8 @@ authors = [
 ]
 
 dependencies = [
-    "pyquery>=2.0.1"
+    "pyquery>=2.0.1",
+    "requests>=2.32.5"
 ]
 
 [project.scripts]

@@ -11,7 +11,10 @@
             "module": "weathergrabber.cli",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
-            "args": "${command:pickArgs} --log debug"
+            "args": "${command:pickArgs} --log debug",
+            "env": {
+                "WEATHER_LOCATION_UD": ""
+            }
         }
     ]
 }

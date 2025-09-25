@@ -5,7 +5,7 @@ import logging
 class WeatherApi:
 
     def __init__(self):
-        self.logging = logging.getLogger(__name__)
+        self.logger = logging.getLogger(__name__)
         pass
 
     def get_weather(self,language: str, location: str) -> PyQuery:
@@ -20,8 +20,8 @@ class WeatherApi:
             raise ValueError("language must be specified")
         
         try:
-            self.logging.debug(f"Fetching weather data from URL: %s.", url)
+            self.logger.debug(f"Fetching weather data from URL: %s.", url)
             return PyQuery(url=url)
         except HTTPError as e:
-            self.logging.error("HTTP '%s' error when fetching weather data from URL: '%s'.", e.code, url)
+            self.logger.error("HTTP '%s' error when fetching weather data from URL: '%s'.", e.code, url)
             raise ValueError(f"HTTP error {e.code} when fetching weather data.")

@@ -7,25 +7,26 @@ from weathergrabber.service.extract_location_service import ExtractLocationServi
 from weathergrabber.service.extract_temperature_service import ExtractTemperatureService
 from weathergrabber.service.extract_feelslike_temperature_service import ExtractFeelslikeTemperatureService
 from weathergrabber.service.extract_icon_service import ExtractIconService
-from weathergrabber.service.extract_today_details_service import ExtractTodayDetailsService 
+from weathergrabber.service.extract_today_details_service import ExtractTodayDetailsService
+from weathergrabber.adapter.client.weather_search_api import WeatherSearchApi
+from weathergrabber.service.search_location_service import SearchLocationService
+from weathergrabber.usecase.use_case import UseCase
 
 
 class WeatherGrabberApplication:
 
     def _beans(self):
+        self.weather_search_api = WeatherSearchApi()
         self.weather_api = WeatherApi()
+        self.search_location_service = SearchLocationService(self.weather_search_api)
         self.read_weather_service = ReadWeatherService(self.weather_api)
         self.extract_city_location_service = ExtractLocationService()
         self.extract_temperatura_service = ExtractTemperatureService()
         self.extract_feelslike_temperature_service = ExtractFeelslikeTemperatureService()
         self.extract_icon_service = ExtractIconService()
         self.extract_today_details_service = ExtractTodayDetailsService()
-        pass
-        
-    def _define_uc(self, output_format: OutputEnum):
-        if output_format == OutputEnum.CONSOLE:
-            from weathergrabber.usecase.console_uc import ConsoleUC
-            self.use_case = ConsoleUC(
+        self.use_case = UseCase(
+                self.search_location_service,
                 self.read_weather_service,
                 self.extract_city_location_service,
                 self.extract_temperatura_service,
@@ -33,14 +34,20 @@ class WeatherGrabberApplication:
                 self.extract_icon_service,
                 self.extract_today_details_service
             )
+        pass
+        
+    def _define_controller(self, output_format: OutputEnum):
+        if output_format == OutputEnum.CONSOLE:
+            from weathergrabber.adapter.tty.console_tty import ConsoleTTY
+            self.controller = ConsoleTTY(self.use_case)
 
         elif output_format == OutputEnum.JSON:
-            from weathergrabber.usecase.json_uc import JsonUC
-            self.use_case = JsonUC()
+            from weathergrabber.adapter.tty.json_tty import JsonTTY
+            self.controller = JsonTTY(self.use_case)
 
         elif output_format == OutputEnum.WAYBAR:
-            from weathergrabber.usecase.waybar_uc import WaybarUC
-            self.use_case = WaybarUC()
+            from weathergrabber.adapter.tty.waybar_tty import WaybarTTY
+            self.controller = WaybarTTY(self.use_case)
 
         else:
             self.logger.error(f"Unsupported output format: {output_format}")
@@ -49,5 +56,5 @@ class WeatherGrabberApplication:
     def __init__(self, params: Params):
         self.logger = logging.getLogger(__name__)
         self._beans()
-        self._define_uc(params.output_format)
-        self.use_case.execute(params)
+        self._define_controller(params.output_format)
+        self.controller.execute(params)

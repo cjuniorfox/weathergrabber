@@ -1,9 +1,26 @@
 from weathergrabber.domain.output_enum import OutputEnum
+from typing import Optional
 
 class Params:
+    class Location:
+        def __init__(self, name: str = None, id: str = None):
+            self._name = name
+            self._id = id
+
+        @property
+        def name(self) -> str | None:
+            return self._name
+        
+        @property
+        def id(self) -> str | None:
+            return self._id
+
+        def __str__(self):
+            return f"Location(name={self.name}, id={self.id})"
+        
     def __init__(
             self,
-            location: str,
+            location: Optional["Params.Location"] = None,
             language: str = "en-US",
             output_format: OutputEnum = OutputEnum.CONSOLE,
             persist: bool = False,
@@ -16,7 +33,7 @@ class Params:
         self._icons = icons
 
     @property
-    def location(self) -> str:
+    def location(self) -> Optional["Params.Location"]:
         return self._location
     
     @property

@@ -4,7 +4,8 @@ from .core import main
 def main_cli():
     ## Get current locale, or use the default one
     parser = argparse.ArgumentParser(description="Weather forecast grabber from weather.com")
-    parser.add_argument("--location", "-l", type=str, help="64-character-hex code for location obtained from weather.com")
+    parser.add_argument("location_name", type=str, nargs='?', help="Location (city name, zip code, etc.)")
+    parser.add_argument("--location-id", "-l", type=str, help="64-character-hex code for location obtained from weather.com")
     parser.add_argument("--lang", "-L", type=str, help="Language (pt-BR, fr-FR, etc.), If not set, uses the machine one.")
     parser.add_argument("--output", "-o", type=str, choices=['console','json','waybar'], default='console', help="Output format. console, json or waybar")
     parser.add_argument("--persist", "-p",action='store_true', default=False, help="Keep waybar open instead of exiting after execution. Does only makes sense for --output=console")
@@ -19,7 +20,8 @@ def main_cli():
 
     main(
         log_level=args.log,
-        location=args.location,
+        location_name = args.location_name,
+        location_id=args.location_id,
         lang=args.lang,
         output=args.output,
         persist=args.persist,
