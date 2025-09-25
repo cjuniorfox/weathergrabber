@@ -12,7 +12,7 @@ def main(log_level: str, location_name: str, location_id: str, lang: str, output
     logging.getLogger().setLevel(log_level.upper())
 
     logging.info(f"Log level set to {log_level}")
-    logging.info(f"Location: {location_name}")
+    logging.info(f"Location name: {location_name}")
     logging.info(f"Location id: {location_id}")
     logging.info(f"Language: {lang}")
     logging.info(f"Output: {output}")
