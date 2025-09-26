@@ -1,7 +1,8 @@
 import logging
 from weathergrabber.weathergrabber_application import WeatherGrabberApplication
 from weathergrabber.domain.adapter.params import Params
-from weathergrabber.domain.output_enum import OutputEnum
+from weathergrabber.domain.adapter.output_enum import OutputEnum
+from weathergrabber.domain.adapter.icon_enum import IconEnum
 
 logging.basicConfig(
     level=logging.INFO,
@@ -24,7 +25,7 @@ def main(log_level: str, location_name: str, location_id: str, lang: str, output
         language=lang if lang else "en-US",
         output_format= OutputEnum(output),
         persist=persist,
-        icons=icons
+        icons=IconEnum(icons)
     )
 
     app = WeatherGrabberApplication(params)

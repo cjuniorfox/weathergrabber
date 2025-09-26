@@ -1,6 +1,6 @@
 import logging
 from .domain.adapter.params import Params
-from .domain.output_enum import OutputEnum
+from .domain.adapter.output_enum import OutputEnum
 from .adapter.client.weather_api import WeatherApi
 from .adapter.client.weather_search_api import WeatherSearchApi
 from .service.search_location_service import SearchLocationService

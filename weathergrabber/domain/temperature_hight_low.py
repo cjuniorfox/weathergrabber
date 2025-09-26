@@ -22,3 +22,6 @@ class TemperatureHighLow:
     
     def __repr__(self):
         return f"TemperatureHighLow(high={self.high!r}, low={self.low!r})"
+    
+    def __str__(self):
+        return f"{self.high}/{self.low}"

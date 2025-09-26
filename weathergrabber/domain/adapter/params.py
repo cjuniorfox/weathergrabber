@@ -1,4 +1,5 @@
-from weathergrabber.domain.output_enum import OutputEnum
+from .output_enum import OutputEnum
+from .icon_enum import IconEnum
 from typing import Optional
 
 class Params:
@@ -24,7 +25,7 @@ class Params:
             language: str = "en-US",
             output_format: OutputEnum = OutputEnum.CONSOLE,
             persist: bool = False,
-            icons: str = "emoji"
+            icons: IconEnum = IconEnum.EMOJI
         ):
         self._location = location
         self._language = language
@@ -49,7 +50,7 @@ class Params:
         return self._persist
     
     @property
-    def icons(self) -> str:
+    def icons(self) -> IconEnum:
         return self._icons
     
     def __str__(self):
