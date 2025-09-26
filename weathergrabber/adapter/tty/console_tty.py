@@ -11,5 +11,9 @@ class ConsoleTTY:
 
     def execute(self, params: Params) -> None:
         self.logger.info("Executing Console output")
-        self.use_case.execute(params)
+
+        forecast = self.use_case.execute(params)
+        
+        
+
         self.logger.info("Console output executed")

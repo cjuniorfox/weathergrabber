@@ -1,25 +1,22 @@
 import logging
-from weathergrabber.domain.adapter.params import Params
-from weathergrabber.domain.output_enum import OutputEnum
-from weathergrabber.adapter.client.weather_api import WeatherApi
-from weathergrabber.adapter.client.weather_search_api import WeatherSearchApi
-from weathergrabber.service.search_location_service import SearchLocationService
-from weathergrabber.service.read_weather_service import ReadWeatherService
-from weathergrabber.service.extract_location_service import ExtractLocationService
-from weathergrabber.service.extract_temperature_service import ExtractTemperatureService
-from weathergrabber.service.extract_feelslike_temperature_service import ExtractFeelslikeTemperatureService
-from weathergrabber.service.extract_icon_service import ExtractIconService
-from weathergrabber.service.extract_today_details_service import ExtractTodayDetailsService
-from weathergrabber.service.extract_aqi_service import ExtractAQIService
-from weathergrabber.service.extract_health_activities_service import ExtractHealthActivitiesService
-from weathergrabber.service.extract_hourly_forecast_service import ExtractHourlyForecastService
-from weathergrabber.service.extract_hourly_forecast_oldstyle_service import ExtractHourlyForecastOldstyleService
-from weathergrabber.service.extract_daily_forecast_service import ExtractDailyForecastService
-from weathergrabber.service.extract_daily_forecast_oldstyle_service import ExtractDailyForecastOldstyleService
-
-
-
-from weathergrabber.usecase.use_case import UseCase
+from .domain.adapter.params import Params
+from .domain.output_enum import OutputEnum
+from .adapter.client.weather_api import WeatherApi
+from .adapter.client.weather_search_api import WeatherSearchApi
+from .service.search_location_service import SearchLocationService
+from .service.read_weather_service import ReadWeatherService
+from .service.extract_location_service import ExtractLocationService
+from .service.extract_temperature_service import ExtractTemperatureService
+from .service.extract_feelslike_temperature_service import ExtractFeelslikeTemperatureService
+from .service.extract_icon_service import ExtractIconService
+from .service.extract_today_details_service import ExtractTodayDetailsService
+from .service.extract_aqi_service import ExtractAQIService
+from .service.extract_health_activities_service import ExtractHealthActivitiesService
+from .service.extract_hourly_forecast_service import ExtractHourlyForecastService
+from .service.extract_hourly_forecast_oldstyle_service import ExtractHourlyForecastOldstyleService
+from .service.extract_daily_forecast_service import ExtractDailyForecastService
+from .service.extract_daily_forecast_oldstyle_service import ExtractDailyForecastOldstyleService
+from .usecase.use_case import UseCase
 
 
 class WeatherGrabberApplication:
