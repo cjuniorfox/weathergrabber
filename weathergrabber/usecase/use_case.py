@@ -9,7 +9,10 @@ from weathergrabber.service.extract_today_details_service import ExtractTodayDet
 from weathergrabber.service.extract_aqi_service import ExtractAQIService
 from weathergrabber.service.extract_health_activities_service import ExtractHealthActivitiesService
 from weathergrabber.service.extract_hourly_forecast_service import ExtractHourlyForecastService
+from weathergrabber.service.extract_hourly_forecast_oldstyle_service import ExtractHourlyForecastOldstyleService
 from weathergrabber.service.extract_daily_forecast_service import ExtractDailyForecastService
+from weathergrabber.service.extract_daily_forecast_oldstyle_service import ExtractDailyForecastOldstyleService
+
 
 class UseCase:
     def __init__(
@@ -24,7 +27,10 @@ class UseCase:
         extract_aqi_service: ExtractAQIService,
         extract_health_activities_service: ExtractHealthActivitiesService,
         extract_hourly_forecast_service: ExtractHourlyForecastService,
-        extract_daily_forecast_service: ExtractDailyForecastService
+        extract_hourly_forecast_oldstyle_service: ExtractHourlyForecastOldstyleService,
+        extract_daily_forecast_service: ExtractDailyForecastService,
+        extract_daily_forecast_oldstyle_service: ExtractDailyForecastOldstyleService,
+
     ):
         self.read_weather_service = read_weather_service
         self.extract_location_service = extract_location_service
@@ -36,7 +42,9 @@ class UseCase:
         self.extract_aqi_service = extract_aqi_service
         self.extract_health_activities_service = extract_health_activities_service
         self.extract_hourly_forecast_service = extract_hourly_forecast_service
+        self.extract_hourly_forecast_oldstyle_service = extract_hourly_forecast_oldstyle_service
         self.extract_daily_forecast_service = extract_daily_forecast_service
+        self.extract_daily_forecast_oldstyle_service = extract_daily_forecast_oldstyle_service
 
     def execute(self, params: Params) -> None:
 
@@ -53,6 +61,14 @@ class UseCase:
         today_details = self.extract_today_details_service.execute(weather_data)
         air_quality_index = self.extract_aqi_service.execute(weather_data)
         health_activities = self.extract_health_activities_service.execute(weather_data)
-        hourly_forecast = self.extract_hourly_forecast_service.execute(weather_data)
-        daily_forecast = self.extract_daily_forecast_service.execute(weather_data)
+        
+        try:
+            hourly_forecast = self.extract_hourly_forecast_service.execute(weather_data)
+        except ValueError:
+            hourly_forecast = self.extract_hourly_forecast_oldstyle_service.execute(weather_data)
+        
+        try:
+            daily_forecast = self.extract_daily_forecast_service.execute(weather_data)
+        except ValueError:
+            daily_forecast = self.extract_daily_forecast_oldstyle_service.execute(weather_data)
         

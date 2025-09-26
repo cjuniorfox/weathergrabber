@@ -3,7 +3,7 @@ class Precipitation:
     def __init__(
             self,
             percentage: str,
-            amount: str
+            amount: str = None
         ):
         self._percentage = percentage
         self._amount = amount

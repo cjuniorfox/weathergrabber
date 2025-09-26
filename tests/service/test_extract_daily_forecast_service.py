@@ -72,7 +72,7 @@ def test_execute_returns_daily_predictions():
     assert isinstance(dp, DailyPredictions)
     assert dp.title == "Monday"
     assert dp.summary == "Clear skies"
-    assert dp.precipitation_percentage == "10"  # string from HTML
+    assert dp.precipitation.percentage == "10"  # string from HTML
     assert dp.moon_phase.phase == "Waxing Crescent"
     assert "DailyPredictions" in repr(dp)
 

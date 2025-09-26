@@ -1,6 +1,6 @@
 import logging
 from pyquery import PyQuery
-from weathergrabber.domain.hourly_predictions import HourlyPredictions
+from weathergrabber.domain.precipitation import Precipitation
 from weathergrabber.domain.weather_icon_enum import WeatherIconEnum
 from weathergrabber.domain.moon_phase_enum import MoonPhaseEnum
 from weathergrabber.domain.moon_phase import MoonPhase
@@ -42,7 +42,7 @@ class ExtractDailyForecastService:
                     high_low = TemperatureHighLow.from_string(item["high-low"]),
                     icon = WeatherIconEnum.from_name(item["icon"]),
                     summary = item["summary"],
-                    precipitation_percentage = item["precip-percentage"],
+                    precipitation = Precipitation(percentage=item["precip-percentage"]),
                     moon_phase = MoonPhase(MoonPhaseEnum.from_name(item["moon-phase-icon"]),item["moon-phase-value"])
             ) for item in details ]
 

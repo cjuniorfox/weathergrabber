@@ -1,6 +1,7 @@
 from .temperature_hight_low import TemperatureHighLow
 from .weather_icon_enum import WeatherIconEnum
 from .moon_phase import MoonPhase
+from .precipitation import Precipitation
 from typing import Optional
 
 class DailyPredictions:
@@ -10,14 +11,14 @@ class DailyPredictions:
         high_low: Optional[TemperatureHighLow],
         icon: Optional[WeatherIconEnum],
         summary: str,
-        precipitation_percentage: str,
-        moon_phase: Optional[MoonPhase]
+        precipitation: Optional[Precipitation],
+        moon_phase: Optional[MoonPhase] = None
     ):
         self._title = title
         self._high_low = high_low
         self._icon = icon
         self._summary = summary
-        self._precipitation_percentage = precipitation_percentage
+        self._precipitation = precipitation
         self._moon_phase = moon_phase
 
     # ---- Properties ----
@@ -38,8 +39,8 @@ class DailyPredictions:
         return self._summary
 
     @property
-    def precipitation_percentage(self) -> str:
-        return self._precipitation_percentage
+    def precipitation(self) -> Optional[Precipitation]:
+        return self._precipitation
 
     @property
     def moon_phase(self) -> Optional[MoonPhase]:
@@ -52,6 +53,6 @@ class DailyPredictions:
             f"high_low={self._high_low!r}, "
             f"icon={self._icon!r}, "
             f"summary={self._summary!r}, "
-            f"precipitation_percentage={self._precipitation_percentage!r}, "
+            f"precipitation={self._precipitation!r}, "
             f"moon_phase={self._moon_phase!r})"
         )

@@ -12,11 +12,11 @@ class HourlyPredictions:
             icon: WeatherIconEnum,
             summary: str,
             precipitation: Optional[Precipitation],
-            wind: Optional[Wind],
-            feels_like: str,
-            humidity: str,
-            uv_index: Optional[UVIndex],
-            cloud_cover: str
+            wind: Optional[Wind] = None,
+            feels_like: str = None,
+            humidity: str = None,
+            uv_index: Optional[UVIndex] = None,
+            cloud_cover: str = None
         ):
         self._title = title
         self._temperature = temperature
