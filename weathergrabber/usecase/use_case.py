@@ -1,3 +1,4 @@
+import logging
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.service.search_location_service import SearchLocationService
 from weathergrabber.service.read_weather_service import ReadWeatherService
@@ -12,7 +13,8 @@ from weathergrabber.service.extract_hourly_forecast_service import ExtractHourly
 from weathergrabber.service.extract_hourly_forecast_oldstyle_service import ExtractHourlyForecastOldstyleService
 from weathergrabber.service.extract_daily_forecast_service import ExtractDailyForecastService
 from weathergrabber.service.extract_daily_forecast_oldstyle_service import ExtractDailyForecastOldstyleService
-
+from weathergrabber.domain.location import Location
+from weathergrabber.domain.forecast import Forecast
 
 class UseCase:
     def __init__(
@@ -20,7 +22,7 @@ class UseCase:
         search_location_service: SearchLocationService,
         read_weather_service: ReadWeatherService,
         extract_location_service: ExtractLocationService,
-        extract_temperature_icon_service: ExtractTemperatureService,
+        extract_temperature_service: ExtractTemperatureService,
         extract_feelslike_temperature_service: ExtractFeelslikeTemperatureService,
         extract_icon_service: ExtractIconService,
         extract_today_details_service: ExtractTodayDetailsService,
@@ -32,9 +34,10 @@ class UseCase:
         extract_daily_forecast_oldstyle_service: ExtractDailyForecastOldstyleService,
 
     ):
+        self.logger = logging.getLogger(__name__)
         self.read_weather_service = read_weather_service
         self.extract_location_service = extract_location_service
-        self.extract_temperature_service = extract_temperature_icon_service
+        self.extract_temperature_service = extract_temperature_service
         self.extract_feelslike_temperature_service = extract_feelslike_temperature_service
         self.extract_icon_service = extract_icon_service
         self.extract_today_details_service = extract_today_details_service
@@ -46,29 +49,52 @@ class UseCase:
         self.extract_daily_forecast_service = extract_daily_forecast_service
         self.extract_daily_forecast_oldstyle_service = extract_daily_forecast_oldstyle_service
 
-    def execute(self, params: Params) -> None:
+    def execute(self, params: Params) -> Forecast:
+
+        self.logger.debug("Starting usecase")
 
         location_id = params.location.id
+        search_name = params.location.search_name
         if not location_id:
-            location_id = self.search_location_service.execute(params.location.name, params.language)
+            location_id = self.search_location_service.execute(params.location.search_name, params.language)
 
         weather_data = self.read_weather_service.execute(params.language, location_id)
         
-        location = self.extract_location_service.execute(weather_data)
+        city_location = self.extract_location_service.execute(weather_data)
         temperature = self.extract_temperature_service.execute(weather_data)
-        feelslike_temperature = self.extract_feelslike_temperature_service.execute(weather_data)
+        feelslike = self.extract_feelslike_temperature_service.execute(weather_data)
         icon = self.extract_icon_service.execute(weather_data)
         today_details = self.extract_today_details_service.execute(weather_data)
         air_quality_index = self.extract_aqi_service.execute(weather_data)
         health_activities = self.extract_health_activities_service.execute(weather_data)
         
         try:
-            hourly_forecast = self.extract_hourly_forecast_service.execute(weather_data)
+            hourly_predictions = self.extract_hourly_forecast_service.execute(weather_data)
         except ValueError:
-            hourly_forecast = self.extract_hourly_forecast_oldstyle_service.execute(weather_data)
+            hourly_predictions = self.extract_hourly_forecast_oldstyle_service.execute(weather_data)
         
         try:
-            daily_forecast = self.extract_daily_forecast_service.execute(weather_data)
+            daily_predictions = self.extract_daily_forecast_service.execute(weather_data)
         except ValueError:
-            daily_forecast = self.extract_daily_forecast_oldstyle_service.execute(weather_data)
+            daily_predictions = self.extract_daily_forecast_oldstyle_service.execute(weather_data)
+
+        forecast = Forecast(
+            location = Location(
+                id = location_id,
+                city_location = city_location,
+                search_name = search_name
+            ),
+            temperature = temperature,
+            feelslike = feelslike,
+            icon = icon,
+            today_details = today_details,
+            air_quality_index = air_quality_index,
+            health_activities = health_activities,
+            hourly_predictions = hourly_predictions,
+            daily_predictions = daily_predictions
+        )
+
+        self.logger.debug("Forecast data obtained %s", forecast)
+
+        return forecast
         

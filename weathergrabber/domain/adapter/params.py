@@ -3,20 +3,20 @@ from typing import Optional
 
 class Params:
     class Location:
-        def __init__(self, name: str = None, id: str = None):
-            self._name = name
+        def __init__(self, search_name: str = None, id: str = None):
+            self._search_name = search_name
             self._id = id
 
         @property
-        def name(self) -> str | None:
-            return self._name
+        def search_name(self) -> str | None:
+            return self._search_name
         
         @property
         def id(self) -> str | None:
             return self._id
 
         def __str__(self):
-            return f"Location(name={self.name}, id={self.id})"
+            return f"Location(search_name={self.search_name}, id={self.id})"
         
     def __init__(
             self,

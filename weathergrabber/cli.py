@@ -12,9 +12,9 @@ def main_cli():
     parser.add_argument("--icons", "-i", type=str, choices=['fa','emoji'], default='emoji', help="Icon set. 'fa' for Font-Awesome, or 'emoji'")
     parser.add_argument(
         "--log",
-        default="error",
+        default="critical",
         choices=["debug", "info", "warning", "error", "critical", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-        help="Set the logging level (default: ERROR)"
+        help="Set the logging level (default: CRITICAL)"
     )
     args = parser.parse_args()
 

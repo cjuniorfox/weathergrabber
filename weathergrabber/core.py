@@ -20,7 +20,7 @@ def main(log_level: str, location_name: str, location_id: str, lang: str, output
     logging.info(f"Icons: {icons}")
 
     params = Params(
-        location=Params.Location(name=location_name, id=location_id),
+        location=Params.Location(search_name=location_name, id=location_id),
         language=lang if lang else "en-US",
         output_format= OutputEnum(output),
         persist=persist,
