@@ -1,4 +1,5 @@
 import argparse
+import os
 from .core import main
 
 def main_cli():
@@ -18,11 +19,15 @@ def main_cli():
     )
     args = parser.parse_args()
 
+    # Check for language and location from environment variables if not provided as arguments
+    lang = args.lang if args.lang else os.getenv("LANG","en_US.UTF-8").split(".")[0].replace("_","-")
+    location_id = args.location_id if args.location_id else os.getenv('WEATHER_LOCATION_ID') if not args.location_name else args.location_name
+
     main(
         log_level=args.log,
         location_name = args.location_name,
-        location_id=args.location_id,
-        lang=args.lang,
+        location_id = location_id,
+        lang=lang,
         output=args.output,
         persist=args.persist,
         icons=args.icons

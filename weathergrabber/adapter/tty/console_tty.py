@@ -22,6 +22,8 @@ class ConsoleTTY:
         state_province = forecast.current_conditions.location.state_province
         icon = forecast.current_conditions.icon.fa_icon if is_fa else forecast.current_conditions.icon.emoji_icon
         temperature = forecast.current_conditions.temperature
+        moon_icon = forecast.today_details.moon_phase.icon.fa_icon if is_fa else forecast.today_details.moon_phase.icon.emoji_icon
+        moon_phase = forecast.today_details.moon_phase.phase
         summary = forecast.current_conditions.summary
 
         high_low = forecast.today_details.high_low
@@ -30,16 +32,16 @@ class ConsoleTTY:
         feelslike = forecast.feelslike
 
         wind_icon = WeatherIconEnum.WIND.fa_icon if is_fa else WeatherIconEnum.WIND.emoji_icon
-        wind = forecast.today_details.wind
+        wind = forecast.today_details.wind.value
 
         humidity_icon = WeatherIconEnum.HUMIDITY.fa_icon if is_fa else WeatherIconEnum.HUMIDITY.emoji_icon
-        humidity = forecast.today_details.humidity
+        humidity = forecast.today_details.humidity.value
 
         visibility_icon = WeatherIconEnum.VISIBILITY.fa_icon if is_fa else WeatherIconEnum.VISIBILITY.emoji_icon
-        visibility = forecast.today_details.visibility
+        visibility = forecast.today_details.visibility.value
 
         r, g, b = forecast.air_quality_index.color.red, forecast.air_quality_index.color.green, forecast.air_quality_index.color.blue
-        aqi_category = f"\033[38;2;{forecast.air_quality_index.category}\033[0m \n"
+        aqi_category = f"\033[38;2;{r};{g};{b}m{forecast.air_quality_index.category}\033[0m\n"
         aqi_acronym = forecast.air_quality_index.acronym
         aqi_value = forecast.air_quality_index.value
 
@@ -54,6 +56,7 @@ class ConsoleTTY:
             f"\n"
             f"{wind_icon} {wind}        {humidity_icon} {humidity}\n"
             f"{visibility_icon} {visibility}      {aqi_acronym} {aqi_value} {aqi_category}"
+            f"{moon_icon} {moon_phase}\n"
         )
         
 

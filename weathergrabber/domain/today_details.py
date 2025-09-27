@@ -5,15 +5,34 @@ from weathergrabber.domain.moon_phase import MoonPhase
 
 class TodayDetails:
 
+    class LabelValue:
+        def __init__(self, label: str, value: str):
+            self._label = label
+            self._value = value
+
+        @property
+        def label(self) -> str:
+            return self._label
+
+        @property
+        def value(self) -> str:
+            return self._value
+
+        def __repr__(self) -> str:
+            return f"LabelValue(label={self.label!r}, value={self.value!r})"
+        
+        def __str__(self) -> str:
+            return f"{self.label}: {self.value}"
+
     def __init__(
             self,
             high_low: Optional[TemperatureHighLow],
-            wind: str,
-            humidity: str,
-            dew_point: str,
-            pressure: str,
+            wind: LabelValue,
+            humidity: LabelValue,
+            dew_point: LabelValue,
+            pressure: LabelValue,
             uv_index: Optional[UVIndex],
-            visibility: str,
+            visibility: LabelValue,
             moon_phase: Optional[MoonPhase]
         ):
         self._high_low = high_low
@@ -30,19 +49,19 @@ class TodayDetails:
         return self._high_low
     
     @property
-    def wind(self) -> str:
+    def wind(self) -> LabelValue:
         return self._wind
     
     @property
-    def humidity(self) -> str:
+    def humidity(self) -> LabelValue:
         return self._humidity
     
     @property
-    def dew_point(self) -> str:
+    def dew_point(self) -> LabelValue:
         return self._dew_point
     
     @property
-    def pressure(self) -> str:
+    def pressure(self) -> LabelValue:
         return self._pressure
     
     @property
@@ -50,7 +69,7 @@ class TodayDetails:
         return self._uv_index
     
     @property
-    def visibility(self) -> str:
+    def visibility(self) -> LabelValue:
         return self._visibility
     
     @property
