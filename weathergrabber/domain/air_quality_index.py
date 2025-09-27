@@ -1,9 +1,17 @@
 from .color import Color
+from typing import Optional
 
 class AirQualityIndex:
-    def __init__(self, title: str, aqi: int, category: str = None, description: str = None, acronym: str = None, color: str = None):
+    def __init__(self,
+            title: str, 
+            value: int, 
+            category: Optional[str] = None, 
+            description: Optional[str] = None, 
+            acronym: Optional[str] = None, 
+            color: Optional[Color] = None
+        ):
         self._title = title
-        self._aqi = aqi
+        self._value = value
         self._category = category
         self._description = description
         self._acronym = acronym
@@ -14,8 +22,8 @@ class AirQualityIndex:
         return self._title
 
     @property
-    def aqi(self) -> int:
-        return self._aqi
+    def value(self) -> int:
+        return self._value
     
     @property
     def category(self) -> str | None:
@@ -30,14 +38,14 @@ class AirQualityIndex:
         return self._acronym
     
     @property
-    def color(self) -> str | None:
+    def color(self) -> Color | None:
         return self._color
     
     def __str__(self) -> str:
-        return f"Title: {self.title}. AQI: {self.aqi}, Category: {self.category}, Description: {self.description}, Acronym: {self.acronym}, Color: {self.color}"
+        return f"Title: {self.title}. AQI: {self.value}, Category: {self.category}, Description: {self.description}, Acronym: {self.acronym}, Color: {self.color}"
     
     def __repr__(self) -> str:
-        return f"AirQualityIndex(title={self.title}, aqi={self.aqi}, category={self.category}, description={self.description}, acronym:{self.acronym}, color={self.color})"
+        return f"AirQualityIndex(title={self.title}, value={self.value}, category={self.category}, description={self.description}, acronym:{self.acronym}, color={self.color})"
     
     @staticmethod
     def _extract_aqi(data: str):

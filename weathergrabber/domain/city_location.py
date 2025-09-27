@@ -22,6 +22,7 @@ class CityLocation:
 
     @classmethod
     def from_string(cls, data: str) -> "CityLocation":
+        #'Nova Friburgo, Rio de Janeiro, Brazil'
         parts = data.split(", ")
         if len(parts) == 3:
             city, state_province, country = parts

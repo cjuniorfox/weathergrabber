@@ -1,30 +1,29 @@
 from typing import Optional, List
-from .location import Location
+from .search import Search
 from .weather_icon_enum import WeatherIconEnum
 from .today_details import TodayDetails
 from .air_quality_index import AirQualityIndex
 from .health_activities import HealthActivities
 from .hourly_predictions import HourlyPredictions
 from .daily_predictions import DailyPredictions
+from .current_conditions import CurrentConditions
 
 
 class Forecast:
     def __init__(
         self,
-        location: Optional[Location],
-        temperature: str,
+        search: Optional[Search],
+        current_conditions: Optional[CurrentConditions],
         feelslike: str,
-        icon: Optional[WeatherIconEnum],
         today_details: Optional[TodayDetails],
         air_quality_index: Optional[AirQualityIndex],
         health_activities: Optional[HealthActivities],
         hourly_predictions: List[HourlyPredictions],
         daily_predictions: List[DailyPredictions],
     ):
-        self._location = location
-        self._temperature = temperature
+        self._search = search
+        self._current_conditions = current_conditions
         self._feelslike = feelslike
-        self._icon = icon
         self._today_details = today_details
         self._air_quality_index = air_quality_index
         self._health_activities = health_activities
@@ -32,20 +31,16 @@ class Forecast:
         self._daily_predictions = daily_predictions
 
     @property
-    def location(self) -> Optional[Location]:
-        return self._location
+    def search(self) -> Optional[Search]:
+        return self._search
 
     @property
-    def temperature(self) -> str:
-        return self._temperature
+    def current_conditions(self) -> Optional[CurrentConditions]:
+        return self._current_conditions
 
     @property
     def feelslike(self) -> str:
         return self._feelslike
-
-    @property
-    def icon(self) -> Optional[WeatherIconEnum]:
-        return self._icon
 
     @property
     def today_details(self) -> Optional[TodayDetails]:
@@ -69,10 +64,9 @@ class Forecast:
 
     def __repr__(self) -> str:
         return (
-            f"Forecast(location={self._location}, "
-            f"temperature='{self._temperature}', "
+            f"Forecast(search={self._search}, "
+            f"current_conditions={self._current_conditions}, "
             f"feelslike='{self._feelslike}', "
-            f"icon={self._icon}, "
             f"today_details={self._today_details}, "
             f"air_quality_index={self._air_quality_index}, "
             f"health_activities={self._health_activities}, "

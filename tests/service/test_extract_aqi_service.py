@@ -28,7 +28,7 @@ def test_execute_returns_air_quality_index(monkeypatch):
     """
     doc = PyQuery(html)
 
-    expected_aqi = AirQualityIndex(title="Air Quality Index", aqi=27, category="Good", acronym="AQI", color=Color("00","E8","38"))
+    expected_aqi = AirQualityIndex(title="Air Quality Index", value=27, category="Good", acronym="AQI", color=Color("00","E8","38"))
 
     def fake_aqi_color_from_string(aqi_data, color_data):
         assert "Air Quality Index" in aqi_data

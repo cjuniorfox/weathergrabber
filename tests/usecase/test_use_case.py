@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock
 from weathergrabber.domain.forecast import Forecast
-from weathergrabber.domain.location import Location
+from weathergrabber.domain.search import Search
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.usecase.use_case import UseCase
 
@@ -12,10 +12,8 @@ def mock_services():
     return {
         "search_location_service": MagicMock(),
         "read_weather_service": MagicMock(),
-        "extract_location_service": MagicMock(),
-        "extract_temperature_service": MagicMock(),
+        "extract_current_conditions_service": MagicMock(),
         "extract_feelslike_temperature_service": MagicMock(),
-        "extract_icon_service": MagicMock(),
         "extract_today_details_service": MagicMock(),
         "extract_aqi_service": MagicMock(),
         "extract_health_activities_service": MagicMock(),
@@ -41,10 +39,8 @@ def test_execute_happy_path(usecase, mock_services, params):
     # Arrange
     mock_services["search_location_service"].execute.return_value = "12345"
     mock_services["read_weather_service"].execute.return_value = "<html>weather</html>"
-    mock_services["extract_location_service"].execute.return_value = "ExtractedCity"
-    mock_services["extract_temperature_service"].execute.return_value = "20°"
+    mock_services["extract_current_conditions_service"].execute.return_value = "CurrentConditions"
     mock_services["extract_feelslike_temperature_service"].execute.return_value = "18°"
-    mock_services["extract_icon_service"].execute.return_value = "sunny"
     mock_services["extract_today_details_service"].execute.return_value = "details"
     mock_services["extract_aqi_service"].execute.return_value = "good"
     mock_services["extract_health_activities_service"].execute.return_value = "running"
@@ -56,10 +52,12 @@ def test_execute_happy_path(usecase, mock_services, params):
 
     # Assert
     assert isinstance(forecast, Forecast)
-    assert forecast.location.id == "12345"
-    assert forecast.temperature == "20°"
+    assert forecast.current_conditions == "CurrentConditions"
+    assert forecast.today_details == "details"
+    assert forecast.air_quality_index == "good"
+    assert forecast.health_activities == "running"
+    assert forecast.search.id == "12345"
     assert forecast.feelslike == "18°"
-    assert forecast.icon == "sunny"
     assert forecast.hourly_predictions == ["hour1", "hour2"]
     assert forecast.daily_predictions == ["day1", "day2"]
 
@@ -68,10 +66,8 @@ def test_execute_fallback_hourly(usecase, mock_services, params):
     # Hourly forecast raises -> fallback to oldstyle
     mock_services["search_location_service"].execute.return_value = "12345"
     mock_services["read_weather_service"].execute.return_value = "<html>weather</html>"
-    mock_services["extract_location_service"].execute.return_value = "ExtractedCity"
-    mock_services["extract_temperature_service"].execute.return_value = "20°"
+    mock_services["extract_current_conditions_service"].execute.return_value = "CurrentConditions"
     mock_services["extract_feelslike_temperature_service"].execute.return_value = "18°"
-    mock_services["extract_icon_service"].execute.return_value = "sunny"
     mock_services["extract_today_details_service"].execute.return_value = "details"
     mock_services["extract_aqi_service"].execute.return_value = "good"
     mock_services["extract_health_activities_service"].execute.return_value = "running"
@@ -89,10 +85,8 @@ def test_execute_fallback_daily(usecase, mock_services, params):
     # Daily forecast raises -> fallback to oldstyle
     mock_services["search_location_service"].execute.return_value = "12345"
     mock_services["read_weather_service"].execute.return_value = "<html>weather</html>"
-    mock_services["extract_location_service"].execute.return_value = "ExtractedCity"
-    mock_services["extract_temperature_service"].execute.return_value = "20°"
+    mock_services["extract_current_conditions_service"].execute.return_value = "CurrentConditions"
     mock_services["extract_feelslike_temperature_service"].execute.return_value = "18°"
-    mock_services["extract_icon_service"].execute.return_value = "sunny"
     mock_services["extract_today_details_service"].execute.return_value = "details"
     mock_services["extract_aqi_service"].execute.return_value = "good"
     mock_services["extract_health_activities_service"].execute.return_value = "running"
