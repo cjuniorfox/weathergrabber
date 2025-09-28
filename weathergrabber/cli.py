@@ -9,7 +9,7 @@ def main_cli():
     parser.add_argument("--location-id", "-l", type=str, help="64-character-hex code for location obtained from weather.com")
     parser.add_argument("--lang", "-L", type=str, help="Language (pt-BR, fr-FR, etc.), If not set, uses the machine one.")
     parser.add_argument("--output", "-o", type=str, choices=['console','json','waybar'], default='console', help="Output format. console, json or waybar")
-    parser.add_argument("--persist", "-p",action='store_true', default=False, help="Keep waybar open instead of exiting after execution. Does only makes sense for --output=console")
+    parser.add_argument("--keep-open", "-k",action='store_true', default=False, help="Keep open and refreshing every 5 minutes instead of exiting after execution. Does only makes sense for --output=console")
     parser.add_argument("--icons", "-i", type=str, choices=['fa','emoji'], default='emoji', help="Icon set. 'fa' for Font-Awesome, or 'emoji'")
     parser.add_argument(
         "--log",
@@ -29,7 +29,7 @@ def main_cli():
         location_id = location_id,
         lang=lang,
         output=args.output,
-        persist=args.persist,
+        keep_open=args.keep_open,
         icons=args.icons
     )
 

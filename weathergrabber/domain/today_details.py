@@ -1,31 +1,16 @@
-from weathergrabber.domain.temperature_hight_low import TemperatureHighLow
+from .temperature_hight_low import TemperatureHighLow
+from .label_value import LabelValue
 from typing import Optional
-from weathergrabber.domain.uv_index import UVIndex
-from weathergrabber.domain.moon_phase import MoonPhase
+from .uv_index import UVIndex
+from .moon_phase import MoonPhase
+from .sunrise_sunset import SunriseSunset
 
 class TodayDetails:
 
-    class LabelValue:
-        def __init__(self, label: str, value: str):
-            self._label = label
-            self._value = value
-
-        @property
-        def label(self) -> str:
-            return self._label
-
-        @property
-        def value(self) -> str:
-            return self._value
-
-        def __repr__(self) -> str:
-            return f"LabelValue(label={self.label!r}, value={self.value!r})"
-        
-        def __str__(self) -> str:
-            return f"{self.label}: {self.value}"
-
     def __init__(
             self,
+            feelslike: LabelValue,
+            sunrise_sunset: Optional["SunriseSunset"],
             high_low: Optional[TemperatureHighLow],
             wind: LabelValue,
             humidity: LabelValue,
@@ -35,6 +20,8 @@ class TodayDetails:
             visibility: LabelValue,
             moon_phase: Optional[MoonPhase]
         ):
+        self._feelslike = feelslike
+        self._sunrise_sunset = sunrise_sunset
         self._high_low = high_low
         self._wind = wind
         self._humidity = humidity
@@ -43,6 +30,14 @@ class TodayDetails:
         self._uv_index = uv_index
         self._visibility = visibility
         self._moon_phase = moon_phase
+
+    @property
+    def feelslike(self) -> LabelValue:
+        return self._feelslike
+
+    @property
+    def sunrise_sunset(self) -> Optional[SunriseSunset]:
+        return self._sunrise_sunset
 
     @property
     def high_low(self) -> Optional[TemperatureHighLow]:
@@ -76,8 +71,9 @@ class TodayDetails:
     def moon_phase(self) -> Optional[MoonPhase]:
         return self._moon_phase
 
-    def __repr__(self) -> str:
-        return (f"TodayDetails(high_low={self.high_low}, wind={self.wind!r}, "
+    def __repr__(self):
+        return (f"TodayDetails(feelslike={self.feelslike!r}, sunrise_sunset={self.sunrise_sunset!r},"
+                f"high_low={self.high_low!r}, wind={self.wind!r}, "
                 f"humidity={self.humidity!r}, dew_point={self.dew_point!r}, "
-                f"pressure={self.pressure!r}, uv_index={self.uv_index}, "
-                f"visibility={self.visibility!r}, moon_phase={self.moon_phase})")    
+                f"pressure={self.pressure!r}, uv_index={self.uv_index!r}, "
+                f"visibility={self.visibility!r}, moon_phase={self.moon_phase!r})")

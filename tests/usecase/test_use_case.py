@@ -13,7 +13,6 @@ def mock_services():
         "search_location_service": MagicMock(),
         "read_weather_service": MagicMock(),
         "extract_current_conditions_service": MagicMock(),
-        "extract_feelslike_temperature_service": MagicMock(),
         "extract_today_details_service": MagicMock(),
         "extract_aqi_service": MagicMock(),
         "extract_health_activities_service": MagicMock(),
@@ -40,7 +39,6 @@ def test_execute_happy_path(usecase, mock_services, params):
     mock_services["search_location_service"].execute.return_value = "12345"
     mock_services["read_weather_service"].execute.return_value = "<html>weather</html>"
     mock_services["extract_current_conditions_service"].execute.return_value = "CurrentConditions"
-    mock_services["extract_feelslike_temperature_service"].execute.return_value = "18°"
     mock_services["extract_today_details_service"].execute.return_value = "details"
     mock_services["extract_aqi_service"].execute.return_value = "good"
     mock_services["extract_health_activities_service"].execute.return_value = "running"
@@ -57,7 +55,6 @@ def test_execute_happy_path(usecase, mock_services, params):
     assert forecast.air_quality_index == "good"
     assert forecast.health_activities == "running"
     assert forecast.search.id == "12345"
-    assert forecast.feelslike == "18°"
     assert forecast.hourly_predictions == ["hour1", "hour2"]
     assert forecast.daily_predictions == ["day1", "day2"]
 
@@ -67,7 +64,6 @@ def test_execute_fallback_hourly(usecase, mock_services, params):
     mock_services["search_location_service"].execute.return_value = "12345"
     mock_services["read_weather_service"].execute.return_value = "<html>weather</html>"
     mock_services["extract_current_conditions_service"].execute.return_value = "CurrentConditions"
-    mock_services["extract_feelslike_temperature_service"].execute.return_value = "18°"
     mock_services["extract_today_details_service"].execute.return_value = "details"
     mock_services["extract_aqi_service"].execute.return_value = "good"
     mock_services["extract_health_activities_service"].execute.return_value = "running"
@@ -86,7 +82,6 @@ def test_execute_fallback_daily(usecase, mock_services, params):
     mock_services["search_location_service"].execute.return_value = "12345"
     mock_services["read_weather_service"].execute.return_value = "<html>weather</html>"
     mock_services["extract_current_conditions_service"].execute.return_value = "CurrentConditions"
-    mock_services["extract_feelslike_temperature_service"].execute.return_value = "18°"
     mock_services["extract_today_details_service"].execute.return_value = "details"
     mock_services["extract_aqi_service"].execute.return_value = "good"
     mock_services["extract_health_activities_service"].execute.return_value = "running"

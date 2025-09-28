@@ -9,7 +9,7 @@ logging.basicConfig(
     format="[%(levelname)s] %(message)s"
 )
 
-def main(log_level: str, location_name: str, location_id: str, lang: str, output: str, persist: bool, icons: str):
+def main(log_level: str, location_name: str, location_id: str, lang: str, output: str, keep_open: bool, icons: str):
     logging.getLogger().setLevel(log_level.upper())
 
     logging.info(f"Log level set to {log_level}")
@@ -17,14 +17,14 @@ def main(log_level: str, location_name: str, location_id: str, lang: str, output
     logging.info(f"Location id: {location_id}")
     logging.info(f"Language: {lang}")
     logging.info(f"Output: {output}")
-    logging.info(f"Persist: {persist}")
+    logging.info(f"Keep open: {keep_open}")
     logging.info(f"Icons: {icons}")
 
     params = Params(
         location=Params.Location(search_name=location_name, id=location_id),
         language=lang if lang else "en-US",
         output_format= OutputEnum(output),
-        persist=persist,
+        keep_open=keep_open,
         icons=IconEnum(icons)
     )
 

@@ -5,7 +5,8 @@ from weathergrabber.domain.temperature_hight_low import TemperatureHighLow
 from weathergrabber.domain.uv_index import UVIndex
 from weathergrabber.domain.moon_phase import MoonPhase
 from weathergrabber.domain.moon_phase_enum import MoonPhaseEnum
-
+from weathergrabber.domain.label_value import LabelValue
+from weathergrabber.domain.sunrise_sunset import SunriseSunset
 
 class ExtractTodayDetailsService:
     def __init__(self):
@@ -16,7 +17,16 @@ class ExtractTodayDetailsService:
         try:
             self.logger.debug("Extracting today's details...")
 
-            today_details_data = weather_data.find("div[class*='TodayDetailsCard'] div[data-testid='WeatherDetailsListItem']")
+            today_details_data = weather_data.find("div#todayDetails")
+            feelslike = PyQuery(today_details_data).find("div[data-testid='FeelsLikeSection'] span")
+            sunrise_sunset = PyQuery(today_details_data).find("div[data-testid='sunriseSunsetContainer'] div p[class*='TwcSunChart']")
+
+            feelslike_label = feelslike.eq(0).text()  #'Feels Like'
+            feelslike_value = feelslike.eq(1).text()  #'60°'
+
+            sunrise = sunrise_sunset.eq(0).text()  #'6:12 AM'
+            sunset = sunrise_sunset.eq(1).text()  #'7:45 PM'
+
             icons = today_details_data.find('svg[class*="WeatherDetailsListItem--icon"]')
             labels = today_details_data.find('div[class*="WeatherDetailsListItem--label"]')
             values = today_details_data.find('div[data-testid="wxData"]')
@@ -49,18 +59,21 @@ class ExtractTodayDetailsService:
 
             self.logger.debug(f"Creating domain objects for today details...")
 
+            sunrise_sunset = SunriseSunset(sunrise=sunrise, sunset=sunset)
             high_low = TemperatureHighLow.from_string(high_low_value, label=high_low_label)
             uv_index = UVIndex.from_string(uv_index_value, label=uv_index_label)
             moon_phase = MoonPhase(MoonPhaseEnum.from_name(moon_phase_icon), moon_phase_value, moon_phase_label)
 
             today_details = TodayDetails(
+                feelslike=LabelValue(label=feelslike_label, value=feelslike_value),
+                sunrise_sunset=sunrise_sunset,
                 high_low=high_low,
-                wind=TodayDetails.LabelValue(label=wind_label, value=wind_value),
-                humidity=TodayDetails.LabelValue(label=humidity_label, value=humidity_value),
-                dew_point=TodayDetails.LabelValue(label=dew_point_label, value=dew_point_value),
-                pressure=TodayDetails.LabelValue(label=pressure_label, value=pressure_value),
+                wind=LabelValue(label=wind_label, value=wind_value),
+                humidity=LabelValue(label=humidity_label, value=humidity_value),
+                dew_point=LabelValue(label=dew_point_label, value=dew_point_value),
+                pressure=LabelValue(label=pressure_label, value=pressure_value),
                 uv_index=uv_index,
-                visibility=TodayDetails.LabelValue(label=visibility_label, value=visibility_value),
+                visibility=LabelValue(label=visibility_label, value=visibility_value),
                 moon_phase=moon_phase
             )
 

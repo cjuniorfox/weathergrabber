@@ -1,10 +1,9 @@
 class UVIndex:
 
-    def __init__(self, string_value: str, index: str, of: str, observation:str = None, label:str = None):
+    def __init__(self, string_value: str, index: str, of: str = None, label:str = None):
         self._string_value = string_value
         self._index = index
         self._of = of
-        self._observation = observation
         self._label = label
 
     @property
@@ -18,10 +17,6 @@ class UVIndex:
     @property
     def of(self) -> str:
         return self._of
-    
-    @property
-    def observation(self) -> str:
-        return self._observation
 
     @property
     def label(self) -> str:
@@ -30,14 +25,19 @@ class UVIndex:
     @classmethod
     def from_string(cls, data: str, label: str = None) -> 'UVIndex':
         parts = data.split(' ')
-        if len(parts) == 3:
+        if len(parts) == 1:
+            return cls(string_value = data, index= parts[0].strip(), of="", label=label)
+        elif len(parts) == 3:
             index, of, some = parts
-            return cls(data, index=index.strip(), of=some.strip())
-        elif len(parts) == 1:
-            parts
-            return cls(data, index=None, of=None, observation=parts.strip(), label=label)
+            return cls(string_value = data, index=index.strip(), of=some.strip(), label=label)
         else:
-            raise ValueError("Invalid UV index string format")
+            raise ValueError(f"Cannot parse UV Index from string: {data}")
     
     def __repr__(self) -> str:
-        return f"UVIndex(string_value={self.string_value!r}, index={self.index!r}, of={self.of!r}, observation={self.observation!r}, label={self.label!r})"
+        return f"UVIndex(string_value={self.string_value!r}, index={self.index!r}, of={self.of!r}, label={self.label!r})"
+    
+    def __str__(self) -> str:
+        if self.string_value:
+            return f"{self.label}: {self.string_value}"
+        elif self.index and self.of:
+            return f"{self.label}: {self.index} {self.of}" if self.label else f"{self.index} {self.of}"

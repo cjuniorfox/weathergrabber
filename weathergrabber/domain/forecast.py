@@ -14,7 +14,6 @@ class Forecast:
         self,
         search: Optional[Search],
         current_conditions: Optional[CurrentConditions],
-        feelslike: str,
         today_details: Optional[TodayDetails],
         air_quality_index: Optional[AirQualityIndex],
         health_activities: Optional[HealthActivities],
@@ -23,7 +22,6 @@ class Forecast:
     ):
         self._search = search
         self._current_conditions = current_conditions
-        self._feelslike = feelslike
         self._today_details = today_details
         self._air_quality_index = air_quality_index
         self._health_activities = health_activities
@@ -37,10 +35,6 @@ class Forecast:
     @property
     def current_conditions(self) -> Optional[CurrentConditions]:
         return self._current_conditions
-
-    @property
-    def feelslike(self) -> str:
-        return self._feelslike
 
     @property
     def today_details(self) -> Optional[TodayDetails]:
@@ -66,7 +60,6 @@ class Forecast:
         return (
             f"Forecast(search={self._search}, "
             f"current_conditions={self._current_conditions}, "
-            f"feelslike='{self._feelslike}', "
             f"today_details={self._today_details}, "
             f"air_quality_index={self._air_quality_index}, "
             f"health_activities={self._health_activities}, "

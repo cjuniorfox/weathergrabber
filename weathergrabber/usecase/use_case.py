@@ -3,7 +3,6 @@ from weathergrabber.domain.adapter.params import Params
 from weathergrabber.service.search_location_service import SearchLocationService
 from weathergrabber.service.read_weather_service import ReadWeatherService
 from weathergrabber.service.extract_current_conditions_service import ExtractCurrentConditionsService
-from weathergrabber.service.extract_feelslike_temperature_service import ExtractFeelslikeTemperatureService
 from weathergrabber.service.extract_today_details_service import ExtractTodayDetailsService
 from weathergrabber.service.extract_aqi_service import ExtractAQIService
 from weathergrabber.service.extract_health_activities_service import ExtractHealthActivitiesService
@@ -20,7 +19,6 @@ class UseCase:
         search_location_service: SearchLocationService,
         read_weather_service: ReadWeatherService,
         extract_current_conditions_service: ExtractCurrentConditionsService,
-        extract_feelslike_temperature_service: ExtractFeelslikeTemperatureService,
         extract_today_details_service: ExtractTodayDetailsService,
         extract_aqi_service: ExtractAQIService,
         extract_health_activities_service: ExtractHealthActivitiesService,
@@ -33,7 +31,6 @@ class UseCase:
         self.logger = logging.getLogger(__name__)
         self.read_weather_service = read_weather_service
         self.extract_current_conditions_service = extract_current_conditions_service
-        self.extract_feelslike_temperature_service = extract_feelslike_temperature_service
         self.extract_today_details_service = extract_today_details_service
         self.search_location_service = search_location_service
         self.extract_aqi_service = extract_aqi_service
@@ -55,8 +52,6 @@ class UseCase:
         weather_data = self.read_weather_service.execute(params.language, location_id)
 
         current_conditions = self.extract_current_conditions_service.execute(weather_data)
-        
-        feelslike = self.extract_feelslike_temperature_service.execute(weather_data)
         today_details = self.extract_today_details_service.execute(weather_data)
         air_quality_index = self.extract_aqi_service.execute(weather_data)
         health_activities = self.extract_health_activities_service.execute(weather_data)
@@ -77,7 +72,6 @@ class UseCase:
                 search_name = search_name
             ),
             current_conditions = current_conditions,
-            feelslike = feelslike,
             today_details = today_details,
             air_quality_index = air_quality_index,
             health_activities = health_activities,

@@ -15,7 +15,7 @@ class DayNight:
         @classmethod
         def from_string(cls, text:str) -> 'DayNight.Temperature':
             label, value = text.split("\xa0")
-            return cls(label.split(), value.split())
+            return cls(label.strip(), value.strip())
 
         def __repr__(self):
             return f"DayNight.Temperature(label={self.label!r}, value={self.value!r})"

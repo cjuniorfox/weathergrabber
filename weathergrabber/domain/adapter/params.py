@@ -24,13 +24,13 @@ class Params:
             location: Optional["Params.Location"] = None,
             language: str = "en-US",
             output_format: OutputEnum = OutputEnum.CONSOLE,
-            persist: bool = False,
+            keep_open: bool = False,
             icons: IconEnum = IconEnum.EMOJI
         ):
         self._location = location
         self._language = language
         self._output_format = output_format
-        self._persist = persist
+        self._keep_open = keep_open
         self._icons = icons
 
     @property
@@ -46,13 +46,13 @@ class Params:
         return self._output_format
     
     @property
-    def persist(self) -> bool:
-        return self._persist
+    def keep_open(self) -> bool:
+        return self._keep_open
     
     @property
     def icons(self) -> IconEnum:
         return self._icons
     
     def __str__(self):
-        return f"Params(location={self.location}, language={self.language}, output_format={self.output_format}, persist={self.persist}, icons={self.icons})"
+        return f"Params(location={self.location}, language={self.language}, output_format={self.output_format}, keep_open={self.keep_open}, icons={self.icons})"
     
