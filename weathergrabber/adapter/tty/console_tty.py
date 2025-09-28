@@ -100,7 +100,7 @@ class ConsoleTTY:
             lines_count = print_value.count("\n") + 1
             ret_prev_line = f"\033[{lines_count}A"              
             sleep(300)  # Sleep for 5 minutes
-            print(ret_prev_line)
+            print(ret_prev_line, end='')  # Move cursor back to the beginning to overwrite
             WeatherGrabberApplication(params)
 
         self.logger.info("Console output executed")
