@@ -84,7 +84,7 @@ To integrate the script with Waybar:
    {
        "modules-left": ["custom/weather"],
        "custom/weather": {
-           "exec": "weather-grabber --output waybar",
+           "exec": "weathergrabber --output waybar",
            "interval": 600
        }
    }
