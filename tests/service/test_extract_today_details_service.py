@@ -67,7 +67,7 @@ def test_extract_today_details_service():
     assert result.humidity.value == '100%'
     assert result.dew_point.value == '60°'
     assert result.pressure.value == '30.31 in'
-    assert f"{result.uv_index}" == 'UV Index: 5 of 10'
+    assert f"{result.uv_index}" == 'UV Index 5 of 10'
     assert result.visibility.value == '10.0 mi'
     assert result.moon_phase.phase == 'Waxing Crescent'
     assert result.moon_phase.label == 'Moon Phase'

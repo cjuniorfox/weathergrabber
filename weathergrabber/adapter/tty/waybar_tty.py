@@ -72,7 +72,7 @@ class WaybarTTY:
             for h in forecast.hourly_predictions
         ]
         daily_predictions = [
-            f"{d.title}{'\t' if len(d.title) < 5 else ''}\t{d.high_low.high}/<span size='small'>{d.high_low.low}</span>\t{d.icon.fa_icon if is_fa else d.icon.emoji_icon}\t{rain_icon}  {d.precipitation.percentage}"
+            f"{d.title}{'\t' if len(d.title) < 5 else ''}\t{d.high_low.high}/<span size='small'>{d.high_low.low}</span>\t{'\t' if len(d.title) < 5 else ''}{d.icon.fa_icon if is_fa else d.icon.emoji_icon}\t{rain_icon}  {d.precipitation.percentage}"
             for d in forecast.daily_predictions
         ]
 
@@ -83,7 +83,7 @@ class WaybarTTY:
             "\n"
             f"{summary}\n"
             "\n"
-            f"{day_temp_label} {day_temp_value} {night_temp_label} {night_temp_value}\t\t{feelslike_icon} {feelslike}\n"
+            f"{day_temp_label}{day_temp_value} {night_temp_label}{night_temp_value}\t\t {feelslike_icon} {feelslike}\n"
             "\n"
             f"{sunrise_icon} {sunrise_value} • {sunset_icon} {sunset_value}\n"
             "\n"
@@ -97,7 +97,7 @@ class WaybarTTY:
             "\n"
             f"{'\n'.join(daily_predictions)}\n"
             "\n"
-            f"<span size='small' style='italic' weight='light' gravity='east'>{forecast.current_conditions.timestamp}</span>"
+            f"<span size='small' style='italic' weight='light'>{forecast.current_conditions.timestamp}</span>"
         )
 
         waybar_output = {

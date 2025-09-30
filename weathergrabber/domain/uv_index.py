@@ -38,6 +38,6 @@ class UVIndex:
     
     def __str__(self) -> str:
         if self.string_value:
-            return f"{self.label}: {self.string_value}"
+            return f"{self.label} {self.string_value}"
         elif self.index and self.of:
-            return f"{self.label}: {self.index} {self.of}" if self.label else f"{self.index} {self.of}"
+            return f"{self.label} {self.index} {self.of}" if self.label else f"{self.index} {self.of}"
