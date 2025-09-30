@@ -72,7 +72,7 @@ class WeatherGrabberApplication:
             self.logger.info("Keep open mode enabled, the application will refresh every 5 minutes")
             while True:
                 self.controller.execute(params)
-                sleep(300)  # Sleep for 5 minutes
+                sleep(1)  # Sleep for 5 minutes
         else:
             self.controller.execute(params)
         self.logger.info("WeatherGrabber Application finished")

@@ -14,7 +14,7 @@ class WeatherApi:
         if location == None:
             url = f"https://weather.com/{language}/weather/today"       
         elif len(location) < 64 :
-            raise ValueError("Invalid location")
+            raise ValueError("Invalid location id")
         
         if language == None:
             raise ValueError("language must be specified")
