@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 from .domain.adapter.params import Params
 from .domain.adapter.output_enum import OutputEnum
 from .adapter.client.weather_api import WeatherApi
@@ -66,4 +67,12 @@ class WeatherGrabberApplication:
         self.logger = logging.getLogger(__name__)
         self._beans()
         self._define_controller(params.output_format)
-        self.controller.execute(params)
+        self.logger.info("Starting WeatherGrabber Application")
+        if params.keep_open:
+            self.logger.info("Keep open mode enabled, the application will refresh every 5 minutes")
+            while True:
+                self.controller.execute(params)
+                sleep(300)  # Sleep for 5 minutes
+        else:
+            self.controller.execute(params)
+        self.logger.info("WeatherGrabber Application finished")
