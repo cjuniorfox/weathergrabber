@@ -30,43 +30,43 @@ class HourlyPredictions:
         self._cloud_cover = cloud_cover
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self._title
 
     @property
-    def temperature(self):
+    def temperature(self) -> str:
         return self._temperature
 
     @property
-    def icon(self):
+    def icon(self) -> WeatherIconEnum:
         return self._icon
 
     @property
-    def summary(self):
+    def summary(self) -> str:
         return self._summary
 
     @property
-    def precipitation(self):
+    def precipitation(self) -> Optional[Precipitation]:
         return self._precipitation
 
     @property
-    def wind(self):
+    def wind(self) -> Optional[Wind]:
         return self._wind
 
     @property
-    def feels_like(self):
+    def feels_like(self) -> str:
         return self._feels_like
 
     @property
-    def humidity(self):
+    def humidity(self) -> str:
         return self._humidity
 
     @property
-    def uv_index(self):
+    def uv_index(self) -> Optional[UVIndex]:
         return self._uv_index
 
     @property
-    def cloud_cover(self):
+    def cloud_cover(self) -> str:
         return self._cloud_cover
 
     def __repr__(self):
