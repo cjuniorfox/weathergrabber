@@ -31,8 +31,13 @@ class Color:
         
         return cls(r, g, b)
     
-    def __str__(self):
-        return f"#{self.red}{self.green}{self.blue}"
+    @property
+    def hex(self) -> str:
+        return f"#{self.red:02x}{self.green:02x}{self.blue:02x}"
+    
+    @property
+    def rgb(self) -> str:
+        return f"rgb({self.red}, {self.green}, {self.blue})"
     
     def __repr__(self):
         return f"Color(red='{self.red}', green='{self.green}', blue='{self.blue}')"
