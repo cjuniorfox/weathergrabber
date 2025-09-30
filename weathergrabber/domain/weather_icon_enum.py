@@ -1,4 +1,5 @@
 from enum import Enum
+import logging
 
 class WeatherIconEnum(Enum):
     CLEAR = ('clear', chr(0xF0599), '☀️')
@@ -22,6 +23,8 @@ class WeatherIconEnum(Enum):
     RAINY_NIGHT = ('rainy-night', chr(0x1F326), '🌧️')
     SCATTERED_SHOWERS_DAY = ('scattered-showers-day', chr(0x1F326), '🌦️')
     SCATTERED_SHOWERS_NIGHT = ('scattered-showers-night', chr(0x1F326), '🌦️')
+    SCATTERED_THUNDERSTORMS_DAY = ('scattered-thunderstorms-day', chr(0x26C8), '⛈️')
+    SCATTERED_THUNDERSTORMS_NIGHT = ('scattered-thunderstorms-night', chr(0x26C8), '⛈️')
     SEVERE = ('severe', '\ue317', '🌩️')
     SHOWERS = ('showers', '\u26c6', '🌧️')
     SNOW = ('snow', '\uf2dc', '❄️')
@@ -56,4 +59,5 @@ class WeatherIconEnum(Enum):
         for item in WeatherIconEnum:
             if item._name == name:
                 return item
+        logging.warning(f'WeatherIconEnum: No icon found for name "{name}"')
         return None
