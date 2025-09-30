@@ -139,26 +139,6 @@ To integrate the script with Waybar:
 
 2. Reload Waybar to apply the changes.
 
-## Implementation Details
-
-### Class Structure
-
-- **`WeatherForecast`**: Represents weather data, including:
-  - Current temperature and status.
-  - Hourly and daily predictions.
-- **`WeatherForecastExtractor`**: Parses HTML data from Weather.com to extract relevant weather information.
-
-### Key Functions
-
-- `grab_weather_data(lang, weather_id)`: Fetches HTML data from Weather.com.
-- `get_weather_forecast(lang, weather_id)`: Extracts weather data and returns a `WeatherForecast` object.
-- `format_weather(wf)`: Formats weather data for console display.
-- `waybar(wf)`: Generates Waybar-compatible JSON.
-
-### Customization
-
-- The script uses `FontAwesome` and emoji-based icons. Customize these icons by editing the `weather_icons_fa` and `weather_icons_emoji` dictionaries.
-
 ## Error Handling
 
 - Validates `weather_id` and `lang` inputs.
