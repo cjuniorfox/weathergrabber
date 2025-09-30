@@ -40,45 +40,6 @@ Or, for development (editable install with dev dependencies):
 pip install -e .[dev]
 ```
 
-## Usage
-
-### Examples
-
-1. **Fetch weather data for a specific location:**
-
-  ```bash
-  python -m weathergrabber.cli --lang en-IL --location-id WEATHER_LOCATION_ID
-  ```
-
-  The `WEATHER_LOCATION_ID` is a 64-character hex unique location. To get the intended location, go to Weather.com, search for your location, and check the URL. The `LOCATION_ID` will be at the URL. Example:
-
-- For **São Paulo**, the URL is: `https://weather.com/pt-BR/weather/today/l/ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`
-- The `WEATHER_LOCATION_ID` is  `ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`.
-
-  Optionally, you can set the value as the environment variable `WEATHER_LOCATION_ID` and omit the `location_name` and `--location-id` parameters. If no environment variable nor parameter is specified, the weather data will be the default one from Weather.com.
-
-2. **Display formatted weather in the console:**
-
-  ```bash
-  python -m weathergrabber.cli --lang en-US
-  ```
-
-  With the addition of `--keep-open` option, the weather script will keep open and update its information with new data every 5 minutes.
-
-3. **Generate JSON for Waybar:**
-
-  ```bash
-  python -m weathergrabber.cli --output waybar --lang pt-BR --location-id WEATHER_LOCATION_ID
-  ```
-
-4. **Generate JSON output for general usage:**
-
-  ```bash
-  python -m weathergrabber.cli --output json --location-id WEATHER_LOCATION_ID | jq
-  ```
-
-  See the **JSON Schema** for this output.
-
 ### Output Formats
 
 #### Console Output
