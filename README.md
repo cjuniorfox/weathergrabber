@@ -99,8 +99,8 @@ To integrate the script with Waybar:
 
 ## CI & Test Coverage
 
-![Test Status](https://github.com/cjuniorfox/weather/actions/workflows/python-package.yml/badge.svg)
-[![codecov](https://codecov.io/gh/cjuniorfox/weather/branch/main/graph/badge.svg)](https://codecov.io/gh/cjuniorfox/weather)
+![Test Status](https://github.com/cjuniorfox/weathergrabber/actions/workflows/python-package.yml/badge.svg)
+[![codecov](https://codecov.io/gh/cjuniorfox/weathergrabber/branch/main/graph/badge.svg)](https://codecov.io/gh/cjuniorfox/weathergrabber)
 
 The test suite is run automatically on every push and pull request using GitHub Actions. Coverage results are uploaded to Codecov and displayed above.
 
