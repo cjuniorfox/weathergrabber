@@ -4,7 +4,6 @@ from weathergrabber.domain.adapter.icon_enum import IconEnum
 from weathergrabber.domain.weather_icon_enum import WeatherIconEnum
 from weathergrabber.weathergrabber_application import WeatherGrabberApplication
 import logging
-from time import sleep
 
 class ConsoleTTY:
 
@@ -73,9 +72,10 @@ class ConsoleTTY:
         ]
 
         print_value = (
-            f"\n"
+            "\n"
             f"{city}, {state_province}\n"
-            f"{icon} {temperature}\n"
+            "\n"
+            f"{icon}       {temperature}\n"
             "\n"
             f"{summary}\n"
             f"{day_temp_label} {day_temp_value}/{night_temp_label} {night_temp_value}\t{feelslike_icon} {feelslike}\n"
@@ -99,8 +99,4 @@ class ConsoleTTY:
         if(params.keep_open):
             lines_count = print_value.count("\n") + 1
             ret_prev_line = f"\033[{lines_count}A"              
-            sleep(300)  # Sleep for 5 minutes
-            print(ret_prev_line, end='')  # Move cursor back to the beginning to overwrite
-            WeatherGrabberApplication(params)
-
-        self.logger.info("Console output executed")
+            print(ret_prev_line, end='')  # Move cursor back to the beginning for overwriting, the application is responsable for executing again
