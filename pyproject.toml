@@ -1,5 +1,5 @@
 [project]
-name = "weathergrabber"
+name = "python3-weathergrabber"
 version = "0.1.0"
 description = "A grabber for weather.com data with various output formats."
 readme = "README.md"
@@ -11,7 +11,7 @@ authors = [
 
 dependencies = [
     "pyquery>=2.0.1",
-    "requests>=2.32.5"
+    "requests>=2.32.4"
 ]
 
 [project.scripts]
