@@ -1,6 +1,8 @@
 from weathergrabber.usecase.use_case import UseCase
 from weathergrabber.domain.adapter.params import Params
+from weathergrabber.domain.adapter.mapper.forecast_mapper import forecast_to_dict
 import logging
+import json
 
 class JsonTTY:
 
@@ -10,6 +12,8 @@ class JsonTTY:
         pass
 
     def execute(self, params: Params) -> None:
-        self.logger.info("Executing TTY output")
-        self.use_case.execute(params)
-        self.logger.info("TTY output executed")
+        self.logger.info("Executing JSON output")
+        forecast = self.use_case.execute(params)
+        output: dict = forecast_to_dict(forecast)
+        output_json = json.dumps(output, indent=4)
+        print(output_json)
