@@ -1,5 +1,3 @@
-from .city_location import CityLocation
-
 class Search:
     def __init__(self, id: str, search_name: str | None = None):
         self._id = id
