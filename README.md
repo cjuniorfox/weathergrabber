@@ -42,48 +42,50 @@ pip install -r requirements.txt
 
 ### Command-Line Arguments
 
-- `--location`: Specify the 64-bit hex unique location ID for Weather.com. (Obtain from Weather.com URL for your location.)
-- `--lang`: Specify the language for Weather.com data (e.g., `en-US`, `pt-BR`). If not specified, the language used will be the system default.
-- `--output` : Choose between `console`, `waybar` or `json`. Forther explanation below. The default one is `console`.
-- `--persist` : Instead of executing and closing, keep the process running and retrieve new information from Weather.com every 10 minutes. Only makes sense when output is `console`.
-- `--icons` : Specify the icons set for the output. Choose between `emoji` or `fa` for using `font-awesome` icons insted. default is `emoji`.
+- `location_name` (positional, optional): City name, zip code, etc. If not provided, you can use `--location-id` or the `WEATHER_LOCATION_ID` environment variable.
+- `--location-id`, `-l`: 64-character-hex code for location (from Weather.com)
+- `--lang`, `-L`: Language (e.g., `pt-BR`, `fr-FR`). Defaults to system locale if not set.
+- `--output`, `-o`: Output format. One of `console`, `json`, or `waybar`. Default: `console`.
+- `--keep-open`, `-k`: Keep open and refresh every 5 minutes (only makes sense for `console` output).
+- `--icons`, `-i`: Icon set. `fa` for Font-Awesome, `emoji` for emoji icons. Default: `emoji`.
+- `--log`: Set logging level. One of `debug`, `info`, `warning`, `error`, `critical`. Default: `critical`.
 
 ### Examples
 
 1. **Fetch weather data for a specific location:**
 
-   ```bash
-   python weather.py --lang en-IL --location WEATHER_LOCATION_ID
-   ```
+  ```bash
+  python -m weathergrabber.cli --lang en-IL --location-id WEATHER_LOCATION_ID
+  ```
 
-   The `WEATHER_LOCATION_ID` is a 64-bit hex unique location. To get the intended location, go to Weather.com, search for your location, and check the URL. the `LOCATION_ID` will be at the URL. Example:
+  The `WEATHER_LOCATION_ID` is a 64-character hex unique location. To get the intended location, go to Weather.com, search for your location, and check the URL. The `LOCATION_ID` will be at the URL. Example:
 
-   - For **São Paulo**, the URL is: `https://weather.com/pt-BR/weather/today/l/ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`
-   - The `WEATHER_LOCATION_ID` is  `ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`.
+  - For **São Paulo**, the URL is: `https://weather.com/pt-BR/weather/today/l/ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`
+  - The `WEATHER_LOCATION_ID` is  `ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`.
 
-   Optionally, you can set the value as the environment variable `WEATHER_LOCATION_ID` and omit the `--location` parameter instead. If no enviroment variable nor parameter is specified, the weather data will be the default one from Weather.com.
+  Optionally, you can set the value as the environment variable `WEATHER_LOCATION_ID` and omit the `location_name` and `--location-id` parameters. If no environment variable nor parameter is specified, the weather data will be the default one from Weather.com.
 
 2. **Display formatted weather in the console:**
 
-   ```bash
-   python weather.py --lang en-US
-   ```
+  ```bash
+  python -m weathergrabber.cli --lang en-US
+  ```
 
-   With the addition of `--persist` option, the weather script will keep open and updating its information with new data every 10 minutes.
+  With the addition of `--keep-open` option, the weather script will keep open and update its information with new data every 5 minutes.
 
 3. **Generate JSON for Waybar:**
 
-   ```bash
-   python weather.py --output waybar --lang pt-BR --location WEATHER_LOCATION_ID
-   ```
+  ```bash
+  python -m weathergrabber.cli --output waybar --lang pt-BR --location-id WEATHER_LOCATION_ID
+  ```
 
 4. **Generate JSON output for general usage:**
 
   ```bash
-  python weather.py --output json --location WEATHER_LOCATION_ID | jq
+  python -m weathergrabber.cli --output json --location-id WEATHER_LOCATION_ID | jq
   ```
 
-  Above the **JSON Schema** output of this json.
+  See the **JSON Schema** for this output.
 
 ### Output Formats
 
@@ -129,7 +131,7 @@ To integrate the script with Waybar:
    {
        "modules-left": ["custom/weather"],
        "custom/weather": {
-           "exec": "python /path/to/weather_script.py --output waybar",
+           "exec": "weather-grabber --output waybar",
            "interval": 600
        }
    }
@@ -162,6 +164,67 @@ To integrate the script with Waybar:
 - Validates `weather_id` and `lang` inputs.
 - Handles HTTP errors gracefully, including 404 errors for invalid locations.
 
+## CI & Test Coverage
+
+![Test Status](https://github.com/cjuniorfox/weather/actions/workflows/python-package.yml/badge.svg)
+[![codecov](https://codecov.io/gh/cjuniorfox/weather/branch/main/graph/badge.svg)](https://codecov.io/gh/cjuniorfox/weather)
+
+The test suite is run automatically on every push and pull request using GitHub Actions. Coverage results are uploaded to Codecov and displayed above.
+
+To run tests and check coverage locally:
+
+```sh
+pytest --cov=weathergrabber --cov-report=term
+```
+
 ## License
 
 This script is open-source and available under the MIT License.
+
+## CLI Usage
+
+You can run the CLI as an installed command:
+
+```sh
+weathergrabber [location_name] [options]
+```
+
+Or as a Python module:
+
+```sh
+python -m weathergrabber.cli [location_name] [options]
+```
+
+### Arguments
+
+- `location_name` (positional, optional): City name, zip code, etc. If not provided, you can use `--location-id` or the `WEATHER_LOCATION_ID` environment variable.
+
+### Options
+
+- `--location-id`, `-l`   : 64-character-hex code for location (from Weather.com)
+- `--lang`, `-L`          : Language (e.g., `pt-BR`, `fr-FR`). Defaults to system locale if not set.
+- `--output`, `-o`        : Output format. One of `console`, `json`, or `waybar`. Default: `console`.
+- `--keep-open`, `-k`     : Keep open and refresh every 5 minutes (only makes sense for `console` output).
+- `--icons`, `-i`         : Icon set. `fa` for Font-Awesome, `emoji` for emoji icons. Default: `emoji`.
+- `--log`                 : Set logging level. One of `debug`, `info`, `warning`, `error`, `critical`. Default: `critical`.
+
+### Environment Variables
+
+- `LANG`                  : Used as default language if `--lang` is not set.
+- `WEATHER_LOCATION_ID`   : Used as default location if neither `location_name` nor `--location-id` is set.
+
+### Example Usage
+
+```sh
+weathergrabber "London" --output console --lang en-GB
+weathergrabber --location-id 1234567890abcdef... --output json
+weathergrabber "Paris" -o waybar -i fa
+```
+
+Or as a Python module:
+
+```sh
+python -m weathergrabber.cli "London" --output console --lang en-GB
+python -m weathergrabber.cli --location-id 1234567890abcdef... --output json
+python -m weathergrabber.cli "Paris" -o waybar -i fa
+```
