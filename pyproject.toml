@@ -1,5 +1,5 @@
 [project]
-name = "weather-grabber"
+name = "weathergrabber"
 version = "0.1.0"
 description = "A grabber for weather.com data with various output formats."
 readme = "README.md"
@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [project.scripts]
-weather-grabber = "weathergrabber.cli:main_cli"
+weathergrabber = "weathergrabber.cli:main_cli"
 
 [project.urls]
 homepage = "https://github.com/cjuniorfox/weather"
