@@ -1,49 +1,91 @@
 import pytest
-import logging
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch, MagicMock
 from weathergrabber.weathergrabber_application import WeatherGrabberApplication
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.domain.adapter.output_enum import OutputEnum
 
-def make_params(output_format=OutputEnum.CONSOLE, keep_open=False):
-    return Params(output_format=output_format, keep_open=keep_open, icons=None)
+@pytest.fixture(params=[OutputEnum.CONSOLE, OutputEnum.JSON, OutputEnum.WAYBAR])
+def params(request):
+    p = MagicMock(spec=Params)
+    p.output_format = request.param
+    p.keep_open = False
+    return p
+
+@pytest.fixture
+def params_keep_open():
+    p = MagicMock(spec=Params)
+    p.output_format = OutputEnum.JSON
+    p.keep_open = True
+    return p
 
 @patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
 @patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._define_controller')
-def test_application_runs_once(mock_define_controller, mock_beans):
-    params = make_params(output_format=OutputEnum.CONSOLE, keep_open=False)
-    app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
-    app.logger = logging.getLogger(__name__)
-    app._beans = MagicMock()
-    app._define_controller = MagicMock()
-    app.controller = MagicMock()
-    # Simulate __init__ logic except for controller assignment
-    app._beans()
-    app._define_controller(params.output_format)
-    app.controller.execute(params)
-    app._beans.assert_called_once()
-    app._define_controller.assert_called_once_with(params.output_format)
-    app.controller.execute.assert_called_once_with(params)
+def test_init_calls_beans_and_define_controller(mock_define, mock_beans, params):
+    with patch.object(WeatherGrabberApplication, 'controller', create=True):
+        WeatherGrabberApplication(params)
+    mock_beans.assert_called_once()
+    mock_define.assert_called_once_with(params.output_format)
 
 @patch('weathergrabber.weathergrabber_application.sleep', return_value=None)
 @patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
-def test_application_keep_open(mock_beans, mock_sleep):
-    params = make_params(output_format=OutputEnum.CONSOLE, keep_open=True)
-    # Patch controller to break after first loop
-    class DummyController:
-        def __init__(self):
-            self.calls = 0
-        def execute(self, p):
-            self.calls += 1
-            if self.calls > 1:
-                raise KeyboardInterrupt()
-    with patch.object(WeatherGrabberApplication, '_define_controller', autospec=True) as ctrl_patch:
-        def ctrl_side_effect(self, output_format):
-            self.controller = DummyController()
-        ctrl_patch.side_effect = ctrl_side_effect
-        try:
-            WeatherGrabberApplication(params)
-        except KeyboardInterrupt:
-            pass
-        # Should call execute at least once
-        assert ctrl_patch.call_count == 1
+@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._define_controller')
+def test_init_keep_open(mock_define, mock_beans, mock_sleep, params_keep_open):
+    # Patch controller to raise after first execute to break the loop
+    with patch.object(WeatherGrabberApplication, 'controller', create=True) as mock_controller:
+        mock_controller.execute = MagicMock(side_effect=Exception('break'))
+        with pytest.raises(Exception):
+            WeatherGrabberApplication(params_keep_open)
+        mock_controller.execute.assert_called_once_with(params_keep_open)
+
+@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
+def test_define_controller_console(mock_beans):
+    app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
+    app.use_case = MagicMock()
+    app.logger = MagicMock()
+    app._define_controller(OutputEnum.CONSOLE)
+    assert hasattr(app, 'controller')
+    assert app.controller.__class__.__name__ == 'ConsoleTTY'
+
+@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
+def test_define_controller_json(mock_beans):
+    app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
+    app.use_case = MagicMock()
+    app.logger = MagicMock()
+    app._define_controller(OutputEnum.JSON)
+    assert hasattr(app, 'controller')
+    assert app.controller.__class__.__name__ == 'JsonTTY'
+
+@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
+def test_define_controller_waybar(mock_beans):
+    app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
+    app.use_case = MagicMock()
+    app.logger = MagicMock()
+    app._define_controller(OutputEnum.WAYBAR)
+    assert hasattr(app, 'controller')
+    assert app.controller.__class__.__name__ == 'WaybarTTY'
+
+@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
+def test_define_controller_invalid(mock_beans):
+    app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
+    app.use_case = MagicMock()
+    app.logger = MagicMock()
+    with pytest.raises(ValueError):
+        app._define_controller('INVALID')
+
+def test_beans_creates_all_services():
+    app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
+    app.logger = None  # Not needed for this test
+    app._beans()
+    assert hasattr(app, 'weather_search_api')
+    assert hasattr(app, 'weather_api')
+    assert hasattr(app, 'search_location_service')
+    assert hasattr(app, 'read_weather_service')
+    assert hasattr(app, 'extract_current_conditions_service')
+    assert hasattr(app, 'extract_today_details_service')
+    assert hasattr(app, 'extract_aqi_service')
+    assert hasattr(app, 'extract_health_activities_service')
+    assert hasattr(app, 'extract_hourly_forecast_service')
+    assert hasattr(app, 'extract_hourly_forecast_oldstyle_service')
+    assert hasattr(app, 'extract_daily_forecast_service')
+    assert hasattr(app, 'extract_daily_forecast_oldstyle_service')
+    assert hasattr(app, 'use_case')
