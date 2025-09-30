@@ -1,5 +1,5 @@
 [project]
-name = "python3-weathergrabber"
+name = "weathergrabber"
 version = "0.1.0"
 description = "A grabber for weather.com data with various output formats."
 readme = "README.md"
