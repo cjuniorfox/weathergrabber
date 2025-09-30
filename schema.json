@@ -1,73 +1,248 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "properties": {
-      "lang": { "type": "string" },
-      "location": { "type": "string" },
-      "status": { "type": "string" },
-      "status_code": { "type": "string" },
-      "icon": { "type": "string" },
-      "wind_speed": { "type": "string" },
-      "humidity": { "type": "string" },
-      "visibility": { "type": "string" },
-      "air_quality": { "type": "string" },
-      "temperature": {
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "search": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "search_name": { "type": ["string", "null"] }
+      },
+      "required": ["id", "search_name"]
+    },
+    "current_conditions": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "object",
+          "properties": {
+            "city": { "type": "string" },
+            "state_province": { "type": "string" },
+            "country": { "type": ["string", "null"] }
+          },
+          "required": ["city", "state_province", "country"]
+        },
+        "timestamp": {
+          "type": "object",
+          "properties": {
+            "time": { "type": "string" },
+            "gmt": { "type": "string" },
+            "text": { "type": "string" }
+          },
+          "required": ["time", "gmt", "text"]
+        },
+        "temperature": { "type": "string" },
+        "icon": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "fa_icon": { "type": "string" },
+            "emoji_icon": { "type": "string" }
+          },
+          "required": ["name", "fa_icon", "emoji_icon"]
+        },
+        "summary": { "type": "string" },
+        "day_night": {
+          "type": "object",
+          "properties": {
+            "day": {
+              "type": "object",
+              "properties": {
+                "label": { "type": "string" },
+                "value": { "type": "string" }
+              },
+              "required": ["label", "value"]
+            },
+            "night": {
+              "type": "object",
+              "properties": {
+                "label": { "type": "string" },
+                "value": { "type": "string" }
+              },
+              "required": ["label", "value"]
+            }
+          },
+          "required": ["day", "night"]
+        }
+      },
+      "required": ["location", "timestamp", "temperature", "icon", "summary", "day_night"]
+    },
+    "today_details": {
+      "type": "object",
+      "properties": {
+        "feelslike": { "$ref": "#/definitions/label_value" },
+        "sunrise_sunset": {
+          "type": "object",
+          "properties": {
+            "sunrise": {
+              "type": "object",
+              "properties": {
+                "icon": { "$ref": "#/definitions/icon" },
+                "value": { "type": "string" }
+              },
+              "required": ["icon", "value"]
+            },
+            "sunset": {
+              "type": "object",
+              "properties": {
+                "icon": { "$ref": "#/definitions/icon" },
+                "value": { "type": "string" }
+              },
+              "required": ["icon", "value"]
+            }
+          },
+          "required": ["sunrise", "sunset"]
+        },
+        "high_low": {
+          "type": "object",
+          "properties": {
+            "high": { "type": "string" },
+            "low": { "type": "string" },
+            "label": { "type": ["string", "null"] }
+          },
+          "required": ["high", "low", "label"]
+        },
+        "wind": { "$ref": "#/definitions/label_value" },
+        "humidity": { "$ref": "#/definitions/label_value" },
+        "dew_point": { "$ref": "#/definitions/label_value" },
+        "pressure": { "$ref": "#/definitions/label_value" },
+        "uv_index": {
+          "type": "object",
+          "properties": {
+            "string_value": { "type": "string" },
+            "index": { "type": "string" },
+            "of": { "type": "string" },
+            "label": { "type": "string" }
+          },
+          "required": ["string_value", "index", "of", "label"]
+        },
+        "visibility": { "$ref": "#/definitions/label_value" },
+        "moon_phase": {
+          "type": "object",
+          "properties": {
+            "icon": { "type": ["string", "object", "null"] },
+            "phase": { "type": "string" },
+            "label": { "type": "string" }
+          },
+          "required": ["icon", "phase", "label"]
+        }
+      },
+      "required": ["feelslike", "sunrise_sunset", "high_low", "wind", "humidity", "dew_point", "pressure", "uv_index", "visibility", "moon_phase"]
+    },
+    "air_quality_index": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "value": { "type": "integer" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "acronym": { "type": "string" },
+        "color": {
+          "type": "object",
+          "properties": {
+            "red": { "type": "integer" },
+            "green": { "type": "integer" },
+            "blue": { "type": "integer" },
+            "hex": { "type": "string" },
+            "rgb": { "type": "string" }
+          },
+          "required": ["red", "green", "blue", "hex", "rgb"]
+        }
+      },
+      "required": ["title", "value", "category", "description", "acronym", "color"]
+    },
+    "health_activities": {
+      "type": "object",
+      "properties": {
+        "category_name": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["category_name", "title", "description"]
+    },
+    "hourly_predictions": {
+      "type": "array",
+      "items": {
         "type": "object",
         "properties": {
-          "current": { "type": "string" },
-          "feel": { "type": "string" },
-          "max": { "type": "string" },
-          "min": { "type": "string" }
+          "title": { "type": "string" },
+          "temperature": { "type": "string" },
+          "icon": { "$ref": "#/definitions/icon" },
+          "summary": { "type": "string" },
+          "precipitation": {
+            "type": "object",
+            "properties": {
+              "percentage": { "type": "string" },
+              "amount": { "type": ["string", "null"] }
+            },
+            "required": ["percentage", "amount"]
+          },
+          "wind": { "type": ["object", "null"] },
+          "feels_like": { "type": ["string", "null"] },
+          "humidity": { "type": ["string", "null"] },
+          "uv_index": { "type": ["object", "null"] },
+          "cloud_cover": { "type": ["string", "null"] }
         },
-        "required": ["current", "feel", "max", "min"]
-      },
-      "hourly_predictions": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "moment": { "type": "string" },
-            "status": { "type": "string" },
-            "skycode": { "type": "integer" },
-            "icon": { "type": "string" },
-            "chance_of_rain": { "type": "string" },
-            "temperature": { "type": "string" },
-            "min": { "type": ["string", "null"] },
-            "max": { "type": ["string", "null"] }
-          },
-          "required": ["moment", "status", "skycode", "icon", "chance_of_rain", "temperature", "min", "max"]
-        }
-      },
-      "daily_predictions": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "moment": { "type": "string" },
-            "status": { "type": "string" },
-            "skycode": { "type": "integer" },
-            "icon": { "type": "string" },
-            "chance_of_rain": { "type": "string" },
-            "temperature": { "type": ["string", "null"] },
-            "min": { "type": ["string", "null"] },
-            "max": { "type": ["string", "null"] }
-          },
-          "required": ["moment", "status", "skycode", "icon", "chance_of_rain", "temperature", "min", "max"]
-        }
+        "required": ["title", "temperature", "icon", "summary", "precipitation", "wind", "feels_like", "humidity", "uv_index", "cloud_cover"]
       }
     },
-    "required": [
-      "lang",
-      "location",
-      "status",
-      "status_code",
-      "icon",
-      "wind_speed",
-      "humidity",
-      "visibility",
-      "air_quality",
-      "temperature",
-      "hourly_predictions",
-      "daily_predictions"
-    ]
+    "daily_predictions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "high_low": {
+            "type": "object",
+            "properties": {
+              "high": { "type": "string" },
+              "low": { "type": "string" },
+              "label": { "type": ["string", "null"] }
+            },
+            "required": ["high", "low", "label"]
+          },
+          "icon": { "$ref": "#/definitions/icon" },
+          "summary": { "type": "string" },
+          "precipitation": {
+            "type": "object",
+            "properties": {
+              "percentage": { "type": "string" },
+              "amount": { "type": ["string", "null"] }
+            },
+            "required": ["percentage", "amount"]
+          },
+          "moon_phase": { "type": ["object", "null"] }
+        },
+        "required": ["title", "high_low", "icon", "summary", "precipitation", "moon_phase"]
+      }
+    }
+  },
+  "required": [
+    "search",
+    "current_conditions",
+    "today_details",
+    "air_quality_index",
+    "health_activities",
+    "hourly_predictions",
+    "daily_predictions"
+  ],
+  "definitions": {
+    "icon": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "fa_icon": { "type": "string" },
+        "emoji_icon": { "type": "string" }
+      },
+      "required": ["name", "fa_icon", "emoji_icon"]
+    },
+    "label_value": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "value": { "type": "string" }
+      },
+      "required": ["label", "value"]
+    }
   }
+}

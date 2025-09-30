@@ -26,29 +26,21 @@ This script fetches and parses weather forecast data from Weather.com and format
 
 ## Requirements
 
-- Python 3.8+
-- Dependencies:
-  - `pyquery`
-  - `argparse`
-  - `urllib`
+Requires Python 3 or newer.
 
-Install dependencies using:
+Install the package and all dependencies with:
 
-```bash
-pip install -r requirements.txt
+```sh
+pip install .
+```
+
+Or, for development (editable install with dev dependencies):
+
+```sh
+pip install -e .[dev]
 ```
 
 ## Usage
-
-### Command-Line Arguments
-
-- `location_name` (positional, optional): City name, zip code, etc. If not provided, you can use `--location-id` or the `WEATHER_LOCATION_ID` environment variable.
-- `--location-id`, `-l`: 64-character-hex code for location (from Weather.com)
-- `--lang`, `-L`: Language (e.g., `pt-BR`, `fr-FR`). Defaults to system locale if not set.
-- `--output`, `-o`: Output format. One of `console`, `json`, or `waybar`. Default: `console`.
-- `--keep-open`, `-k`: Keep open and refresh every 5 minutes (only makes sense for `console` output).
-- `--icons`, `-i`: Icon set. `fa` for Font-Awesome, `emoji` for emoji icons. Default: `emoji`.
-- `--log`: Set logging level. One of `debug`, `info`, `warning`, `error`, `critical`. Default: `critical`.
 
 ### Examples
 
@@ -60,8 +52,8 @@ pip install -r requirements.txt
 
   The `WEATHER_LOCATION_ID` is a 64-character hex unique location. To get the intended location, go to Weather.com, search for your location, and check the URL. The `LOCATION_ID` will be at the URL. Example:
 
-  - For **São Paulo**, the URL is: `https://weather.com/pt-BR/weather/today/l/ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`
-  - The `WEATHER_LOCATION_ID` is  `ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`.
+- For **São Paulo**, the URL is: `https://weather.com/pt-BR/weather/today/l/ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`
+- The `WEATHER_LOCATION_ID` is  `ebe93c0e09d0cfe19844d4281461901cd8f083c310e64255954758c8dcab784b`.
 
   Optionally, you can set the value as the environment variable `WEATHER_LOCATION_ID` and omit the `location_name` and `--location-id` parameters. If no environment variable nor parameter is specified, the weather data will be the default one from Weather.com.
 
