@@ -125,7 +125,21 @@ weathergrabber [location_name] [options]
 Or as a Python module:
 
 ```sh
-python -m weathergrabber.cli [location_name] [options]
+python -m weathergrabber [location_name] [options]
+```
+
+### Importing as a Python module
+
+You can also use the main API or CLI entry point in your own Python code:
+
+```python
+import weathergrabber
+
+# Call the main API
+weathergrabber.main(log_level="INFO", location_name="London", location_id="", lang="en-GB", output="console", keep_open=False, icons="emoji")
+
+# Or run the CLI programmatically
+weathergrabber.main_cli()
 ```
 
 ### Arguments
@@ -157,7 +171,7 @@ weathergrabber "Paris" -o waybar -i fa
 Or as a Python module:
 
 ```sh
-python -m weathergrabber.cli "London" --output console --lang en-GB
-python -m weathergrabber.cli --location-id 1234567890abcdef... --output json
-python -m weathergrabber.cli "Paris" -o waybar -i fa
+python -m weathergrabber "London" --output console --lang en-GB
+python -m weathergrabber --location-id 1234567890abcdef... --output json
+python -m weathergrabber "Paris" -o waybar -i fa
 ```

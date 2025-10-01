@@ -1,6 +1,6 @@
 import argparse
 import os
-from .core import main
+from weathergrabber import main
 
 def main_cli():
     ## Get current locale, or use the default one
