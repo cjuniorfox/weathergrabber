@@ -1,5 +1,4 @@
 from enum import Enum
-import logging
 
 class WeatherIconEnum(Enum):
     CLEAR = ('clear', chr(0xF0599), '☀️')
@@ -33,9 +32,10 @@ class WeatherIconEnum(Enum):
     SUNNY = ('sunny', chr(0xF0599), '☀️')
     SUNRISE = ('sunrise', '\ue34c', '🌅')
     SUNSET = ('sunset', '\ue34d', '🌇')
-    THUNDERSTORM = ('thunderstorm', '\uf0e7', '⛈️')
+    THUNDERSTORMS = ('thunderstorms', '\uf0e7', '⛈️')
     VISIBILITY = ('visibility', '\uf06e', '👁️')
     WIND = ('wind', chr(0xf059d), '🌪️')
+    WINDY = ('windy', chr(0xf059d), '🌪️')
 
     def __init__(self, name: str, fa_icon: str, emoji_icon: str):
         self._name = name
@@ -59,5 +59,4 @@ class WeatherIconEnum(Enum):
         for item in WeatherIconEnum:
             if item._name == name:
                 return item
-        logging.warning(f'WeatherIconEnum: No icon found for name "{name}"')
-        return None
+        raise ValueError(f'WeatherIconEnum: No icon found for name "{name}"')
