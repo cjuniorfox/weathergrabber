@@ -18,7 +18,7 @@ for city, lang in zip(random.sample(cities, 5), random.sample(languages, 5)):
     print(f"Querying {city!r} in {lang!r}...")
     try:
         weathergrabber.main(
-            log_level="WARNING",
+            log_level="DEBUG",
             location_name=city,
             location_id="",
             lang=lang,
