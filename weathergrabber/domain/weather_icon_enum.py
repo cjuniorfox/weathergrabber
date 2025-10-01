@@ -7,6 +7,7 @@ class WeatherIconEnum(Enum):
     CLOUDY_FOGGY_DAY = ('cloudy-foggy-day', chr(0xF013), '🌥️')
     CLOUDY_FOGGY_NIGHT = ('cloudy-foggy-night', chr(0xF013), '🌥️')
     DAY = ('day', '\uf185', '🌞')
+    DRIZZLE = ('drizzle', '\uf0e9', '🌦️')
     FEEL = ('feel', '\uf2c9', '🥵')
     FOGGY = ('foggy', '\uf74e', '🌫️')
     HUMIDITY = ('humidity', '\uf043', '💧')
