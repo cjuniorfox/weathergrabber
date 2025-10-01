@@ -4,6 +4,8 @@ import os
 
 cities_file = os.path.join(os.path.dirname(__file__), "cities.txt")
 
+errors = []
+
 with open(cities_file) as f:
     cities = [line.strip() for line in f if line.strip()]
 
@@ -25,5 +27,11 @@ for city, lang in zip(random.sample(cities, 5), random.sample(languages, 5)):
             icons="emoji"
         )
     except Exception as e:
+        errors.append(f"Failed for {city!r} in {lang!r}: {e}")
         print(f"Failed for {city!r} in {lang!r}: {e}")
-        raise SystemExit(1)
+
+if errors:
+    print("Errors occurred:")
+    for error in errors:
+        print(f" - {error}")
+    raise SystemExit(1)
