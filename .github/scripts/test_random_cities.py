@@ -22,7 +22,7 @@ for city, lang in zip(random.sample(cities, 5), random.sample(languages, 5)):
             location_name=city,
             location_id="",
             lang=lang,
-            output="json",
+            output="console",
             keep_open=False,
             icons="emoji"
         )
