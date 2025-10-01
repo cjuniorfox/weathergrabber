@@ -1,7 +1,10 @@
 import random
 import weathergrabber
+import os
 
-with open("cities.txt") as f:
+cities_file = os.path.join(os.path.dirname(__file__), "cities.txt")
+
+with open(cities_file) as f:
     cities = [line.strip() for line in f if line.strip()]
 
 languages = [
