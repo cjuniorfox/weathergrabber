@@ -24,14 +24,4 @@ jobs:
           pip install .
 
       - name: Test 5 random cities in 5 random languages
-        run: |
-          python -c "import random; import weathergrabber;\n\
-          with open('cities.txt') as f: cities = [line.strip() for line in f if line.strip()];\n\
-          languages = ['en-US', 'pt-BR', 'fr-FR', 'es-ES', 'de-DE', 'it-IT', 'ru-RU', 'ja-JP', 'zh-CN', 'ar-SA'];\n\
-          for city, lang in zip(random.sample(cities, 5), random.sample(languages, 5)):\n\
-              print(f'Querying {city!r} in {lang!r}...');\n\
-              try:\n\
-                  weathergrabber.main(log_level='DEBUG', location_name=city, location_id='', lang=lang, output='json', keep_open=False, icons='emoji')\n\
-              except Exception as e:\n\
-                  print(f'Failed for {city!r} in {lang!r}: {e}');\n\
-                  raise SystemExit(1)\n"
+        run: python .github/scripts/test_random_cities.py
