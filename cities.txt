@@ -3,190 +3,514 @@ Los Angeles
 Chicago
 Houston
 Phoenix
-Philadelphia
-San Antonio
-San Diego
-Dallas
-San Jose
-Austin
-Jacksonville
-Fort Worth
-Columbus
-Charlotte
+London
+Paris
+Berlin
+Tokyo
+Beijing
+Shanghai
+Moscow
+Istanbul
+Delhi
+Mumbai
+São Paulo
+Rio de Janeiro
+Buenos Aires
+Lima
+Santiago
+Bogotá
+Mexico City
+Toronto
+Vancouver
+Montreal
+Sydney
+Melbourne
+Brisbane
+Perth
+Auckland
+Wellington
+Cape Town
+Johannesburg
+Cairo
+Lagos
+Nairobi
+Casablanca
+Rabat
+Algiers
+Tunis
+Addis Ababa
+Dubai
+Abu Dhabi
+Doha
+Riyadh
+Jeddah
+Kuwait City
+Manama
+Muscat
+Tehran
+Baghdad
+Jerusalem
+Amman
+Damascus
+Beirut
+Ankara
+Izmir
+Athens
+Rome
+Milan
+Naples
+Venice
+Florence
+Madrid
+Barcelona
+Valencia
+Seville
+Lisbon
+Porto
+Brussels
+Antwerp
+Amsterdam
+Rotterdam
+The Hague
+Luxembourg
+Zurich
+Geneva
+Bern
+Vienna
+Salzburg
+Prague
+Brno
+Budapest
+Warsaw
+Krakow
+Gdansk
+Wroclaw
+Vilnius
+Riga
+Tallinn
+Helsinki
+Stockholm
+Gothenburg
+Oslo
+Bergen
+Copenhagen
+Aarhus
+Reykjavik
+Dublin
+Cork
+Belfast
+Edinburgh
+Glasgow
+Manchester
+Birmingham
+Liverpool
+Bristol
+Cardiff
+Leeds
+Sheffield
+Nottingham
+Leicester
+Southampton
+Newcastle
+Aberdeen
+Inverness
+Stirling
+Perth (Scotland)
+Bangkok
+Singapore
+Kuala Lumpur
+Jakarta
+Hanoi
+Ho Chi Minh City
+Manila
+Seoul
+Busan
+Taipei
+Hong Kong
+Macau
+Phnom Penh
+Vientiane
+Yangon
+Phnom Penh
+Colombo
+Kathmandu
+Dhaka
+Chittagong
+Karachi
+Lahore
+Islamabad
+Peshawar
+Kabul
+Tashkent
+Almaty
+Astana
+Bishkek
+Dushanbe
+Ashgabat
+Ulaanbaatar
+Hanoi
+Hobart
+Darwin
+Suva
+Nuku'alofa
+Apia
+Pago Pago
+Port Moresby
+Honiara
+Port Vila
+Nouméa
+Papeete
+Anchorage
+Honolulu
 San Francisco
-Indianapolis
 Seattle
 Denver
-Washington
 Boston
-El Paso
-Nashville
-Detroit
-Oklahoma City
-Portland
-Las Vegas
-Memphis
-Louisville
-Baltimore
-Milwaukee
-Albuquerque
-Tucson
-Fresno
-Mesa
-Sacramento
-Atlanta
-Kansas City
-Colorado Springs
+Washington
 Miami
-Raleigh
-Omaha
-Long Beach
-Virginia Beach
-Oakland
-Minneapolis
-Tulsa
-Arlington
+Atlanta
+Dallas
+San Diego
+Las Vegas
+Orlando
 Tampa
-New Orleans
-Wichita
-Cleveland
-Bakersfield
-Aurora
-Anaheim
-Honolulu
-Santa Ana
-Riverside
-Corpus Christi
-Lexington
-Stockton
-Henderson
-Saint Paul
+Philadelphia
+Detroit
+Minneapolis
 St. Louis
+Kansas City
+Charlotte
+Raleigh
+Nashville
+Indianapolis
+Columbus
+Cleveland
 Cincinnati
 Pittsburgh
-Greensboro
-Anchorage
-Plano
-Lincoln
-Orlando
-Irvine
-Newark
-Toledo
-Durham
-Chula Vista
-Fort Wayne
-Jersey City
-St. Petersburg
-Laredo
-Madison
-Chandler
 Buffalo
-Lubbock
-Scottsdale
-Reno
-Glendale
-Gilbert
-Winston–Salem
-North Las Vegas
-Norfolk
-Chesapeake
-Garland
-Irving
-Hialeah
-Fremont
-Boise
-Richmond
-Baton Rouge
-Spokane
-Des Moines
-Tacoma
-San Bernardino
-Modesto
-Fontana
-Santa Clarita
-Birmingham
-Oxnard
-Fayetteville
-Moreno Valley
 Rochester
-Glendale
-Huntington Beach
-Salt Lake City
-Grand Rapids
-Amarillo
-Yonkers
-Aurora
-Montgomery
-Akron
-Little Rock
-Huntsville
-Augusta
-Port St. Lucie
-Grand Prairie
-Columbus
-Tallahassee
-Overland Park
-Tempe
-McKinney
-Mobile
-Cape Coral
-Shreveport
-Frisco
-Knoxville
-Worcester
-Brownsville
-Vancouver
-Fort Lauderdale
-Sioux Falls
-Ontario
-Chattanooga
+Albany
 Providence
-Newport News
-Rancho Cucamonga
-Santa Rosa
-Oceanside
-Salem
-Elk Grove
-Garden Grove
-Pembroke Pines
-Peoria
-Eugene
-Corona
-Cary
-Springfield
-Fort Collins
+Hartford
+Newark
+Jersey City
+Baltimore
+Richmond
+Norfolk
+Virginia Beach
+Louisville
+Memphis
+Oklahoma City
+Tulsa
+Omaha
+Des Moines
+Milwaukee
+Madison
+Fargo
+Sioux Falls
+Boise
+Salt Lake City
+Phoenix
+Tucson
+Albuquerque
+El Paso
+San Antonio
+Austin
+Fort Worth
+Houston
+New Orleans
+Baton Rouge
+Little Rock
 Jackson
-Alexandria
-Hayward
-Lancaster
-Lakewood
-Clarksville
-Palmdale
-Salinas
-Springfield
-Hollywood
-Pasadena
-Sunnyvale
-Macon
-Pomona
-Escondido
-Killeen
-Naperville
-Joliet
-Bellevue
-Rockford
+Birmingham
+Mobile
+Montgomery
 Savannah
-Paterson
-Torrance
-Bridgeport
-McAllen
-Mesquite
-Syracuse
-Midland
-Pasadena
-Murfreesboro
-Miramar
+Charleston
+Columbia
+Greenville
+Knoxville
+Chattanooga
+Lexington
+Toledo
+Akron
 Dayton
-Fullerton
-Olathe
-Thornton
+Grand Rapids
+Lansing
+Flint
+Saginaw
+Windsor
+Ottawa
+Quebec City
+Halifax
+St. John's
+Edmonton
+Calgary
+Winnipeg
+Regina
+Saskatoon
+Victoria
+Whitehorse
+Yellowknife
+Iqaluit
+Cancun
+Guadalajara
+Monterrey
+Puebla
+Tijuana
+Leon
+Merida
+Havana
+Santo Domingo
+San Juan
+Port-au-Prince
+Kingston
+Nassau
+Bridgetown
+Castries
+Port of Spain
+Georgetown
+Paramaribo
+Caracas
+Maracaibo
+Quito
+Guayaquil
+La Paz
+Santa Cruz
+Asuncion
+Montevideo
+Punta del Este
+Sao Luis
+Fortaleza
+Recife
+Salvador
+Belo Horizonte
+Curitiba
+Porto Alegre
+Brasilia
+Manaus
+Belem
+Goiania
+Campinas
+Santos
+Florianopolis
+Joinville
+Blumenau
+Londrina
+Maringa
+Campo Grande
+Cuiaba
+Aracaju
+Maceio
+Joao Pessoa
+Teresina
+Boa Vista
+Macapa
+Palmas
+Rio Branco
+Porto Velho
+Natal
+Petropolis
+Volta Redonda
+Juiz de Fora
+Sorocaba
+Sao Jose dos Campos
+Sao Bernardo do Campo
+Santo Andre
+Osasco
+Guarulhos
+Barueri
+Suzano
+Taboao da Serra
+Carapicuiba
+Diadema
+Sao Caetano do Sul
+Sao Vicente
+Praia Grande
+Maua
+Ribeirao Preto
+Franca
+Araraquara
+Sao Carlos
+Piracicaba
+Americana
+Santa Barbara d'Oeste
+Itu
+Jundiai
+Taubate
+Pindamonhangaba
+Jacarei
+Guaratingueta
+Lorena
+Braganca Paulista
+Atibaia
+Mogi das Cruzes
+Ferraz de Vasconcelos
+Poá
+Itaquaquecetuba
+Suzano
+Sao Paulo
+Brasilia
+Rio de Janeiro
+Salvador
+Fortaleza
+Belo Horizonte
+Manaus
+Curitiba
+Recife
+Porto Alegre
+Goiania
+Belem
+Guarulhos
+Campinas
+Sao Luis
+Sao Goncalo
+Maceio
+Duque de Caxias
+Nova Iguacu
+Sao Bernardo do Campo
+Teresina
+Natal
+Campo Grande
+Sao Joao de Meriti
+Joao Pessoa
+Jaboatao dos Guararapes
+Osasco
+Santo Andre
+Ribeirao Preto
+Uberlandia
+Contagem
+Sorocaba
+Aracaju
+Feira de Santana
+Cuiaba
+Joinville
+Aparecida de Goiania
+Londrina
+Juiz de Fora
+Ananindeua
+Porto Velho
+Serra
+Caxias do Sul
+Niteroi
+Belford Roxo
+Campos dos Goytacazes
+Vila Velha
+Florianopolis
+Macae
+Petropolis
+Itaborai
+Volta Redonda
+Angra dos Reis
+Resende
+Barra Mansa
+Teresopolis
+Nova Friburgo
+Marica
+Sao Pedro da Aldeia
+Araruama
+Saquarema
+Cabo Frio
+Buzios
+Arraial do Cabo
+Rio das Ostras
+Macae
+Campos dos Goytacazes
+Itaperuna
+Sao Fidelis
+Miracema
+Bom Jesus do Itabapoana
+Santo Antonio de Padua
+Varre-Sai
+Natividade
+Porciuncula
+Italva
+Cardoso Moreira
+Cambuci
+Aperibe
+Itaocara
+Santa Maria Madalena
+Sao Sebastiao do Alto
+Cordeiro
+Cantagalo
+Duas Barras
+Macuco
+Sumidouro
+Sapucaia
+Três Rios
+Paraiba do Sul
+Comendador Levy Gasparian
+Paty do Alferes
+Miguel Pereira
+Vassouras
+Barra do Pirai
+Piraí
+Pinheiral
+Rio Claro
+Valenca
+Quatis
+Itatiaia
+Paraty
+Mangaratiba
+Seropedica
+Queimados
+Japeri
+Mesquita
+Nilopolis
+Sao Joao de Meriti
+Belford Roxo
+Duque de Caxias
+Nova Iguacu
+Magé
+Guapimirim
+Tanguá
+Itaboraí
+Niterói
+Maricá
+Saquarema
+Araruama
+Cabo Frio
+Búzios
+Arraial do Cabo
+Rio das Ostras
+Macaé
+Campos dos Goytacazes
+Itaperuna
+Santo Antônio de Pádua
+Varre-Sai
+Natividade
+Porciúncula
+Italva
+Cardoso Moreira
+Cambuci
+Aperibé
+Itaocara
+Santa Maria Madalena
+São Sebastião do Alto
+Cordeiro
+Cantagalo
+Duas Barras
+Macuco
+Sumidouro
+Sapucaia
+Três Rios
+Paraíba do Sul
+Comendador Levy Gasparian
+Paty do Alferes
+Miguel Pereira
+Vassouras
+Barra do Piraí
+Piraí
+Pinheiral
+Rio Claro
+Valença
+Quatis
+Itatiaia
+Paraty
+Mangaratiba
+Seropédica
+Queimados
+Japeri
+Mesquita
+Nilópolis
+São João de Meriti
