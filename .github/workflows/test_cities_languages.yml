@@ -1,0 +1,37 @@
+name: Test Weathergrabber with Random Cities and Languages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-cities-languages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Test 5 random cities in 5 random languages
+        run: |
+          python -c "import random; import weathergrabber;\n\
+          with open('cities.txt') as f: cities = [line.strip() for line in f if line.strip()];\n\
+          languages = ['en-US', 'pt-BR', 'fr-FR', 'es-ES', 'de-DE', 'it-IT', 'ru-RU', 'ja-JP', 'zh-CN', 'ar-SA'];\n\
+          for city, lang in zip(random.sample(cities, 5), random.sample(languages, 5)):\n\
+              print(f'Querying {city!r} in {lang!r}...');\n\
+              try:\n\
+                  weathergrabber.main(log_level='DEBUG', location_name=city, location_id='', lang=lang, output='json', keep_open=False, icons='emoji')\n\
+              except Exception as e:\n\
+                  print(f'Failed for {city!r} in {lang!r}: {e}');\n\
+                  raise SystemExit(1)\n"
