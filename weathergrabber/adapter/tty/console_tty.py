@@ -21,8 +21,7 @@ class ConsoleTTY:
 
         rain_icon = WeatherIconEnum.RAIN.fa_icon if is_fa else WeatherIconEnum.RAIN.emoji_icon
 
-        city = forecast.current_conditions.location.city
-        state_province = forecast.current_conditions.location.state_province
+        city_location = forecast.current_conditions.location
         icon = forecast.current_conditions.icon.fa_icon if is_fa else forecast.current_conditions.icon.emoji_icon
         temperature = forecast.current_conditions.temperature
         
@@ -103,7 +102,7 @@ class ConsoleTTY:
 
         print_value = (
             "\n"
-            f"{city}, {state_province}\n"
+            f"{city_location}\n"
             "\n"
             f"{icon}       {temperature}\n"
             "\n"

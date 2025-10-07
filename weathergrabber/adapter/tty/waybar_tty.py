@@ -25,8 +25,7 @@ class WaybarTTY:
 
 
         # City and state/province
-        city = forecast.current_conditions.location.city
-        state_province = forecast.current_conditions.location.state_province
+        city_location = forecast.current_conditions.location
 
         # Summary
         summary = forecast.current_conditions.summary
@@ -105,7 +104,7 @@ class WaybarTTY:
         ]
 
         tooltip = (
-            f"{city}, {state_province}\n"
+            f"{city_location}\n"
             "\n"
             f"<span size='xx-large'>{icon}\t\t{temperature}</span>\n"
             "\n"
