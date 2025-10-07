@@ -62,13 +62,43 @@ class ConsoleTTY:
         aqi_acronym = forecast.air_quality_index.acronym
         aqi_value = forecast.air_quality_index.value
 
-        hourly_predictions = [
-            f"{h.title}\t{h.temperature}\t{h.icon.fa_icon if is_fa else h.icon.emoji_icon}\t{rain_icon  if h.precipitation.percentage else ''}  {h.precipitation.percentage}"
-            for h in forecast.hourly_predictions
+        hourly_predictions_format = [
+            {
+                'title': h.title if len(h.title) < 8 else h.title[:6] + '.',
+                'temperature' : h.temperature,
+                'icon': h.icon.fa_icon if is_fa else h.icon.emoji_icon,
+                'precipitation': f"{h.precipitation.percentage if h.precipitation.percentage else ''}"
+            } for h in forecast.hourly_predictions
         ]
+
+        daily_predictions_format = [
+            {
+                'title': d.title if len(d.title) < 8 else d.title[:6] + '.',
+                'high_low': f"{d.high_low}",
+                'icon': d.icon.fa_icon if is_fa else d.icon.emoji_icon,
+                'precipitation': f"{d.precipitation.percentage}"
+            } for d in forecast.daily_predictions
+        ]
+
+        # Hourly predictions and daily predictions
+        hourly_predictions = [
+                f"{h['title']}"
+                f"{'\t' if len(h['title']) < 3 else ''}\t"
+                f"{h['temperature']}"
+                "\t"
+                f"{h['icon']}\t"
+                f"{rain_icon} {h['precipitation']}"
+            for h in hourly_predictions_format
+        ]
+
         daily_predictions = [
-            f"{d.title}\t{d.high_low}\t{d.icon.fa_icon if is_fa else d.icon.emoji_icon}\t{rain_icon}  {d.precipitation.percentage}"
-            for d in forecast.daily_predictions
+                f"{d['title']}"
+                f"{'\t' if len(d['title']) < 3 else ''}\t"
+                f"{d['high_low']}"
+                f"\t"
+                f"{d['icon']}\t"
+                f"{rain_icon} {d['precipitation']}"
+            for d in daily_predictions_format
         ]
 
         print_value = (
@@ -84,9 +114,11 @@ class ConsoleTTY:
             "\n"
             f"{moon_icon} {moon_phase}\n"
             "\n"
-            f"{wind_icon} {wind}\t {uv_index}\n"
-            f"{humidity_icon} {humidity}\t\t {pressure}\n"
-            f"{visibility_icon} {visibility}\t {aqi_acronym} {aqi_category} {aqi_value}\n"
+            f"{wind_icon} {wind}\t{uv_index}\n"
+            f"{humidity_icon} {humidity}\t\t{pressure}\n"
+            f"{visibility_icon} {visibility}"
+            f"\t{'\t' if len(visibility) < 6 else ''}" 
+            f"{aqi_acronym} {aqi_category} {aqi_value}\n"
             "\n"
             f"{'\n'.join(hourly_predictions)}\n"
             "\n"

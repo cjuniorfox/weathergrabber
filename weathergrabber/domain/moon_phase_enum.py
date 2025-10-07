@@ -18,12 +18,12 @@ class MoonPhaseEnum(Enum):
     PHASE_10 = ("phase-10", "\uf186", "🌔")
     PHASE_11 = ("phase-11", "\uf186", "🌔")
     PHASE_12 = ("phase-12", "\uf186", "🌔")
-    PHASE_13 = ("phase-13", "\uf186", "🌔")
+    PHASE_13 = ("phase-13", "\uf186", "🌕")
     # Full Moon
     PHASE_14 = ("phase-14", "\uf186", "🌕")
     # Waning Gibbous
-    PHASE_15 = ("phase-15", "\uf186", "🌖")
-    PHASE_16 = ("phase-16", "\uf186", "🌖")
+    PHASE_15 = ("phase-15", "\uf186", "🌕")
+    PHASE_16 = ("phase-16", "\uf186", "🌕")
     PHASE_17 = ("phase-17", "\uf186", "🌖")
     PHASE_18 = ("phase-18", "\uf186", "🌖")
     PHASE_19 = ("phase-19", "\uf186", "🌖")
