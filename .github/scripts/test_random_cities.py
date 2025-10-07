@@ -14,7 +14,7 @@ languages = [
     "it-IT", "ru-RU", "ja-JP", "zh-CN", "ar-SA"
 ]
 
-for city, lang in zip(random.sample(cities, 5), random.sample(languages, 5)):
+for city, lang in zip(random.sample(cities, 25), random.sample(languages, 10)):
     print(f"Querying {city!r} in {lang!r}...")
     try:
         weathergrabber.main(

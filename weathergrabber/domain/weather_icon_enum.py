@@ -11,6 +11,7 @@ class WeatherIconEnum(Enum):
     FEEL = ('feel', '\uf2c9', '🥵')
     FOGGY = ('foggy', '\uf74e', '🌫️')
     HUMIDITY = ('humidity', '\uf043', '💧')
+    ISOLATED_THUNDERSTORMS = ('isolated-thunderstorms', chr(0x26C8), '⛈️')
     MOSTLY_CLEAR_DAY = ('mostly-clear-day', chr(0xF0599), '☀️')
     MOSTLY_CLEAR_NIGHT = ('mostly-clear-night', chr(0xF0594), '🌙')
     MOSTLY_CLOUDY_DAY = ('mostly-cloudy-day', chr(0xf013), '☁️')
