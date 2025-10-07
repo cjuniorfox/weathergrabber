@@ -87,7 +87,7 @@ class ConsoleTTY:
                 f"{h['temperature']}"
                 "\t"
                 f"{h['icon']}\t"
-                f"{rain_icon} {h['precipitation']}"
+                f"{rain_icon}  {h['precipitation']}"
             for h in hourly_predictions_format
         ]
 
@@ -97,7 +97,7 @@ class ConsoleTTY:
                 f"{d['high_low']}"
                 f"\t"
                 f"{d['icon']}\t"
-                f"{rain_icon} {d['precipitation']}"
+                f"{rain_icon}  {d['precipitation']}"
             for d in daily_predictions_format
         ]
 
