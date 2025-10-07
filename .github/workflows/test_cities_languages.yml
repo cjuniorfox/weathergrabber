@@ -23,5 +23,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install .
 
-      - name: Test 5 random cities in 5 random languages
+      - name: Test 25 random cities in 25 random languages
         run: python .github/scripts/test_random_cities.py
