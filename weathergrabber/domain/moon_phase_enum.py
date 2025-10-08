@@ -23,7 +23,7 @@ class MoonPhaseEnum(Enum):
     PHASE_14 = ("phase-14", "\uf186", "🌕")
     # Waning Gibbous
     PHASE_15 = ("phase-15", "\uf186", "🌕")
-    PHASE_16 = ("phase-16", "\uf186", "🌕")
+    PHASE_16 = ("phase-16", "\uf186", "🌖")
     PHASE_17 = ("phase-17", "\uf186", "🌖")
     PHASE_18 = ("phase-18", "\uf186", "🌖")
     PHASE_19 = ("phase-19", "\uf186", "🌖")

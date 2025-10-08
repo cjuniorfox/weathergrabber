@@ -117,7 +117,7 @@ class WaybarTTY:
             f"{moon_icon} {moon_phase}\n"
             "\n"
             f"{wind_icon} {wind}\t"
-            f"{'\t' if len(wind) < 6 else ''}"
+            f"{'\t' if len(wind) < 7 else ''}"
             f"{uv_index}\n"
             f"{humidity_icon} {humidity}\t\t{pressure}\n"
             f"{visibility_icon} {visibility}\t{aqi_acronym} {aqi_category} {aqi_value}\n"

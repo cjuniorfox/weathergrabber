@@ -30,6 +30,7 @@ class WeatherIconEnum(Enum):
     SCATTERED_THUNDERSTORMS_NIGHT = ('scattered-thunderstorms-night', chr(0x26C8), '⛈️')
     SEVERE = ('severe', '\ue317', '🌩️')
     SHOWERS = ('showers', '\u26c6', '🌧️')
+    SMOKE = ('smoke', '\uf062', '💨')
     SNOW = ('snow', '\uf2dc', '❄️')
     SNOWY_ICY_DAY = ('snowy-icy-day', '\uf2dc', '❄️')
     SNOWY_ICY_NIGHT = ('snowy-icy-night', '\uf2dc', '❄️')
@@ -41,6 +42,23 @@ class WeatherIconEnum(Enum):
     VISIBILITY = ('visibility', '\uf06e', '👁️')
     WIND = ('wind', chr(0xf059d), '🌪️')
     WINDY = ('windy', chr(0xf059d), '🌪️')
+    # Suggestions from Copilot
+    BLIZZARD = ('blizzard', '\u2744', '🌨️')
+    DUST = ('dust', '\uf063', '🌪️')
+    FLURRIES = ('flurries', '\u2744', '🌨️')
+    FREEZING_DRIZZLE = ('freezing-drizzle', '\uf0e9', '🌧️')
+    FREEZING_RAIN = ('freezing-rain', '\uf0e9', '🌧️')
+    HAIL = ('hail', '\uf015', '🌨️')
+    HAZE = ('haze', '\uf0b6', '🌫️')
+    HURRICANE = ('hurricane', '\uf073', '🌀')
+    ICE = ('ice', '\u2744', '🧊')
+    MIXED_RAIN_AND_SLEET = ('mixed-rain-and-sleet', '\uf0e9', '🌧️')
+    MIXED_RAIN_AND_SNOW = ('mixed-rain-and-snow', '\uf0e9', '🌧️')
+    MIXED_SNOW_AND_SLEET = ('mixed-snow-and-sleet', '\uf2dc', '❄️')
+    SAND = ('sand', '\uf063', '🏜️')
+    SLEET = ('sleet', '\uf0e9', '🌨️')
+    TORNADO = ('tornado', '\uf056', '🌪️')
+    TROPICAL_STORM = ('tropical-storm', '\uf073', '🌀')
 
     def __init__(self, name: str, fa_icon: str, emoji_icon: str):
         self._name = name
