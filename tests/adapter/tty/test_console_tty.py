@@ -3,10 +3,11 @@ from unittest.mock import MagicMock
 from weathergrabber.adapter.tty.console_tty import ConsoleTTY
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.domain.adapter.icon_enum import IconEnum
+from weathergrabber.domain.city_location import CityLocation
 
 class DummyForecast:
     class current_conditions:
-        location = type('loc', (), {'city': 'TestCity', 'state_province': 'TestState'})()
+        location = CityLocation(city='TestCity', state_province='TestState', country='TestCountry', location='TestLocation')
         icon = type('icon', (), {'fa_icon': '🌤', 'emoji_icon': '☀️'})()
         temperature = '25°'
         day_night = type('dn', (), {
@@ -56,7 +57,7 @@ def test_console_tty_prints_forecast(monkeypatch, capsys, dummy_use_case):
     tty = ConsoleTTY(dummy_use_case)
     tty.execute(params)
     output = capsys.readouterr().out
-    assert 'TestCity' in output
+    assert 'TestLocation, TestCity, TestState, TestCountry' in output
     assert '25°' in output
     assert 'Sunny' in output
     assert '2025-09-30 12:00' in output
