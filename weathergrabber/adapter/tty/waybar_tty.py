@@ -21,10 +21,11 @@ class WaybarTTY:
         # Forecast icon and temperature
         icon = forecast.current_conditions.icon.fa_icon if is_fa else forecast.current_conditions.icon.emoji_icon
         temperature = forecast.current_conditions.temperature
+        rain_icon = WeatherIconEnum.RAIN.fa_icon if is_fa else WeatherIconEnum.RAIN.emoji_icon
+
 
         # City and state/province
-        city = forecast.current_conditions.location.city
-        state_province = forecast.current_conditions.location.state_province
+        city_location = forecast.current_conditions.location
 
         # Summary
         summary = forecast.current_conditions.summary
@@ -65,19 +66,45 @@ class WaybarTTY:
         aqi_acronym = forecast.air_quality_index.acronym
         aqi_value = forecast.air_quality_index.value
 
-        # Hourly predictions and daily predictions
-        rain_icon = WeatherIconEnum.RAIN.fa_icon if is_fa else WeatherIconEnum.RAIN.emoji_icon
-        hourly_predictions = [
-            f"{h.title}{'\t' if len(h.title) < 5 else ''}\t{h.temperature}\t\t{h.icon.fa_icon if is_fa else h.icon.emoji_icon}\t{rain_icon  if h.precipitation.percentage else ''}  {h.precipitation.percentage}"
-            for h in forecast.hourly_predictions
+        hourly_predictions_format = [{
+            'title': h.title if len(h.title) < 10 else h.title[:9] + '.',
+            'temperature' : h.temperature,
+            'icon': h.icon.fa_icon if is_fa else h.icon.emoji_icon,
+            'precipitation': f"{h.precipitation.percentage if h.precipitation.percentage else ''}"
+        } for h in forecast.hourly_predictions]
+
+        daily_predictions_format = [
+            {
+                'title': d.title if len(d.title) < 10 else d.title[:9] + '.',
+                'high_low': f"{d.high_low.high}/<span size='small'>{d.high_low.low}</span>",
+                'icon': d.icon.fa_icon if is_fa else d.icon.emoji_icon,
+                'precipitation': f"{d.precipitation.percentage}"
+            } for d in forecast.daily_predictions
         ]
+
+        # Hourly predictions and daily predictions
+        hourly_predictions = [
+                f"{h['title']}"
+                f"{'\t\t' if len(h['title']) < 4 else '\t'}"
+                f"{h['temperature']}"
+                "\t\t"
+                f"{h['icon']}\t"
+                f"{rain_icon} {h['precipitation']}"
+            for h in hourly_predictions_format
+        ]
+
         daily_predictions = [
-            f"{d.title}{'\t' if len(d.title) < 5 else ''}\t{d.high_low.high}/<span size='small'>{d.high_low.low}</span>\t{'\t' if len(d.title) < 5 else ''}{d.icon.fa_icon if is_fa else d.icon.emoji_icon}\t{rain_icon}  {d.precipitation.percentage}"
-            for d in forecast.daily_predictions
+                f"{d['title']}"
+                f"\t{'\t' if len(d['title']) < 6 else ' '}"
+                f"{d['high_low']}"
+                f"\t{'\t' if len(d['high_low']) < 33 else ''}"
+                f"{d['icon']}\t"
+                f"{rain_icon} {d['precipitation']}"
+            for d in daily_predictions_format
         ]
 
         tooltip = (
-            f"{city}, {state_province}\n"
+            f"{city_location}\n"
             "\n"
             f"<span size='xx-large'>{icon}\t\t{temperature}</span>\n"
             "\n"
@@ -89,9 +116,11 @@ class WaybarTTY:
             "\n"
             f"{moon_icon} {moon_phase}\n"
             "\n"
-            f"{wind_icon} {wind}\t {uv_index}\n"
-            f"{humidity_icon} {humidity}\t\t {pressure}\n"
-            f"{visibility_icon} {visibility}\t {aqi_acronym} {aqi_category} {aqi_value}\n"
+            f"{wind_icon} {wind}\t"
+            f"{'\t' if len(wind) < 7 else ''}"
+            f"{uv_index}\n"
+            f"{humidity_icon} {humidity}\t\t{pressure}\n"
+            f"{visibility_icon} {visibility}\t{aqi_acronym} {aqi_category} {aqi_value}\n"
             "\n"
             f"{'\n'.join(hourly_predictions)}\n"
             "\n"
