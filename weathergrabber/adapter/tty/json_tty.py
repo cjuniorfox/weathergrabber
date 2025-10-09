@@ -15,5 +15,5 @@ class JsonTTY:
         self.logger.info("Executing JSON output")
         forecast = self.use_case.execute(params)
         output: dict = forecast_to_dict(forecast)
-        output_json = json.dumps(output, indent=4)
+        output_json = json.dumps(output)
         print(output_json)
