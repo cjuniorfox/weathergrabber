@@ -1,6 +1,6 @@
 import argparse
 import os
-from weathergrabber import main
+import weathergrabber
 
 def main_cli():
     ## Get current locale, or use the default one
@@ -11,6 +11,7 @@ def main_cli():
     parser.add_argument("--output", "-o", type=str, choices=['console','json','waybar'], default='console', help="Output format. console, json or waybar")
     parser.add_argument("--keep-open", "-k",action='store_true', default=False, help="Keep open and refreshing every 5 minutes instead of exiting after execution. Does only makes sense for --output=console")
     parser.add_argument("--icons", "-i", type=str, choices=['fa','emoji'], default='emoji', help="Icon set. 'fa' for Font-Awesome, or 'emoji'")
+    parser.add_argument("--version", "-v", action='version', version=f'Weathergrabber {weathergrabber.get_version()}', help="Show version and exit")
     parser.add_argument(
         "--log",
         default="critical",
@@ -25,7 +26,7 @@ def main_cli():
     if not args.location_id and not args.location_name:
         location_id = os.getenv('WEATHER_LOCATION_ID')
 
-    main(
+    weathergrabber.main(
         log_level=args.log,
         location_name = args.location_name,
         location_id = location_id,
