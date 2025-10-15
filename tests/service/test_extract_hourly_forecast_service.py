@@ -85,7 +85,7 @@ def test_execute_exception_on_wind_error():
   '''
   pq = PyQuery(html)
   service = ExtractHourlyForecastService()
-  with pytest.raises(ValueError, match="There's no hourly forecast data available."):
+  with pytest.raises(ValueError, match="Invalid Wind Speed string format"):
     service.execute(pq)
     
 
