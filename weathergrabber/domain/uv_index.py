@@ -30,8 +30,10 @@ class UVIndex:
         elif len(parts) == 3:
             index, of, some = parts
             return cls(string_value = data, index=index.strip(), of=some.strip(), label=label)
+        elif len(data) == 0:
+            raise ValueError("UV Index string cannot be empty")
         else:
-            raise ValueError(f"Cannot parse UV Index from string: {data}")
+            return cls(string_value = data, index="", of="", label=label)
     
     def __repr__(self) -> str:
         return f"UVIndex(string_value={self.string_value!r}, index={self.index!r}, of={self.of!r}, label={self.label!r})"
