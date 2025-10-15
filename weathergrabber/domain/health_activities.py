@@ -23,8 +23,8 @@ class HealthActivities:
         return f"HealthActivities(category_name={self._category_name!r}, title={self._title!r}, description={self._description!r})"
     
     # 'Health & Activities\nGrass\nSeasonal Allergies and Pollen Count Forecast\nGrass pollen is low in your area'
-    @staticmethod
-    def from_text(text: str):
+    @classmethod
+    def from_text(cls, text: str):
         try:
             lines = text.split('\n')
             if len(lines) >= 4:
@@ -32,7 +32,7 @@ class HealthActivities:
                 #Ignore the "grass" line
                 title = lines[2].strip()
                 description = ' '.join(line.strip() for line in lines[3:]).strip()
-                return HealthActivities(category_name, title, description)
+                return cls(category_name, title, description)
             else:
                 raise ValueError("Insufficient data to parse HealthActivities")
         except Exception as e:

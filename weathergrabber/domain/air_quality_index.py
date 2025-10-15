@@ -45,34 +45,32 @@ class AirQualityIndex:
         return f"Title: {self.title}. AQI: {self.value}, Category: {self.category}, Description: {self.description}, Acronym: {self.acronym}, Color: {self.color}"
     
     def __repr__(self) -> str:
-        return f"AirQualityIndex(title={self.title}, value={self.value}, category={self.category}, description={self.description}, acronym:{self.acronym}, color={self.color})"
+        return f"AirQualityIndex(title='{self.title}', value={self.value}, category='{self.category}', description='{self.description}', acronym='{self.acronym}', color='{self.color}')"
     
     @staticmethod
     def _extract_aqi(data: str):
-        parts = data.split('\n')
-        title = parts[0].strip()
-        aqi = int(parts[1].strip())
-        category = parts[2].strip() if len(parts) > 2 else None
-        description = parts[3].strip() if len(parts) > 3 else None
-        acronym = ''.join(word[0].strip().upper() for word in title.split())
+        try:
+            parts = data.split('\n')
+            title = parts[0].strip()
+            aqi = int(parts[1].strip())
+            category = parts[2].strip() if len(parts) > 2 else None
+            description = parts[3].strip() if len(parts) > 3 else None
+            acronym = ''.join(word[0].strip().upper() for word in title.split())
 
-        return title, aqi, category, description, acronym
+            return title, aqi, category, description, acronym
+        except (ValueError, IndexError) as e:
+            raise ValueError("Invalid AQI data format") from e
     
     # 'Air Quality Index\n26\nGood\nAir quality is considered satisfactory, and air pollution poses little or no risk.'
     @classmethod
     def from_string(cls, data: str) -> 'AirQualityIndex':
-        try:
-            title, aqi, category, description, acronym = AirQualityIndex._extract_aqi(data)
-            return cls(title, aqi, category, description, acronym)
-        except (ValueError, IndexError) as e:
-            raise ValueError("Invalid AQI data format") from e
+        title, aqi, category, description, acronym = AirQualityIndex._extract_aqi(data)
+        return cls(title, aqi, category, description, acronym)
         
     @classmethod
     def aqi_color_from_string(cls, aqi_data: str, color_data: str):
-        try:
-            title, aqi, category, description, acronym = AirQualityIndex._extract_aqi(aqi_data)
-            color = Color.from_string(color_data)
-            return cls(title, aqi, category, description, acronym, color)
-        except(ValueError, IndexError) as e:
-            raise ValueError("Invalid AQI data format or color data format") from e
+        title, aqi, category, description, acronym = AirQualityIndex._extract_aqi(aqi_data)
+        color = Color.from_string(color_data)
+        return cls(title, aqi, category, description, acronym, color)
+            
 

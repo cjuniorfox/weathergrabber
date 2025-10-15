@@ -46,9 +46,12 @@ class CityLocation:
         country, state_province, city, location = None, None, None, None
         parts = data.split(", ")
 
+        if data.strip() == "":
+            raise ValueError("City location string cannot be empty")
+
         if len(parts) > 2:
             i = len(parts) - 1
-            while i > 0:
+            while i >= 0:
                 if not country:
                     country = parts[i]
                 elif not state_province:
@@ -67,5 +70,3 @@ class CityLocation:
         elif len(parts) == 1:
             city = parts[0]
             return cls(city=city)
-        else:
-            raise ValueError("Invalid city location string format")
