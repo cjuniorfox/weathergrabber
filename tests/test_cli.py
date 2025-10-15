@@ -4,7 +4,7 @@ import sys
 
 @pytest.fixture
 def mock_main():
-    with patch('weathergrabber.cli.main') as m:
+    with patch('weathergrabber.cli.weathergrabber.main') as m:
         yield m
 
 def test_cli_location_name(monkeypatch, mock_main):

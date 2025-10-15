@@ -42,8 +42,8 @@ def test_execute_happy_path(usecase, mock_services, params):
     mock_services["extract_today_details_service"].execute.return_value = "details"
     mock_services["extract_aqi_service"].execute.return_value = "good"
     mock_services["extract_health_activities_service"].execute.return_value = "running"
-    mock_services["extract_hourly_forecast_service"].execute.return_value = ["hour1", "hour2"]
-    mock_services["extract_daily_forecast_service"].execute.return_value = ["day1", "day2"]
+    mock_services["extract_hourly_forecast_oldstyle_service"].execute.return_value = ["hour1", "hour2"]
+    mock_services["extract_daily_forecast_oldstyle_service"].execute.return_value = ["day1", "day2"]
 
     # Act
     forecast = usecase.execute(params)
@@ -60,7 +60,7 @@ def test_execute_happy_path(usecase, mock_services, params):
 
 
 def test_execute_fallback_hourly(usecase, mock_services, params):
-    # Hourly forecast raises -> fallback to oldstyle
+    # Hourly forecast raises -> fallback to forecast service
     mock_services["search_location_service"].execute.return_value = "12345"
     mock_services["read_weather_service"].execute.return_value = "<html>weather</html>"
     mock_services["extract_current_conditions_service"].execute.return_value = "CurrentConditions"
@@ -68,8 +68,8 @@ def test_execute_fallback_hourly(usecase, mock_services, params):
     mock_services["extract_aqi_service"].execute.return_value = "good"
     mock_services["extract_health_activities_service"].execute.return_value = "running"
 
-    mock_services["extract_hourly_forecast_service"].execute.side_effect = ValueError("fail hourly")
-    mock_services["extract_hourly_forecast_oldstyle_service"].execute.return_value = ["hour_old"]
+    mock_services["extract_hourly_forecast_oldstyle_service"].execute.side_effect = ValueError("fail hourly")
+    mock_services["extract_hourly_forecast_service"].execute.return_value = ["hour_old"]
     mock_services["extract_daily_forecast_service"].execute.return_value = ["day1"]
 
     forecast = usecase.execute(params)
@@ -78,7 +78,7 @@ def test_execute_fallback_hourly(usecase, mock_services, params):
 
 
 def test_execute_fallback_daily(usecase, mock_services, params):
-    # Daily forecast raises -> fallback to oldstyle
+    # Daily forecast raises -> fallback to forecast service
     mock_services["search_location_service"].execute.return_value = "12345"
     mock_services["read_weather_service"].execute.return_value = "<html>weather</html>"
     mock_services["extract_current_conditions_service"].execute.return_value = "CurrentConditions"
@@ -87,8 +87,8 @@ def test_execute_fallback_daily(usecase, mock_services, params):
     mock_services["extract_health_activities_service"].execute.return_value = "running"
 
     mock_services["extract_hourly_forecast_service"].execute.return_value = ["hour1"]
-    mock_services["extract_daily_forecast_service"].execute.side_effect = ValueError("fail daily")
-    mock_services["extract_daily_forecast_oldstyle_service"].execute.return_value = ["day_old"]
+    mock_services["extract_daily_forecast_oldstyle_service"].execute.side_effect = ValueError("fail daily")
+    mock_services["extract_daily_forecast_service"].execute.return_value = ["day_old"]
 
     forecast = usecase.execute(params)
 

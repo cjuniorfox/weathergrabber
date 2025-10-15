@@ -1,47 +1,99 @@
 import pytest
-from unittest.mock import MagicMock, patch
+from pyquery import PyQuery
+## No need for MagicMock, use PyQuery and real HTML
 from weathergrabber.service.extract_hourly_forecast_service import ExtractHourlyForecastService
 from weathergrabber.domain.hourly_predictions import HourlyPredictions
 
-@patch('weathergrabber.domain.hourly_predictions.HourlyPredictions')
-@patch('weathergrabber.domain.weather_icon_enum.WeatherIconEnum.from_name', return_value='icon')
-@patch('weathergrabber.domain.precipitation.Precipitation', return_value='precip')
-@patch('weathergrabber.domain.wind.Wind.from_string', return_value='wind')
-@patch('weathergrabber.domain.uv_index.UVIndex.from_string', return_value='uv')
-@patch('weathergrabber.service.extract_hourly_forecast_service.PyQuery')
-def test_execute_success(mock_uv, mock_wind, mock_precip, mock_icon, mock_hourly, mock_pyquery_cls):
-
-    mock_pq_instance = MagicMock()
-
-    mock_find = MagicMock()
-    mock_find.text.return_value = "Now"
-    mock_find.attr.return_value = "cloudy"
-    mock_find.next.eq.text.return_value = "S"
-    mock_find.next.text.return_value = "some-text"
-
-
-    mock_pyquery_cls.find.side_effect = mock_find
-    mock_pyquery_cls.return_value = mock_pq_instance
-
-    mock_pyquery = MagicMock()
-    mock_data = [MagicMock(), MagicMock()]
-    mock_pyquery.find.return_value = mock_data
-    
+def test_execute_success():
+    html = '''
+    <html>
+      <body>
+        <section data-testid="HourlyForecast">
+          <div class="Card">
+            <details>
+              <h2>10:00 AM</h2>
+              <div data-testid="detailsTemperature">22°C</div>
+              <svg class="DetailsSummary" name="clear"/>
+              <span class="DetailsSummary--wxPhrase">Sunny</span>
+              <div data-testid="Precip"><span data-testid="PercentageValue">10%</span></div>
+              <span data-testid="WindTitle"></span><div><span>NW 10km/h</span></div>
+              <span data-testid="FeelsLikeTitle"></span><span>21°C</span>
+              <span data-testid="HumidityTitle"></span><span>50%</span>
+              <span data-testid="UVIndexValue">3</span>
+              <span data-testid="CloudCoverTitle"></span><span>10%</span>
+              <span data-testid="AccumulationTitle"></span><span>0 mm</span>
+            </details>
+          </div>
+          <div class="Card">
+            <details>
+              <h2>11:00 AM</h2>
+              <div data-testid="detailsTemperature">22°C</div>
+              <svg class="DetailsSummary" name="clear"/>
+              <span class="DetailsSummary--wxPhrase">Sunny</span>
+              <div data-testid="Precip"><span data-testid="PercentageValue">10%</span></div>
+              <span data-testid="WindTitle"></span><div><span>NW 10km/h</span></div>
+              <span data-testid="FeelsLikeTitle"></span><span>21°C</span>
+              <span data-testid="HumidityTitle"></span><span>50%</span>
+              <span data-testid="UVIndexValue">3</span>
+              <span data-testid="CloudCoverTitle"></span><span>10%</span>
+              <span data-testid="AccumulationTitle"></span><span>0 mm</span>
+            </details>
+            </details>
+          </div>
+        </section>
+      </body>
+    </html>
+    '''
+    pq = PyQuery(html)
     service = ExtractHourlyForecastService()
-    result = service.execute(mock_pyquery)
-    assert mock_hourly.call_count == 2
+    result = service.execute(pq)
     assert isinstance(result, list)
+    assert len(result) == 2
+    assert result[0].title == "10:00 AM"
+    assert result[1].title == "11:00 AM"
 
 def test_execute_empty():
-    mock_pyquery = MagicMock()
-    mock_pyquery.find.return_value = []
-    service = ExtractHourlyForecastService()
-    with pytest.raises(ValueError, match="Could not extract hourly forecast."):
-        service.execute(mock_pyquery)
+  html = "<section data-testid='HourlyForecast'></section>"  # No Card divs
+  pq = PyQuery(html)
+  service = ExtractHourlyForecastService()
+  with pytest.raises(ValueError, match="There's no hourly forecast data available."):
+    service.execute(pq)
+
+def test_execute_exception_on_wind_error():
+  html = '''
+  <html>
+    <body>
+      <section data-testid="HourlyForecast">
+        <div class="Card">
+          <details>
+            <h2>10:00 AM</h2>
+            <div data-testid="detailsTemperature">22°C</div>
+            <svg class="DetailsSummary" name="clear"/>
+            <span class="DetailsSummary--wxPhrase">Sunny</span>
+            <div data-testid="Precip"><span data-testid="PercentageValue">10%</span></div>
+            <span data-testid="WindTitle"></span><div><span>INVALID WIND DATA</span></div>
+            <span data-testid="FeelsLikeTitle"></span><span>21°C</span>
+            <span data-testid="HumidityTitle"></span><span>50%</span>
+            <span data-testid="UVIndexValue">3</span>
+            <span data-testid="CloudCoverTitle"></span><span>10%</span>
+            <span data-testid="AccumulationTitle"></span><span>0 mm</span>
+          </details>
+        </div>
+      </section>
+    </body>
+  </html>
+  '''
+  pq = PyQuery(html)
+  service = ExtractHourlyForecastService()
+  with pytest.raises(ValueError, match="Invalid Wind Speed string format"):
+    service.execute(pq)
+    
 
 def test_execute_exception():
-    mock_pyquery = MagicMock()
-    mock_pyquery.find.side_effect = Exception("fail")
-    service = ExtractHourlyForecastService()
-    with pytest.raises(ValueError, match="Could not extract hourly forecast."):
-        service.execute(mock_pyquery)
+  class BrokenPyQuery(PyQuery):
+    def find(self, *args, **kwargs):
+      raise Exception("fail")
+  pq = BrokenPyQuery("<section></section>")
+  service = ExtractHourlyForecastService()
+  with pytest.raises(Exception, match="fail"):
+    service.execute(pq)

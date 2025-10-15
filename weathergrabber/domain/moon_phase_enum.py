@@ -8,9 +8,9 @@ class MoonPhaseEnum(Enum):
     PHASE_2 = ("phase-2", "\uf186", "🌒")
     PHASE_3 = ("phase-3", "\uf186", "🌒")
     PHASE_4 = ("phase-4", "\uf186", "🌒")
-    PHASE_5 = ("phase-5", "\uf186", "🌒")
-    PHASE_6 = ("phase-6", "\uf186", "🌒")
     # First Quarter
+    PHASE_5 = ("phase-5", "\uf186", "🌓")
+    PHASE_6 = ("phase-6", "\uf186", "🌓")
     PHASE_7 = ("phase-7", "\uf186", "🌓")
     # Waxing Gibbous
     PHASE_8 = ("phase-8", "\uf186", "🌔")
@@ -21,8 +21,8 @@ class MoonPhaseEnum(Enum):
     PHASE_13 = ("phase-13", "\uf186", "🌕")
     # Full Moon
     PHASE_14 = ("phase-14", "\uf186", "🌕")
-    # Waning Gibbous
     PHASE_15 = ("phase-15", "\uf186", "🌕")
+    # Waning Gibbous
     PHASE_16 = ("phase-16", "\uf186", "🌖")
     PHASE_17 = ("phase-17", "\uf186", "🌖")
     PHASE_18 = ("phase-18", "\uf186", "🌖")
@@ -30,10 +30,10 @@ class MoonPhaseEnum(Enum):
     PHASE_20 = ("phase-20", "\uf186", "🌖")
     # Last Quarter
     PHASE_21 = ("phase-21", "\uf186", "🌗")
-    # Waning Crescent
-    PHASE_22 = ("phase-22", "\uf186", "🌘")
-    PHASE_23 = ("phase-23", "\uf186", "🌘")
-    PHASE_24 = ("phase-24", "\uf186", "🌘")
+    PHASE_22 = ("phase-22", "\uf186", "🌗")
+    PHASE_23 = ("phase-23", "\uf186", "🌗")
+    PHASE_24 = ("phase-24", "\uf186", "🌗")
+    
     PHASE_25 = ("phase-25", "\uf186", "🌘")
     PHASE_26 = ("phase-26", "\uf186", "🌘")
     PHASE_27 = ("phase-27", "\uf186", "🌘")
