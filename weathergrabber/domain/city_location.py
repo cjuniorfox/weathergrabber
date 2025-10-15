@@ -48,7 +48,7 @@ class CityLocation:
 
         if len(parts) > 2:
             i = len(parts) - 1
-            while i > 0:
+            while i >= 0:
                 if not country:
                     country = parts[i]
                 elif not state_province:
