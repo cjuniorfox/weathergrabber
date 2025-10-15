@@ -48,7 +48,7 @@ def test_execute_raises_value_error_on_missing_section():
     doc = PyQuery("<div>No AQI data here</div>")
     service = ExtractAQIService()
 
-    with pytest.raises(ValueError, match="Could not extract AQI data"):
+    with pytest.raises(ValueError, match="Invalid AQI data format"):
         service.execute(doc)
 
 
@@ -73,5 +73,5 @@ def test_execute_raises_value_error_on_invalid_style(monkeypatch):
     monkeypatch.setattr(AirQualityIndex, "aqi_color_from_string", staticmethod(fake_aqi_color_from_string))
 
     service = ExtractAQIService()
-    with pytest.raises(ValueError, match="Could not extract AQI data"):
+    with pytest.raises(ValueError, match="Invalid color string"):
         service.execute(doc)
