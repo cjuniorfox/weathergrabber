@@ -29,6 +29,14 @@ def test_color_init_with_ints():
     assert color.blue == 30
     assert color.hex == "0A141E"
 
+def test_color_init_with_invalid_ints():
+    with pytest.raises(ValueError):
+        Color(256, 0, 0)
+    with pytest.raises(ValueError):
+        Color(-1, 0, 0)
+    with pytest.raises(ValueError):
+        Color(0, 0, 300)
+
 def test_color_init_with_hex_strings():
     color = Color("0A", "14", "1E")
     assert color.red == 10

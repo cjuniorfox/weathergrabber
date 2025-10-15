@@ -35,6 +35,3 @@ def main_cli():
         keep_open=args.keep_open,
         icons=args.icons
     )
-
-if __name__ == "__main__":
-    main_cli()

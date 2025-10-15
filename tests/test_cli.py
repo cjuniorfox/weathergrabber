@@ -1,3 +1,4 @@
+from asyncio import subprocess
 import pytest
 from unittest.mock import patch, MagicMock
 import sys
@@ -73,3 +74,11 @@ def test_cli_location_id_env(monkeypatch, mock_main):
     main_cli()
     args = mock_main.call_args[1]
     assert args["location_id"] == "envlocationid"
+
+def test_cli_log_level(monkeypatch, mock_main):
+    test_args = ["weathergrabber", "Tokyo", "--log", "debug"]
+    monkeypatch.setattr(sys, "argv", test_args)
+    from weathergrabber.cli import main_cli
+    main_cli()
+    args = mock_main.call_args[1]
+    assert args["log_level"] == "debug"

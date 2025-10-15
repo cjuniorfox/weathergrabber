@@ -71,3 +71,14 @@ def test_console_tty_prints_forecast(monkeypatch, capsys, dummy_use_case):
     assert 'AQI' in output
     assert 'Today' in output
     assert '30°/20°' in output
+
+def test_console_tty_keep_open(monkeypatch, capsys, dummy_use_case):
+    params = Params(icons=IconEnum.FA, keep_open=True)
+    tty = ConsoleTTY(dummy_use_case)
+
+    # Patch input to simulate user pressing Enter immediately
+    monkeypatch.setattr('builtins.input', lambda _: '\n')
+    
+    tty.execute(params)
+    output = capsys.readouterr().out
+    assert '\033[' in output

@@ -70,5 +70,3 @@ class CityLocation:
         elif len(parts) == 1:
             city = parts[0]
             return cls(city=city)
-        else:
-            raise ValueError("Invalid city location string format")

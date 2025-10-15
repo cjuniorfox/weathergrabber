@@ -45,7 +45,7 @@ class AirQualityIndex:
         return f"Title: {self.title}. AQI: {self.value}, Category: {self.category}, Description: {self.description}, Acronym: {self.acronym}, Color: {self.color}"
     
     def __repr__(self) -> str:
-        return f"AirQualityIndex(title={self.title}, value={self.value}, category={self.category}, description={self.description}, acronym:{self.acronym}, color={self.color})"
+        return f"AirQualityIndex(title='{self.title}', value={self.value}, category='{self.category}', description='{self.description}', acronym='{self.acronym}', color='{self.color}')"
     
     @staticmethod
     def _extract_aqi(data: str):

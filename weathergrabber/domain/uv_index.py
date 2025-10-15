@@ -32,8 +32,6 @@ class UVIndex:
         elif len(parts) == 3:
             index, of, some = parts
             return cls(string_value = data, index=index.strip(), of=some.strip(), label=label)
-        elif len(data) == 0:
-            raise ValueError("UV Index string cannot be empty")
         else:
             return cls(string_value = data, index="", of="", label=label)
     
@@ -43,5 +41,5 @@ class UVIndex:
     def __str__(self) -> str:
         if self.string_value:
             return f"{self.label} {self.string_value}"
-        elif self.index and self.of:
+        else:
             return f"{self.label} {self.index} {self.of}" if self.label else f"{self.index} {self.of}"

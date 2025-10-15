@@ -30,3 +30,13 @@ def test_aqi_color_from_string_invalid_color():
     color_data = "not-a-color"
     with pytest.raises(ValueError):
         AirQualityIndex.aqi_color_from_string(aqi_data, color_data)
+
+def test_air_quality_index_repr():
+    aqi = AirQualityIndex("AQI", 42, "Good", "Air quality is good.", "AQI", None)
+    r = repr(aqi)
+    assert "AirQualityIndex(" in r
+    assert "title='AQI'" in r
+    assert "value=42" in r
+    assert "category='Good'" in r
+    assert "description='Air quality is good.'" in r
+    assert "acronym='AQI'" in r
