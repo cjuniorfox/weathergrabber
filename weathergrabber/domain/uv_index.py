@@ -24,6 +24,8 @@ class UVIndex:
 
     @classmethod
     def from_string(cls, data: str, label: str = None) -> 'UVIndex':
+        if not data:
+            raise ValueError("UV Index string cannot be empty")
         parts = data.split(' ')
         if len(parts) == 1:
             return cls(string_value = data, index= parts[0].strip(), of="", label=label)

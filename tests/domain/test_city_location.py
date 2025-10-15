@@ -55,6 +55,6 @@ def test_from_string_one_part():
     assert loc.location is None
     assert str(loc) == "Paris"
 
-def test_from_string_invalid():
-    with pytest.raises(ValueError):
+def test_empty_city_location_string():
+    with pytest.raises(ValueError, match="City location string cannot be empty"):
         CityLocation.from_string("")

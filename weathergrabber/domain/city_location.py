@@ -46,6 +46,9 @@ class CityLocation:
         country, state_province, city, location = None, None, None, None
         parts = data.split(", ")
 
+        if data.strip() == "":
+            raise ValueError("City location string cannot be empty")
+
         if len(parts) > 2:
             i = len(parts) - 1
             while i >= 0:
