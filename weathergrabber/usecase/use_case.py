@@ -57,16 +57,16 @@ class UseCase:
         health_activities = self.extract_health_activities_service.execute(weather_data)
         
         try:
-            hourly_predictions = self.extract_hourly_forecast_service.execute(weather_data)
-        except ValueError:
-            self.logger.warning("Falling back to old style hourly forecast extraction")
             hourly_predictions = self.extract_hourly_forecast_oldstyle_service.execute(weather_data)
-        
-        try:
-            daily_predictions = self.extract_daily_forecast_service.execute(weather_data)
         except ValueError:
-            self.logger.warning("Falling back to old style daily forecast extraction")
+            self.logger.warning("Falling back to new style hourly forecast extraction")
+            hourly_predictions = self.extract_hourly_forecast_service.execute(weather_data)
+
+        try:
             daily_predictions = self.extract_daily_forecast_oldstyle_service.execute(weather_data)
+        except ValueError:
+            self.logger.warning("Falling back to new style daily forecast extraction")
+            daily_predictions = self.extract_daily_forecast_service.execute(weather_data)
 
         forecast = Forecast(
             search = Search(
