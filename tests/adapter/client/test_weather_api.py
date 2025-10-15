@@ -21,6 +21,14 @@ def test_get_weather_no_language():
     with pytest.raises(ValueError, match="language must be specified"):
         api.get_weather(None, "a"*64)
 
+def test_get_weather_no_location():
+    api = WeatherApi()
+    with patch('weathergrabber.adapter.client.weather_api.PyQuery') as mock_pyquery:
+        mock_pyquery.return_value = "dummy_no_location"
+        result = api.get_weather("pt-BR", None)
+        mock_pyquery.assert_called_with(url="https://weather.com/pt-BR/weather/today")
+        assert result == "dummy_no_location"
+
 @patch('weathergrabber.adapter.client.weather_api.PyQuery')
 def test_get_weather_http_error(mock_pyquery):
     api = WeatherApi()

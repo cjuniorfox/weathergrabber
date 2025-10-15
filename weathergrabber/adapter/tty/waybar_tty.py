@@ -62,7 +62,7 @@ class WaybarTTY:
 
         #Air quality index
         color = forecast.air_quality_index.color.hex
-        aqi_category = f" <span color=\"{color}\">{forecast.air_quality_index.category}</span>"
+        aqi_category = f" <span color=\"#{color}\">{forecast.air_quality_index.category}</span>"
         aqi_acronym = forecast.air_quality_index.acronym
         aqi_value = forecast.air_quality_index.value
 
