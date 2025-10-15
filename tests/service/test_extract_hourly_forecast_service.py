@@ -56,7 +56,7 @@ def test_execute_empty():
   html = "<section data-testid='HourlyForecast'></section>"  # No Card divs
   pq = PyQuery(html)
   service = ExtractHourlyForecastService()
-  with pytest.raises(ValueError, match="Could not extract hourly forecast."):
+  with pytest.raises(ValueError, match="There's no hourly forecast data available."):
     service.execute(pq)
 
 def test_execute_exception_on_wind_error():
@@ -85,7 +85,7 @@ def test_execute_exception_on_wind_error():
   '''
   pq = PyQuery(html)
   service = ExtractHourlyForecastService()
-  with pytest.raises(ValueError, match="Could not extract hourly forecast."):
+  with pytest.raises(ValueError, match="There's no hourly forecast data available."):
     service.execute(pq)
     
 
@@ -95,5 +95,5 @@ def test_execute_exception():
       raise Exception("fail")
   pq = BrokenPyQuery("<section></section>")
   service = ExtractHourlyForecastService()
-  with pytest.raises(ValueError, match="Could not extract hourly forecast."):
+  with pytest.raises(Exception, match="fail"):
     service.execute(pq)
