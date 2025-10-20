@@ -82,7 +82,7 @@ class ConsoleTTY:
         # Hourly predictions and daily predictions
         hourly_predictions = [
                 f"{h['title']}"
-                f"{'\t' if len(h['title']) < 3 else ''}\t"
+                f"{'\t\t' if len(h['title']) < 3 else '\t'}"
                 f"{h['temperature']}"
                 "\t"
                 f"{h['icon']}\t"
@@ -92,7 +92,7 @@ class ConsoleTTY:
 
         daily_predictions = [
                 f"{d['title']}"
-                f"{'\t' if len(d['title']) < 3 else ''}\t"
+                f"{'\t\t' if len(d['title']) < 3 else '\t'}"
                 f"{d['high_low']}"
                 f"\t"
                 f"{d['icon']}\t"
