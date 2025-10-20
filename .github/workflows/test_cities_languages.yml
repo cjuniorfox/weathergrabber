@@ -4,7 +4,10 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: '0 0 */2 * *'
+    - cron: '0 2 1,5,9,13,17,21,25,29 * *'  # Every 4 days at 2 AM (night)
+    - cron: '0 19 3,7,11,15,19,23,27,31 * *'  # Every 4 days at 7 PM (evening)
+    - cron: '0 8 2,6,10,14,18,22,26,30 * *'     # Every 4 days at 8 AM (morning)
+    - cron: '0 14 4,8,12,16,20,24,28 * *'       # Every 4 days at 2 PM (afternoon)
 
 jobs:
   test-cities-languages:
