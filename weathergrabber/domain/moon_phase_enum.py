@@ -38,6 +38,7 @@ class MoonPhaseEnum(Enum):
     PHASE_26 = ("phase-26", "\uf186", "🌘")
     PHASE_27 = ("phase-27", "\uf186", "🌘")
     PHASE_28 = ("phase-28", "\uf186", "🌘")
+    PHASE_29 = ("phase-29", "\uf186", "🌑")
     DEFAULT = ("default", "\uf186", "🌑")
 
     def __init__(self, name: str, fa_icon: str, emoji_icon: str):

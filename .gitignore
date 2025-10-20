@@ -8,7 +8,6 @@ htmlcov/
 *.swp
 .venv/
 .env
-.vscode/
 .coverage
 htmlcov/
 .pytest_cache/

@@ -67,7 +67,7 @@ class WaybarTTY:
         aqi_value = forecast.air_quality_index.value
 
         hourly_predictions_format = [{
-            'title': h.title if len(h.title) < 10 else h.title[:9] + '.',
+            'title': h.title if len(h.title) < 9 else h.title[:8] + '.',
             'temperature' : h.temperature,
             'icon': h.icon.fa_icon if is_fa else h.icon.emoji_icon,
             'precipitation': f"{h.precipitation.percentage if h.precipitation.percentage else ''}"
@@ -75,7 +75,7 @@ class WaybarTTY:
 
         daily_predictions_format = [
             {
-                'title': d.title if len(d.title) < 10 else d.title[:9] + '.',
+                'title': d.title if len(d.title) < 9 else d.title[:8] + '.',
                 'high_low': f"{d.high_low.high}/<span size='small'>{d.high_low.low}</span>",
                 'icon': d.icon.fa_icon if is_fa else d.icon.emoji_icon,
                 'precipitation': f"{d.precipitation.percentage}"
@@ -85,7 +85,7 @@ class WaybarTTY:
         # Hourly predictions and daily predictions
         hourly_predictions = [
                 f"{h['title']}"
-                f"{'\t\t' if len(h['title']) < 4 else '\t'}"
+                f"{'\t\t' if len(h['title']) < 5 else '\t'}"
                 f"{h['temperature']}"
                 "\t\t"
                 f"{h['icon']}\t"
@@ -95,9 +95,9 @@ class WaybarTTY:
 
         daily_predictions = [
                 f"{d['title']}"
-                f"\t{'\t' if len(d['title']) < 6 else ' '}"
+                f"{'\t\t' if len(d['title']) < 5 else '\t'}"
                 f"{d['high_low']}"
-                f"\t{'\t' if len(d['high_low']) < 33 else ''}"
+                f"{'\t\t' if len(d['high_low']) < 32 else '\t'}"
                 f"{d['icon']}\t"
                 f"{rain_icon} {d['precipitation']}"
             for d in daily_predictions_format

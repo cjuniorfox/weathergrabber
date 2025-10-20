@@ -10,6 +10,7 @@ class WeatherIconEnum(Enum):
     DRIZZLE = ('drizzle', '\uf0e9', '🌦️')
     FEEL = ('feel', '\uf2c9', '🥵')
     FOGGY = ('foggy', '\uf74e', '🌫️')
+    HEAVY_RAIN = ('heavy-rain', '\uf0e9', '🌧️')
     HUMIDITY = ('humidity', '\uf043', '💧')
     ISOLATED_THUNDERSTORMS = ('isolated-thunderstorms', chr(0x26C8), '⛈️')
     MOSTLY_CLEAR_DAY = ('mostly-clear-day', chr(0xF0599), '☀️')

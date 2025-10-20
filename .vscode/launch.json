@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: weathergrabber.cli as module",
+            "name": "Python Debugger: weathergrabber as module",
             "type": "debugpy",
             "request": "launch",
-            "module": "weathergrabber.cli",
+            "module": "weathergrabber",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "args": "${command:pickArgs} --log debug",
