@@ -17,7 +17,7 @@ class ExtractTodayDetailsService:
         self.logger.debug("Extracting today's details...")
 
         today_details_data = weather_data.find("div#todayDetails")
-
+        
         feelslike = PyQuery(today_details_data).find("div[data-testid='FeelsLikeSection'] span")
         sunrise_sunset = PyQuery(today_details_data).find("div[data-testid='sunriseSunsetContainer'] div p[class*='TwcSunChart']")
 
@@ -30,8 +30,6 @@ class ExtractTodayDetailsService:
         icons = today_details_data.find('svg[class*="WeatherDetailsListItem--icon"]')
         labels = today_details_data.find('div[class*="WeatherDetailsListItem--label"]')
         values = today_details_data.find('div[data-testid="wxData"]')
-
-        self.logger.debug(f"Extracted:\n\ticons: %s\n\tlabels: %s\n\tvalues: %s", icons, labels, values)
 
         self.logger.debug(f"Parsing today details values...")
         high_low_label = labels.eq(0).text()  #'High / Low'
