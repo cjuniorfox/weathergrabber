@@ -39,7 +39,8 @@ class MoonPhaseEnum(Enum):
     PHASE_27 = ("phase-27", "\uf186", "🌘")
     PHASE_28 = ("phase-28", "\uf186", "🌘")
     PHASE_29 = ("phase-29", "\uf186", "🌑")
-    DEFAULT = ("default", "\uf186", "🌑")
+    PHASE_30 = ("phase-30", "\uf186", "🌑")
+    
 
     def __init__(self, name: str, fa_icon: str, emoji_icon: str):
         self._name = name
@@ -63,4 +64,4 @@ class MoonPhaseEnum(Enum):
         for item in MoonPhaseEnum:
             if item._name == name:
                 return item
-        return None
+        raise ValueError(f'WeatherIconEnum: No icon found for name "{name}"')

@@ -36,7 +36,7 @@ class ExtractDailyForecastService:
 
             self.logger.debug("Extracted %s register(s)...",len(details))
 
-            daily_predictions = [ 
+            daily_predictions = [
                 DailyPredictions(
                     title=item["title"],
                     high_low = TemperatureHighLow.from_string(item["high-low"]),

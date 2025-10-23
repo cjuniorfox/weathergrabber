@@ -17,6 +17,7 @@ class ExtractTodayDetailsService:
         self.logger.debug("Extracting today's details...")
 
         today_details_data = weather_data.find("div#todayDetails")
+        
         feelslike = PyQuery(today_details_data).find("div[data-testid='FeelsLikeSection'] span")
         sunrise_sunset = PyQuery(today_details_data).find("div[data-testid='sunriseSunsetContainer'] div p[class*='TwcSunChart']")
 
