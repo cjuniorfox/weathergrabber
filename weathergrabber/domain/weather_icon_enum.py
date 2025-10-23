@@ -39,6 +39,7 @@ class WeatherIconEnum(Enum):
     SUNNY = ('sunny', chr(0xF0599), '☀️')
     SUNRISE = ('sunrise', '\ue34c', '🌅')
     SUNSET = ('sunset', '\ue34d', '🌇')
+    STRONG_STORMS = ('strong-storms', '\uf01e', '🌩️')
     THUNDERSTORMS = ('thunderstorms', '\uf0e7', '⛈️')
     VISIBILITY = ('visibility', '\uf06e', '👁️')
     WIND = ('wind', chr(0xf059d), '🌪️')
