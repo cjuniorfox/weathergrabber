@@ -34,7 +34,7 @@ class ExtractDailyForecastService:
                 "moon-phase-value": PyQuery(item).find("li[data-testid='MoonphaseSection'] span[data-testid='moonPhase']").text(),
             } for item in data ]
 
-            self.logger.debug("Extracted %s register(s)...",len(details))
+            self.logger.debug("Extracted:\n %s",details)
 
             daily_predictions = [ 
                 DailyPredictions(
