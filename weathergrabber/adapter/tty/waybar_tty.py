@@ -97,7 +97,7 @@ class WaybarTTY:
                 f"{d['title']}"
                 f"{'\t\t' if len(d['title']) < 5 else '\t'}"
                 f"{d['high_low']}"
-                f"{'\t\t' if len(d['high_low']) < 32 else '\t'}"
+                f"{'\t\t' if len(d['high_low']) < 33 else '\t'}"
                 f"{d['icon']}\t"
                 f"{rain_icon} {d['precipitation']}"
             for d in daily_predictions_format
