@@ -1,6 +1,6 @@
-from weathergrabber.usecase.use_case import UseCase
+from weathergrabber.application.usecases.use_case import UseCase
 from weathergrabber.domain.adapter.params import Params
-from weathergrabber.domain.adapter.mapper.forecast_mapper import forecast_to_dict
+from weathergrabber.domain.adapter.mappers.forecast_mapper import forecast_to_dict
 import logging
 import json
 
