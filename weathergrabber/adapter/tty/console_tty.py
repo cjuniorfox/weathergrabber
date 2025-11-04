@@ -1,7 +1,7 @@
-from weathergrabber.usecase.use_case import UseCase
+from weathergrabber.application.usecases.use_case import UseCase
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.domain.adapter.icon_enum import IconEnum
-from weathergrabber.domain.weather_icon_enum import WeatherIconEnum
+from weathergrabber.domain.entities.weather_icon_enum import WeatherIconEnum
 from weathergrabber.weathergrabber_application import WeatherGrabberApplication
 import logging
 

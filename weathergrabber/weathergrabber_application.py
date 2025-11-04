@@ -4,17 +4,17 @@ from .domain.adapter.params import Params
 from .domain.adapter.output_enum import OutputEnum
 from .adapter.client.weather_api import WeatherApi
 from .adapter.client.weather_search_api import WeatherSearchApi
-from .service.search_location_service import SearchLocationService
-from .service.read_weather_service import ReadWeatherService
-from .service.extract_current_conditions_service import ExtractCurrentConditionsService
-from .service.extract_today_details_service import ExtractTodayDetailsService
-from .service.extract_aqi_service import ExtractAQIService
-from .service.extract_health_activities_service import ExtractHealthActivitiesService
-from .service.extract_hourly_forecast_service import ExtractHourlyForecastService
-from .service.extract_hourly_forecast_oldstyle_service import ExtractHourlyForecastOldstyleService
-from .service.extract_daily_forecast_service import ExtractDailyForecastService
-from .service.extract_daily_forecast_oldstyle_service import ExtractDailyForecastOldstyleService
-from .usecase.use_case import UseCase
+from .application.services.search_location_service import SearchLocationService
+from .application.services.read_weather_service import ReadWeatherService
+from .application.services.extract_current_conditions_service import ExtractCurrentConditionsService
+from .application.services.extract_today_details_service import ExtractTodayDetailsService
+from .application.services.extract_aqi_service import ExtractAQIService
+from .application.services.extract_health_activities_service import ExtractHealthActivitiesService
+from .application.services.extract_hourly_forecast_service import ExtractHourlyForecastService
+from .application.services.extract_hourly_forecast_oldstyle_service import ExtractHourlyForecastOldstyleService
+from .application.services.extract_daily_forecast_service import ExtractDailyForecastService
+from .application.services.extract_daily_forecast_oldstyle_service import ExtractDailyForecastOldstyleService
+from .application.usecases.use_case import UseCase
 
 
 class WeatherGrabberApplication:
