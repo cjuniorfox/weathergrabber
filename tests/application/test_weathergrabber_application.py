@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from weathergrabber.weathergrabber_application import WeatherGrabberApplication
+from weathergrabber.application.weathergrabber_application import WeatherGrabberApplication
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.domain.adapter.output_enum import OutputEnum
 
@@ -18,17 +18,17 @@ def params_keep_open():
     p.keep_open = True
     return p
 
-@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
-@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._define_controller')
+@patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
+@patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._define_controller')
 def test_init_calls_beans_and_define_controller(mock_define, mock_beans, params):
     with patch.object(WeatherGrabberApplication, 'controller', create=True):
         WeatherGrabberApplication(params)
     mock_beans.assert_called_once()
     mock_define.assert_called_once_with(params.output_format)
 
-@patch('weathergrabber.weathergrabber_application.sleep', side_effect=Exception("break loop"))
-@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
-@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._define_controller')
+@patch('weathergrabber.application.weathergrabber_application.sleep', side_effect=Exception("break loop"))
+@patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
+@patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._define_controller')
 def test_init_keep_open(mock_define, mock_beans, mock_sleep, params_keep_open):
     # Patch controller to raise after first execute to break the loop
     with patch.object(WeatherGrabberApplication, 'controller', create=True) as mock_controller:
@@ -38,7 +38,7 @@ def test_init_keep_open(mock_define, mock_beans, mock_sleep, params_keep_open):
         mock_controller.execute.assert_called_once_with(params_keep_open)
         mock_sleep.assert_called()
 
-@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
+@patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_console(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
     app.use_case = MagicMock()
@@ -48,7 +48,7 @@ def test_define_controller_console(mock_beans):
     assert app.controller.__class__.__name__ == 'ConsoleTTY'
     
 
-@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
+@patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_json(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
     app.use_case = MagicMock()
@@ -57,7 +57,7 @@ def test_define_controller_json(mock_beans):
     assert hasattr(app, 'controller')
     assert app.controller.__class__.__name__ == 'JsonTTY'
 
-@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
+@patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_waybar(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
     app.use_case = MagicMock()
@@ -66,7 +66,7 @@ def test_define_controller_waybar(mock_beans):
     assert hasattr(app, 'controller')
     assert app.controller.__class__.__name__ == 'WaybarTTY'
 
-@patch('weathergrabber.weathergrabber_application.WeatherGrabberApplication._beans')
+@patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_invalid(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
     app.use_case = MagicMock()

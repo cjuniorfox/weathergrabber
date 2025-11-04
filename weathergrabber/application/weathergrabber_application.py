@@ -1,20 +1,20 @@
 import logging
 from time import sleep
-from .domain.adapter.params import Params
-from .domain.adapter.output_enum import OutputEnum
-from .adapter.client.weather_api import WeatherApi
-from .adapter.client.weather_search_api import WeatherSearchApi
-from .application.services.search_location_service import SearchLocationService
-from .application.services.read_weather_service import ReadWeatherService
-from .application.services.extract_current_conditions_service import ExtractCurrentConditionsService
-from .application.services.extract_today_details_service import ExtractTodayDetailsService
-from .application.services.extract_aqi_service import ExtractAQIService
-from .application.services.extract_health_activities_service import ExtractHealthActivitiesService
-from .application.services.extract_hourly_forecast_service import ExtractHourlyForecastService
-from .application.services.extract_hourly_forecast_oldstyle_service import ExtractHourlyForecastOldstyleService
-from .application.services.extract_daily_forecast_service import ExtractDailyForecastService
-from .application.services.extract_daily_forecast_oldstyle_service import ExtractDailyForecastOldstyleService
-from .application.usecases.use_case import UseCase
+from weathergrabber.domain.adapter.params import Params
+from weathergrabber.domain.adapter.output_enum import OutputEnum
+from weathergrabber.adapter.client.weather_api import WeatherApi
+from weathergrabber.adapter.client.weather_search_api import WeatherSearchApi
+from .services.search_location_service import SearchLocationService
+from .services.read_weather_service import ReadWeatherService
+from .services.extract_current_conditions_service import ExtractCurrentConditionsService
+from .services.extract_today_details_service import ExtractTodayDetailsService
+from .services.extract_aqi_service import ExtractAQIService
+from .services.extract_health_activities_service import ExtractHealthActivitiesService
+from .services.extract_hourly_forecast_service import ExtractHourlyForecastService
+from .services.extract_hourly_forecast_oldstyle_service import ExtractHourlyForecastOldstyleService
+from .services.extract_daily_forecast_service import ExtractDailyForecastService
+from .services.extract_daily_forecast_oldstyle_service import ExtractDailyForecastOldstyleService
+from .usecases.use_case import UseCase
 
 
 class WeatherGrabberApplication:

@@ -1,5 +1,5 @@
 import logging
-from weathergrabber.weathergrabber_application import WeatherGrabberApplication
+from weathergrabber.application.weathergrabber_application import WeatherGrabberApplication
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.domain.adapter.output_enum import OutputEnum
 from weathergrabber.domain.adapter.icon_enum import IconEnum
