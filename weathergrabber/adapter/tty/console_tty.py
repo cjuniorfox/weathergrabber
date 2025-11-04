@@ -1,8 +1,8 @@
-from weathergrabber.usecase.use_case import UseCase
+from weathergrabber.application.usecases.use_case import UseCase
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.domain.adapter.icon_enum import IconEnum
-from weathergrabber.domain.weather_icon_enum import WeatherIconEnum
-from weathergrabber.weathergrabber_application import WeatherGrabberApplication
+from weathergrabber.domain.entities.weather_icon_enum import WeatherIconEnum
+from weathergrabber.application.weathergrabber_application import WeatherGrabberApplication
 import logging
 
 class ConsoleTTY:
@@ -82,7 +82,7 @@ class ConsoleTTY:
         # Hourly predictions and daily predictions
         hourly_predictions = [
                 f"{h['title']}"
-                f"{'\t' if len(h['title']) < 3 else ''}\t"
+                f"{'\t\t' if len(h['title']) < 3 else '\t'}"
                 f"{h['temperature']}"
                 "\t"
                 f"{h['icon']}\t"
@@ -92,7 +92,7 @@ class ConsoleTTY:
 
         daily_predictions = [
                 f"{d['title']}"
-                f"{'\t' if len(d['title']) < 3 else ''}\t"
+                f"{'\t\t' if len(d['title']) < 3 else '\t'}"
                 f"{d['high_low']}"
                 f"\t"
                 f"{d['icon']}\t"

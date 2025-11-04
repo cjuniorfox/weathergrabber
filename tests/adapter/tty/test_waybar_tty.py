@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 from weathergrabber.adapter.tty.waybar_tty import WaybarTTY
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.domain.adapter.icon_enum import IconEnum
-from weathergrabber.domain.city_location import CityLocation
+from weathergrabber.domain.entities.city_location import CityLocation
 
 class DummyHighLow:
     high = '30°'
