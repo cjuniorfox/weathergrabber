@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 from weathergrabber.domain.entities.forecast import Forecast
 from weathergrabber.domain.entities.search import Search
 from weathergrabber.domain.adapter.params import Params
-from weathergrabber.application.usecases.use_case import UseCase
+from weathergrabber.application.usecases.weather_forecast_uc import WeatherForecastUC
 
 
 @pytest.fixture
@@ -25,7 +25,7 @@ def mock_services():
 
 @pytest.fixture
 def usecase(mock_services):
-    return UseCase(**mock_services)
+    return WeatherForecastUC(**mock_services)
 
 
 @pytest.fixture

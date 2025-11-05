@@ -1,5 +1,7 @@
 import logging
 from time import sleep
+from weathergrabber.adapter.repository.forecast_repository import ForecastRepository
+from weathergrabber.application.services.retrieve_forecast_from_cache_service import RetrieveForecastFromCacheService
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.domain.adapter.output_enum import OutputEnum
 from weathergrabber.adapter.client.weather_api import WeatherApi
@@ -14,7 +16,7 @@ from .services.extract_hourly_forecast_service import ExtractHourlyForecastServi
 from .services.extract_hourly_forecast_oldstyle_service import ExtractHourlyForecastOldstyleService
 from .services.extract_daily_forecast_service import ExtractDailyForecastService
 from .services.extract_daily_forecast_oldstyle_service import ExtractDailyForecastOldstyleService
-from .usecases.use_case import UseCase
+from .usecases.weather_forecast_uc import WeatherForecastUC
 
 
 class WeatherGrabberApplication:
@@ -22,6 +24,7 @@ class WeatherGrabberApplication:
     def _beans(self):
         self.weather_search_api = WeatherSearchApi()
         self.weather_api = WeatherApi()
+        self.forecast_repository = ForecastRepository()
         self.search_location_service = SearchLocationService(self.weather_search_api)
         self.read_weather_service = ReadWeatherService(self.weather_api)
         self.extract_current_conditions_service = ExtractCurrentConditionsService()
@@ -32,7 +35,8 @@ class WeatherGrabberApplication:
         self.extract_hourly_forecast_oldstyle_service = ExtractHourlyForecastOldstyleService()
         self.extract_daily_forecast_service = ExtractDailyForecastService()
         self.extract_daily_forecast_oldstyle_service = ExtractDailyForecastOldstyleService()
-        self.use_case = UseCase(
+        self.retrieve_forecast_from_cache_service = RetrieveForecastFromCacheService(self.forecast_repository)
+        self.use_case = WeatherForecastUC(
                 self.search_location_service,
                 self.read_weather_service,
                 self.extract_current_conditions_service,
@@ -42,7 +46,8 @@ class WeatherGrabberApplication:
                 self.extract_hourly_forecast_service,
                 self.extract_hourly_forecast_oldstyle_service,
                 self.extract_daily_forecast_service,
-                self.extract_daily_forecast_oldstyle_service
+                self.extract_daily_forecast_oldstyle_service,
+                self.retrieve_forecast_from_cache_service
             )
         pass
         

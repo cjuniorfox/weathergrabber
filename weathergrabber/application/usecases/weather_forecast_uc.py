@@ -1,4 +1,7 @@
+from typing import List
 import logging
+
+from requests.exceptions import ConnectionError
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.application.services.search_location_service import SearchLocationService
 from weathergrabber.application.services.read_weather_service import ReadWeatherService
@@ -10,10 +13,16 @@ from weathergrabber.application.services.extract_hourly_forecast_service import 
 from weathergrabber.application.services.extract_hourly_forecast_oldstyle_service import ExtractHourlyForecastOldstyleService
 from weathergrabber.application.services.extract_daily_forecast_service import ExtractDailyForecastService
 from weathergrabber.application.services.extract_daily_forecast_oldstyle_service import ExtractDailyForecastOldstyleService
+from weathergrabber.application.services.retrieve_forecast_from_cache_service import RetrieveForecastFromCacheService
+from weathergrabber.domain.entities.air_quality_index import AirQualityIndex
+from weathergrabber.domain.entities.daily_predictions import DailyPredictions
+from weathergrabber.domain.entities.health_activities import HealthActivities
+from weathergrabber.domain.entities.hourly_predictions import HourlyPredictions
 from weathergrabber.domain.entities.search import Search
 from weathergrabber.domain.entities.forecast import Forecast
+from weathergrabber.domain.entities.today_details import TodayDetails
 
-class UseCase:
+class WeatherForecastUC:
     """Use case for retrieving weather forecast data."""
     
     # Constants for warning messages
@@ -32,6 +41,7 @@ class UseCase:
         extract_hourly_forecast_oldstyle_service: ExtractHourlyForecastOldstyleService,
         extract_daily_forecast_service: ExtractDailyForecastService,
         extract_daily_forecast_oldstyle_service: ExtractDailyForecastOldstyleService,
+        retrieve_forecast_from_cache_service: RetrieveForecastFromCacheService
     ):
         self.logger = logging.getLogger(__name__)
         self.search_location_service = search_location_service
@@ -44,25 +54,45 @@ class UseCase:
         self.extract_hourly_forecast_oldstyle_service = extract_hourly_forecast_oldstyle_service
         self.extract_daily_forecast_service = extract_daily_forecast_service
         self.extract_daily_forecast_oldstyle_service = extract_daily_forecast_oldstyle_service
+        self.retrieve_forecast_from_cache_service = retrieve_forecast_from_cache_service
 
     def execute(self, params: Params) -> Forecast:
         """Execute the weather forecast retrieval use case."""
         self.logger.debug("Starting weather forecast use case")
 
-        location_id = self._resolve_location_id(params)
-        weather_data = self.read_weather_service.execute(params.language, location_id)
+        try:
+            location_id = self._resolve_location_id(params)
+        except ConnectionError as e:
+            self.logger.error(f"Error resolving location ID: {e}")
+            forecast = self.retrieve_forecast_from_cache_service(params)
+            if forecast:
+                self.logger.debug("Forecast retrieved from cache successfully")
+                return forecast
+            raise ValueError("Failed to resolve location ID due to connection error and no cached data available.")
         
-        basic_weather_data = self._extract_basic_weather_data(weather_data)
+        
+        weather_data = self.read_weather_service.execute(params.language, location_id)
+
+        current_conditions = self.extract_current_conditions_service.execute(weather_data)
+        today_details = self.extract_today_details_service.execute(weather_data)
+        air_quality_index = self.extract_aqi_service.execute(weather_data)
+        health_activities = self.extract_health_activities_service.execute(weather_data)
+        
         hourly_predictions = self._extract_hourly_predictions(weather_data)
         daily_predictions = self._extract_daily_predictions(weather_data)
 
         forecast = self._build_forecast(
             location_id=location_id,
             search_name=params.location.search_name,
-            basic_data=basic_weather_data,
+            current_conditions=current_conditions,
+            today_details=today_details,
+            air_quality_index=air_quality_index,
+            health_activities=health_activities,
             hourly_predictions=hourly_predictions,
             daily_predictions=daily_predictions
         )
+
+        #TODO: Save forecast to cache repository here if needed
 
         self.logger.debug("Forecast data obtained successfully")
         return forecast
@@ -86,7 +116,7 @@ class UseCase:
             'health_activities': self.extract_health_activities_service.execute(weather_data),
         }
 
-    def _extract_hourly_predictions(self, weather_data):
+    def _extract_hourly_predictions(self, weather_data) -> List[HourlyPredictions]:
         """Extract hourly predictions with fallback mechanism."""
         try:
             return self.extract_hourly_forecast_oldstyle_service.execute(weather_data)
@@ -94,7 +124,7 @@ class UseCase:
             self.logger.warning(self.HOURLY_FORECAST_FALLBACK_MSG)
             return self.extract_hourly_forecast_service.execute(weather_data)
 
-    def _extract_daily_predictions(self, weather_data):
+    def _extract_daily_predictions(self, weather_data) -> List[DailyPredictions]:
         """Extract daily predictions with fallback mechanism."""
         try:
             return self.extract_daily_forecast_oldstyle_service.execute(weather_data)
@@ -102,15 +132,17 @@ class UseCase:
             self.logger.warning(self.DAILY_FORECAST_FALLBACK_MSG)
             return self.extract_daily_forecast_service.execute(weather_data)
 
-    def _build_forecast(self, location_id: str, search_name: str, basic_data: dict, 
-                       hourly_predictions, daily_predictions) -> Forecast:
+    def _build_forecast(self, location_id: str, search_name: str, current_conditions: 
+                        dict, today_details: TodayDetails, air_quality_index : AirQualityIndex, 
+                        health_activities: HealthActivities, hourly_predictions: HourlyPredictions, 
+                        daily_predictions: DailyPredictions) -> Forecast:
         """Build the final forecast object."""
         return Forecast(
             search=Search(id=location_id, search_name=search_name),
-            current_conditions=basic_data['current_conditions'],
-            today_details=basic_data['today_details'],
-            air_quality_index=basic_data['air_quality_index'],
-            health_activities=basic_data['health_activities'],
+            current_conditions=current_conditions,
+            today_details=today_details,
+            air_quality_index=air_quality_index,
+            health_activities=health_activities,
             hourly_predictions=hourly_predictions,
             daily_predictions=daily_predictions
         )
