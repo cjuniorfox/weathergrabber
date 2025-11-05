@@ -9,7 +9,7 @@ logging.basicConfig(
     format="[%(levelname)s] %(message)s"
 )
 
-def main(log_level: str, location_name: str, location_id: str, lang: str, output: str, keep_open: bool, icons: str):
+def main(log_level: str, location_name: str, location_id: str, lang: str, output: str, keep_open: bool, icons: str, force_cache: bool):
     logging.getLogger().setLevel(log_level.upper())
 
     logging.info(f"Log level set to {log_level}")
@@ -19,13 +19,15 @@ def main(log_level: str, location_name: str, location_id: str, lang: str, output
     logging.info(f"Output: {output}")
     logging.info(f"Keep open: {keep_open}")
     logging.info(f"Icons: {icons}")
+    logging.info(f"Force cache: {force_cache}")
 
     params = Params(
         location=Params.Location(search_name=location_name, id=location_id),
         language=lang if lang else "en-US",
         output_format= OutputEnum(output),
         keep_open=keep_open,
-        icons=IconEnum(icons)
+        icons=IconEnum(icons),
+        force_cache=force_cache,
     )
 
     app = WeatherGrabberApplication(params)

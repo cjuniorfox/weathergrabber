@@ -20,7 +20,6 @@ class SunriseSunset:
         def __repr__(self):
             return f"IconValue(icon={self._icon}, value='{self._value}')"
 
-
     def __init__(self, sunrise: str, sunset: str):
         self._sunrise = SunriseSunset.IconValue(WeatherIconEnum.SUNRISE, sunrise)
         self._sunset = SunriseSunset.IconValue(WeatherIconEnum.SUNSET, sunset)

@@ -41,7 +41,7 @@ def test_init_keep_open(mock_define, mock_beans, mock_sleep, params_keep_open):
 @patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_console(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
-    app.use_case = MagicMock()
+    app.weather_forecast_uc = MagicMock()
     app.logger = MagicMock()
     app._define_controller(OutputEnum.CONSOLE)
     assert hasattr(app, 'controller')
@@ -51,7 +51,7 @@ def test_define_controller_console(mock_beans):
 @patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_json(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
-    app.use_case = MagicMock()
+    app.weather_forecast_uc = MagicMock()
     app.logger = MagicMock()
     app._define_controller(OutputEnum.JSON)
     assert hasattr(app, 'controller')
@@ -60,7 +60,7 @@ def test_define_controller_json(mock_beans):
 @patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_waybar(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
-    app.use_case = MagicMock()
+    app.weather_forecast_uc = MagicMock()
     app.logger = MagicMock()
     app._define_controller(OutputEnum.WAYBAR)
     assert hasattr(app, 'controller')
@@ -69,7 +69,7 @@ def test_define_controller_waybar(mock_beans):
 @patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_invalid(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
-    app.use_case = MagicMock()
+    app.weather_forecast_uc = MagicMock()
     app.logger = MagicMock()
     with pytest.raises(ValueError):
         app._define_controller('INVALID')

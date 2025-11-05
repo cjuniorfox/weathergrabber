@@ -16,11 +16,12 @@ class RetrieveForecastFromCacheService:
         elif params.location.search_name:
             forecast = self.forecast_repository.get_by_search_name(params.location.search_name)
         else:
-            self.log.debug("No location_id or search_name provided in params; cannot retrieve from cache.")
-            raise ValueError("Either location ID or search name must be provided to retrieve forecast from cache.")
+            self.log.debug("No location_id provided in params; cannot retrieve from cache.")
+            raise ValueError("Location ID must be provided to retrieve forecast from cache.")
 
         if forecast:
             self.log.debug("Forecast retrieved from cache successfully.")
+            return forecast
         else:
             self.log.debug("No forecast found in cache.")
-        return forecast
+            raise ValueError("No forecast found in cache for the given location.")

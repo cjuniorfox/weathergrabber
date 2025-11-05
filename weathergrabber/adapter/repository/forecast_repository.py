@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Optional
 import logging
 from weathergrabber.domain.entities.forecast import Forecast
+from weathergrabber.domain.adapter.mappers.forecast_mapper import forecast_to_dict, dict_to_forecast
 
 class ForecastRepository:
     def __init__(self, db_path: str = None):
@@ -27,7 +28,7 @@ class ForecastRepository:
                     CREATE TABLE IF NOT EXISTS forecasts (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         location_id TEXT NOT NULL,
-                        search_name TEXT NOT NULL,
+                        search_name TEXT,
                         forecast_data TEXT NOT NULL,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -35,7 +36,6 @@ class ForecastRepository:
                 ''')
                 # Create indexes for fast retrieval
                 cursor.execute("CREATE INDEX IF NOT EXISTS idx_location_id ON forecasts (location_id)")
-                cursor.execute("CREATE INDEX IF NOT EXISTS idx_search_name ON forecasts (search_name)")
                 conn.commit()
                 self.logger.debug(f"Database initialized successfully at {self.db_path}")
         except sqlite3.Error as e:
@@ -43,6 +43,7 @@ class ForecastRepository:
             raise
 
     def save_forecast(self, location_id: str, search_name: str, forecast_data: Forecast) -> None:
+        forecast_dict_data = forecast_to_dict(forecast_data)
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
@@ -51,7 +52,7 @@ class ForecastRepository:
             ''', (
                 location_id,
                 search_name,
-                json.dumps(forecast_data),
+                json.dumps(forecast_dict_data),
                 datetime.now(),
                 datetime.now()
             ))
@@ -66,19 +67,20 @@ class ForecastRepository:
                 LIMIT 1
             ''', (location_id,))
             row = cursor.fetchone()
-            return json.loads(row[0]) if row else None
-
+            forecast_dict_data = json.loads(row[0]) if row else None
+            return dict_to_forecast(forecast_dict_data) if forecast_dict_data else None
+        
     def get_by_search_name(self, search_name: str) -> Optional[Forecast]:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
                 SELECT forecast_data FROM forecasts
-                WHERE search_name = ?
-                ORDER BY created_at DESC
+                WHERE search_name = ? ORDER BY created_at DESC
                 LIMIT 1
             ''', (search_name,))
             row = cursor.fetchone()
-            return json.loads(row[0]) if row else None
+            forecast_dict_data = json.loads(row[0]) if row else None
+            return dict_to_forecast(forecast_dict_data) if forecast_dict_data else None
 
     def clear_cache(self) -> None:
         """Clear all cached forecasts from the database."""
@@ -101,7 +103,7 @@ class ForecastRepository:
                 
                 cursor.execute("""
                     SELECT COUNT(DISTINCT location_id) as unique_locations,
-                           COUNT(DISTINCT search_name) as unique_searches
+                           COUNT(DISTINCT search_name) as unique_search_names
                     FROM forecasts
                 """)
                 stats = cursor.fetchone()
@@ -109,7 +111,7 @@ class ForecastRepository:
                 return {
                     'total_forecasts': total_count,
                     'unique_locations': stats[0],
-                    'unique_searches': stats[1],
+                    'unique_search_names': stats[1],
                     'database_path': self.db_path
                 }
         except sqlite3.Error as e:
