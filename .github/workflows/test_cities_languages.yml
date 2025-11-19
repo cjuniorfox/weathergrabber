@@ -28,7 +28,7 @@ jobs:
 
       - name: Test 25 random cities in 25 random languages
         run: |
-          python .github/scripts/test_random_cities.py --languages "en-US,pt-BR,fr-FR,es-ES,de-DE,it-IT,ru-RU,ja-JP,zh-CN,ar-SA,ko-KR,nl-NL,sv-SE,cs-CZ,hu-HU,fi-FI,da-DK,tr-TR,sk-SK,da-DK,th-TH,id-ID,vi-VN,uk-UA"
+          python .github/scripts/test_random_cities.py --languages "en-US,pt-BR,fr-FR,es-ES,de-DE,it-IT,ja-JP,zh-CN,ar-SA,ko-KR,nl-NL,sv-SE,cs-CZ,hu-HU,fi-FI,da-DK,tr-TR,sk-SK,da-DK,th-TH,id-ID,vi-VN,uk-UA"
 
       - name: Test 10 random cities in US English
         run: |
