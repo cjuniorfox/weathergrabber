@@ -49,6 +49,7 @@ class WeatherIconEnum(Enum):
     DUST = ('dust', '\uf063', '🌪️')
     FLURRIES = ('flurries', '\u2744', '🌨️')
     FREEZING_DRIZZLE = ('freezing-drizzle', '\uf0e9', '🌧️')
+    FREEZING_DRIZZLE_RAIN = ('freezing-drizzle-rain', '\uf0e9', '🌧️')
     FREEZING_RAIN = ('freezing-rain', '\uf0e9', '🌧️')
     HAIL = ('hail', '\uf015', '🌨️')
     HAZE = ('haze', '\uf0b6', '🌫️')
