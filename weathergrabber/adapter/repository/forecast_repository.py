@@ -44,6 +44,7 @@ class ForecastRepository:
 
     def save_forecast(self, location_id: str, search_name: str, forecast_data: Forecast) -> None:
         forecast_dict_data = forecast_to_dict(forecast_data)
+        now = datetime.now().isoformat()
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
@@ -53,8 +54,8 @@ class ForecastRepository:
                 location_id,
                 search_name,
                 json.dumps(forecast_dict_data),
-                datetime.now(),
-                datetime.now()
+                now,
+                now
             ))
             conn.commit()
 

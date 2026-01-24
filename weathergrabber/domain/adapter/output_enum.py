@@ -4,4 +4,3 @@ class OutputEnum(StrEnum):
     CONSOLE = "console"
     JSON = "json"
     WAYBAR = "waybar"
-    STATISTICS = "statistics"

@@ -26,7 +26,8 @@ class Params:
             output_format: OutputEnum = OutputEnum.CONSOLE,
             keep_open: bool = False,
             icons: IconEnum = IconEnum.EMOJI,
-            force_cache: bool = False
+            force_cache: bool = False,
+            cache_statistics: bool = False,
 
         ):
         self._location = location
@@ -35,6 +36,7 @@ class Params:
         self._keep_open = keep_open
         self._icons = icons
         self._force_cache = force_cache
+        self._cache_statistics = cache_statistics
 
     @property
     def location(self) -> Optional["Params.Location"]:
@@ -59,6 +61,19 @@ class Params:
     @property
     def force_cache(self) -> bool:
         return self._force_cache
+    
+    @property
+    def cache_statistics(self) -> bool:
+        return self._cache_statistics
 
     def __str__(self):
-        return f"Params(location={self.location}, language={self.language}, output_format={self.output_format}, keep_open={self.keep_open}, icons={self.icons}, force_cache={self.force_cache})"
+        return f'''
+            Params(
+                location={self.location},
+                language={self.language},
+                output_format={self.output_format},
+                keep_open={self.keep_open}, 
+                icons={self.icons},
+                force_cache={self.force_cache},
+                cache_statistics={self.cache_statistics})
+        '''

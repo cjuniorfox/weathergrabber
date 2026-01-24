@@ -36,5 +36,6 @@ def main_cli():
         output=args.output,
         keep_open=args.keep_open,
         icons=args.icons,
-        force_cache=args.force_cache
+        force_cache=args.force_cache,
+        cache_statistics=args.cache_statistics,
     )
