@@ -9,6 +9,7 @@ def params(request):
     p = MagicMock(spec=Params)
     p.output_format = request.param
     p.keep_open = False
+    p.cache_statistics = False
     return p
 
 @pytest.fixture
@@ -16,6 +17,17 @@ def params_keep_open():
     p = MagicMock(spec=Params)
     p.output_format = OutputEnum.JSON
     p.keep_open = True
+    p.force_cache = False
+    p.cache_statistics = False
+    return p
+
+@pytest.fixture
+def params_statistics():
+    p = MagicMock(spec=Params)
+    p.output_format = OutputEnum.JSON
+    p.keep_open = False
+    p.force_cache = False
+    p.cache_statistics = True
     return p
 
 @patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
@@ -24,7 +36,7 @@ def test_init_calls_beans_and_define_controller(mock_define, mock_beans, params)
     with patch.object(WeatherGrabberApplication, 'controller', create=True):
         WeatherGrabberApplication(params)
     mock_beans.assert_called_once()
-    mock_define.assert_called_once_with(params.output_format)
+    mock_define.assert_called_once_with(params)
 
 @patch('weathergrabber.application.weathergrabber_application.sleep', side_effect=Exception("break loop"))
 @patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
@@ -41,9 +53,12 @@ def test_init_keep_open(mock_define, mock_beans, mock_sleep, params_keep_open):
 @patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_console(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
-    app.use_case = MagicMock()
+    app.weather_forecast_uc = MagicMock()
     app.logger = MagicMock()
-    app._define_controller(OutputEnum.CONSOLE)
+    p = MagicMock(spec=Params)
+    p.output_format = OutputEnum.CONSOLE
+    p.cache_statistics = False
+    app._define_controller(p)
     assert hasattr(app, 'controller')
     assert app.controller.__class__.__name__ == 'ConsoleTTY'
     
@@ -51,28 +66,50 @@ def test_define_controller_console(mock_beans):
 @patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_json(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
-    app.use_case = MagicMock()
+    app.weather_forecast_uc = MagicMock()
     app.logger = MagicMock()
-    app._define_controller(OutputEnum.JSON)
+    p = MagicMock(spec=Params)
+    p.output_format = OutputEnum.JSON
+    p.cache_statistics = False
+    app._define_controller(p)
     assert hasattr(app, 'controller')
     assert app.controller.__class__.__name__ == 'JsonTTY'
 
 @patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_waybar(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
-    app.use_case = MagicMock()
+    app.weather_forecast_uc = MagicMock()
     app.logger = MagicMock()
-    app._define_controller(OutputEnum.WAYBAR)
+    p = MagicMock(spec=Params)
+    p.output_format = OutputEnum.WAYBAR
+    p.cache_statistics = False
+    app._define_controller(p)
     assert hasattr(app, 'controller')
     assert app.controller.__class__.__name__ == 'WaybarTTY'
+    
+@patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
+def test_define_controller_statistics(mock_beans):
+    app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
+    app.weather_forecast_uc = MagicMock()
+    app.statistics_uc = MagicMock()
+    app.logger = MagicMock()
+    p = MagicMock(spec=Params)
+    p.output_format = OutputEnum.JSON
+    p.cache_statistics = True
+    app._define_controller(p)
+    assert hasattr(app, 'controller')
+    assert app.controller.__class__.__name__ == 'StatisticsTTY'
 
 @patch('weathergrabber.application.weathergrabber_application.WeatherGrabberApplication._beans')
 def test_define_controller_invalid(mock_beans):
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
-    app.use_case = MagicMock()
+    app.weather_forecast_uc = MagicMock()
     app.logger = MagicMock()
+    p = MagicMock(spec=Params)
+    p.output_format = 'INVALID'
+    p.cache_statistics = False
     with pytest.raises(ValueError):
-        app._define_controller('INVALID')
+        app._define_controller(p)
 
 def test_beans_creates_all_services():
     app = WeatherGrabberApplication.__new__(WeatherGrabberApplication)
@@ -80,6 +117,7 @@ def test_beans_creates_all_services():
     app._beans()
     assert hasattr(app, 'weather_search_api')
     assert hasattr(app, 'weather_api')
+    assert hasattr(app, 'forecast_repository')
     assert hasattr(app, 'search_location_service')
     assert hasattr(app, 'read_weather_service')
     assert hasattr(app, 'extract_current_conditions_service')
@@ -90,4 +128,8 @@ def test_beans_creates_all_services():
     assert hasattr(app, 'extract_hourly_forecast_oldstyle_service')
     assert hasattr(app, 'extract_daily_forecast_service')
     assert hasattr(app, 'extract_daily_forecast_oldstyle_service')
-    assert hasattr(app, 'use_case')
+    assert hasattr(app, 'retrieve_forecast_from_cache_service')
+    assert hasattr(app, 'save_forecast_to_cache_service')
+    assert hasattr(app, 'retrieve_statistics_service')
+    assert hasattr(app, 'weather_forecast_uc')
+    assert hasattr(app, 'statistics_uc')

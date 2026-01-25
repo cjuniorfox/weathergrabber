@@ -4,7 +4,7 @@ from weathergrabber.domain.entities.weather_icon_enum import WeatherIconEnum
 from weathergrabber.domain.entities.precipitation import Precipitation
 from weathergrabber.domain.entities.wind import Wind
 from weathergrabber.domain.entities.uv_index import UVIndex
-from weathergrabber.domain.adapter.mappers.hourly_predictions_mapper import hourly_predictions_to_dict
+from weathergrabber.domain.adapter.mappers.hourly_predictions_mapper import hourly_predictions_to_dict, dict_to_hourly_predictions
 
 def test_hourly_predictions_to_dict():
     precipitation = Precipitation(percentage="80%", amount="5mm")
@@ -60,3 +60,71 @@ def test_hourly_predictions_to_dict_none():
     assert result["uv_index"] is None
     assert result["cloud_cover"] is None
     assert isinstance(result, dict)
+
+
+def test_dict_to_hourly_predictions():
+    data = {
+        "title": "10:00 AM",
+        "temperature": "22°C",
+        "icon": {"name": "sunny", "fa_icon": "fa-sun", "emoji_icon": "☀️"},
+        "summary": "Sunny",
+        "precipitation": {"percentage": "80%", "amount": "5mm"},
+        "wind": {"direction": "N", "speed": "10 km/h"},
+        "feels_like": "21°C",
+        "humidity": "50%",
+        "uv_index": {"string_value": "5", "index": "5", "of": "10", "label": "UV Index"},
+        "cloud_cover": "10%"
+    }
+    hp = dict_to_hourly_predictions(data)
+    assert isinstance(hp, HourlyPredictions)
+    assert hp.title == "10:00 AM"
+    assert hp.temperature == "22°C"
+    assert hp.icon == WeatherIconEnum.SUNNY
+    assert hp.summary == "Sunny"
+    assert hp.precipitation.percentage == "80%"
+    assert hp.wind.direction == "N"
+    assert hp.feels_like == "21°C"
+    assert hp.humidity == "50%"
+    assert hp.uv_index.index == "5"
+    assert hp.cloud_cover == "10%"
+
+
+def test_dict_to_hourly_predictions_none_values():
+    data = {
+        "title": "2:00 PM",
+        "temperature": "25°C",
+        "icon": None,
+        "summary": "Clear",
+        "precipitation": None,
+        "wind": None,
+        "feels_like": None,
+        "humidity": None,
+        "uv_index": None,
+        "cloud_cover": None
+    }
+    hp = dict_to_hourly_predictions(data)
+    assert hp.icon is None
+    assert hp.precipitation is None
+    assert hp.wind is None
+    assert hp.uv_index is None
+
+
+def test_dict_to_hourly_predictions_roundtrip():
+    original = HourlyPredictions(
+        title="3:00 PM",
+        temperature="26°C",
+        icon=WeatherIconEnum.CLOUDY,
+        summary="Partly cloudy",
+        precipitation=Precipitation(percentage="20%", amount="2mm"),
+        wind=Wind(direction="S", speed="5 km/h"),
+        feels_like="25°C",
+        humidity="55%",
+        uv_index=UVIndex(string_value="6", index="6", of="10", label="High"),
+        cloud_cover="30%"
+    )
+    data = hourly_predictions_to_dict(original)
+    reconstructed = dict_to_hourly_predictions(data)
+    assert reconstructed.title == original.title
+    assert reconstructed.temperature == original.temperature
+    assert reconstructed.icon == original.icon
+    assert reconstructed.humidity == original.humidity

@@ -8,3 +8,10 @@ def color_to_dict(color: Color) -> dict:
         "hex": color.hex,
         "rgb": color.rgb,
     }
+
+def dict_to_color(data: dict) -> Color:
+    return Color(
+        red=data["red"],
+        green=data["green"],
+        blue=data["blue"],
+    )

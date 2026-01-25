@@ -45,7 +45,9 @@ for city, lang in zip(cities_to_test, cycle(languages)):
             lang=lang,
             output="console",
             keep_open=False,
-            icons="emoji"
+            icons="emoji",
+            force_cache=False,
+            cache_statistics=False,
         )
     except Exception as e:
         errors.append(f"Failed for {city!r} in {lang!r}: {e}")

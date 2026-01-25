@@ -57,7 +57,7 @@ class ExtractTodayDetailsService:
         moon_phase_icon = icons.eq(7).attr('name')  #'phase-2'
         moon_phase_value = values.eq(7).text()  #'Waxing Crescent'
 
-        self.logger.debug(f"Creating domain objects for today details...")
+        self.logger.debug("Creating domain objects for today details...")
 
         sunrise_sunset = SunriseSunset(sunrise=sunrise, sunset=sunset)
         high_low = TemperatureHighLow.from_string(high_low_value, label=high_low_label)

@@ -7,3 +7,10 @@ def moon_phase_to_dict(mp: MoonPhase) -> dict:
         "phase": mp.phase,
         "label": mp.label,
     }
+
+def dict_to_moon_phase(data: dict) -> MoonPhase:
+    return MoonPhase(
+        icon=MoonPhaseEnum.from_name(data["icon"]) if data.get("icon") else None,
+        phase=data.get("phase"),
+        label=data.get("label"),
+    )

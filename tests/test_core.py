@@ -12,7 +12,9 @@ def test_main_invokes_application(mock_app):
         'lang': 'en-US',
         'output': 'console',
         'keep_open': False,
-        'icons': 'emoji'
+        'icons': 'emoji',
+        'force_cache': False,
+        'cache_statistics': False,
     }
     main(**params)
     mock_app.assert_called_once()
@@ -25,7 +27,9 @@ def test_main_invokes_application(mock_app):
     assert args[0].output_format.name.lower() == 'console'
     assert args[0].keep_open is False
     assert args[0].icons.name.lower() == 'emoji'
-
+    assert args[0].force_cache is False
+    assert args[0].cache_statistics is False
+    
 @patch('weathergrabber.core.WeatherGrabberApplication')
 def test_main_sets_log_level(mock_app):
     from weathergrabber.core import main
@@ -36,6 +40,8 @@ def test_main_sets_log_level(mock_app):
         lang='fr-FR',
         output='json',
         keep_open=True,
-        icons='fa'
+        icons='fa',
+        force_cache=False,
+        cache_statistics=False,
     )
     assert logging.getLogger().level == logging.DEBUG

@@ -1,4 +1,4 @@
-from weathergrabber.application.usecases.use_case import UseCase
+from weathergrabber.application.usecases.weather_forecast_uc import WeatherForecastUC
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.domain.adapter.icon_enum import IconEnum
 from weathergrabber.domain.entities.weather_icon_enum import WeatherIconEnum
@@ -7,7 +7,7 @@ import json
 
 class WaybarTTY:
 
-    def __init__(self, use_case: UseCase):
+    def __init__(self, use_case: WeatherForecastUC):
         self.logger = logging.getLogger(__name__)
         self.use_case = use_case
         pass
