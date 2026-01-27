@@ -32,4 +32,11 @@ def main(log_level: str, location_name: str, location_id: str, lang: str, output
         cache_statistics=cache_statistics,
     )
 
-    app = WeatherGrabberApplication(params)
+    try:
+        app = WeatherGrabberApplication(params)
+    except Exception as e:
+        logger = logging.getLogger()
+        if logger.level == logging.DEBUG:
+            logger.error(f"{e}", exc_info=True)
+        else:
+            logger.error(f"{e}")
