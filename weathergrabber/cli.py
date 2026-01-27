@@ -16,9 +16,9 @@ def main_cli():
     parser.add_argument("--version", "-v", action='version', version=f'Weathergrabber {weathergrabber.get_version()}', help="Show version and exit")
     parser.add_argument(
         "--log",
-        default="critical",
+        default="ERROR",
         choices=["debug", "info", "warning", "error", "critical", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-        help="Set the logging level (default: CRITICAL)"
+        help="Set the logging level (default: ERROR)"
     )
     args = parser.parse_args()
 
