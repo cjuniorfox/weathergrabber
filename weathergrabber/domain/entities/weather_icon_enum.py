@@ -47,6 +47,7 @@ class WeatherIconEnum(Enum):
     # Suggestions from Copilot
     BLIZZARD = ('blizzard', '\u2744', '🌨️')
     DUST = ('dust', '\uf063', '🌪️')
+    BLOWING_DUST_SANDSTORM = ('blowing-dust-sandstorm', '\uf063', '🌪️')
     FLURRIES = ('flurries', '\u2744', '🌨️')
     FREEZING_DRIZZLE = ('freezing-drizzle', '\uf0e9', '🌧️')
     FREEZING_DRIZZLE_RAIN = ('freezing-drizzle-rain', '\uf0e9', '🌧️')

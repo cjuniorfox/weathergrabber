@@ -45,3 +45,34 @@ def test_main_sets_log_level(mock_app):
         cache_statistics=False,
     )
     assert logging.getLogger().level == logging.DEBUG
+
+
+@pytest.mark.parametrize("log_level, expect_trace", [
+    ("debug", True),
+    ("info", False),
+])
+@patch('weathergrabber.core.WeatherGrabberApplication')
+def test_main_logs_stack_trace_conditionally(mock_app, caplog, log_level, expect_trace):
+    mock_app.side_effect = RuntimeError("boom")
+    from weathergrabber.core import main
+
+    caplog.set_level(logging.DEBUG)
+
+    with pytest.raises(SystemExit) as excinfo:
+        main(
+            log_level=log_level,
+            location_name='Berlin',
+            location_id='789',
+            lang='de-DE',
+            output='console',
+            keep_open=False,
+            icons='emoji',
+            force_cache=False,
+            cache_statistics=False,
+        )
+
+    assert excinfo.value.code == 1
+
+    error_records = [r for r in caplog.records if r.levelno >= logging.ERROR]
+    assert error_records, "Expected at least one error log record"
+    assert any(rec.exc_info for rec in error_records) == expect_trace
