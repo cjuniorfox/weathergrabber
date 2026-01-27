@@ -40,3 +40,4 @@ def main(log_level: str, location_name: str, location_id: str, lang: str, output
             logger.error(f"{e}", exc_info=True)
         else:
             logger.error(f"{e}")
+        raise SystemExit(1)

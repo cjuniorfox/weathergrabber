@@ -58,17 +58,20 @@ def test_main_logs_stack_trace_conditionally(mock_app, caplog, log_level, expect
 
     caplog.set_level(logging.DEBUG)
 
-    main(
-        log_level=log_level,
-        location_name='Berlin',
-        location_id='789',
-        lang='de-DE',
-        output='console',
-        keep_open=False,
-        icons='emoji',
-        force_cache=False,
-        cache_statistics=False,
-    )
+    with pytest.raises(SystemExit) as excinfo:
+        main(
+            log_level=log_level,
+            location_name='Berlin',
+            location_id='789',
+            lang='de-DE',
+            output='console',
+            keep_open=False,
+            icons='emoji',
+            force_cache=False,
+            cache_statistics=False,
+        )
+
+    assert excinfo.value.code == 1
 
     error_records = [r for r in caplog.records if r.levelno >= logging.ERROR]
     assert error_records, "Expected at least one error log record"
