@@ -13,13 +13,9 @@ class SearchLocationService:
         if not location_name:
             self.logger.debug("No location name provided. Bypassing search.")
             return None
+        data = self.api.search(location_name, lang)
         
         try:
-            data = self.api.search(location_name, lang)
-            if not data:
-                self.logger.error(f"No data found for location: {location_name}")
-                raise ValueError(f"Location '{location_name}' not found.")
-            
             dal = data["dal"]["getSunV3LocationSearchUrlConfig"]
 
             # Pick the first (arbitrary) key, then get the value
@@ -29,7 +25,7 @@ class SearchLocationService:
             self.logger.debug(f"Found location ID: {location_id} for location name: {location_name}")
             
             return location_id
-        except Exception as e:
-            self.logger.error(f"Error searching for location '{location_name}': {e}")
+        except KeyError as e:
+            self.logger.debug(f"Error searching for location '{location_name}': {e}")
             raise ValueError(f"Could not find location '{location_name}'.")
 

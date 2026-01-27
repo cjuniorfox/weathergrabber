@@ -68,10 +68,10 @@ class WeatherForecastUC:
         
         try:
             location_id = self._resolve_location_id(params)
+            weather_data = self.read_weather_service.execute(params.language, location_id)
         except ConnectionError as e:
+            self.logger.debug("A connection error occurred while fetching weather data. Trying to retrieve from cache.")
             return self.retrieve_forecast_from_cache_service.execute(params)
-        
-        weather_data = self.read_weather_service.execute(params.language, location_id)
 
         current_conditions = self.extract_current_conditions_service.execute(weather_data)
         today_details = self.extract_today_details_service.execute(weather_data)

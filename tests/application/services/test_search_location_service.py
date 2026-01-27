@@ -43,8 +43,15 @@ def test_execute_not_found():
 def test_execute_api_error():
     class ErrorApi:
         def search(self, location_name, lang):
-            raise Exception("API error")
+            raise ConnectionError("API error")
     api = ErrorApi()
+    service = SearchLocationService(api)
+    with pytest.raises(ConnectionError, match="API error"):
+        service.execute("Berlin", "en-US")
+
+def test_location_not_found():
+    api_response = { }
+    api = DummyApi(api_response)
     service = SearchLocationService(api)
     with pytest.raises(ValueError, match="Could not find location 'Berlin'."):
         service.execute("Berlin", "en-US")
