@@ -1,4 +1,5 @@
 import logging
+import json
 from pyquery import PyQuery
 from weathergrabber.domain.entities.weather_icon_enum import WeatherIconEnum
 from weathergrabber.domain.entities.city_location import CityLocation
@@ -16,12 +17,12 @@ class ExtractCurrentConditionsService:
 
         data = PyQuery(weather_data('div[data-testid="CurrentConditionsContainer"]'))
     
-        city_location_data = data.find('h1').text() #'Nova Friburgo, Rio de Janeiro, Brazil'
+    
         timestamp_data = data.find('span[class*="timestamp"]').text() # 'As of 8:01 pm GMT-03:00'
         icon_data = data.find('svg[class*="wxIcon"]').attr('name') # 'partly-cloudy-night'
         temp_day_night = data.find('div[class*="tempHiLoValue"]').text() #'Day\xa063°\xa0•\xa0Night\xa046°'
 
-        city_location = CityLocation.from_string(city_location_data)
+        city_location = self.__location(weather_data)
         timestamp = Timestamp.from_string(timestamp_data)
         temperature = data.find('span[class*="tempValue"]').text() # '48°'
         icon = WeatherIconEnum.from_name(icon_data)
@@ -40,3 +41,14 @@ class ExtractCurrentConditionsService:
         self.logger.debug(f"Extracted current conditions: {current_conditions}")
 
         return current_conditions
+    
+    def __location(self, weather_data: PyQuery) -> CityLocation:
+        location_str = weather_data.find('script[type="application/ld+json"]').contents().eq(2).text()
+        location_data = json.loads(location_str)
+        address = location_data.get("address", {})
+        
+        return CityLocation(
+            city=address.get("addressLocality"),
+            state_province=address.get("addressRegion"),
+            country=address.get("addressCountry")
+        )

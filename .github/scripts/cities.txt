@@ -82,7 +82,6 @@ Prague
 Brno
 Budapest
 Warsaw
-Krakow
 Gdansk
 Wroclaw
 Vilnius
