@@ -6,6 +6,12 @@ from weathergrabber.domain.entities.current_conditions import CurrentConditions
 def test_extract_current_conditions_service_real_html():
     html = """
         <html>
+        <script type="application/ld+json">{}</script>
+        <script type="application/ld+json">{}</script>
+        <script type="application/ld+json">{}</script>
+        <script type="application/ld+json">
+        { "@context": "http://schema.org", "@type": "Place", "address": { "@type": "PostalAddress", "addressLocality": "Nova Friburgo", "addressRegion": "Rio de Janeiro", "addressCountry": "BR", "postalCode": "28610" }, "geo": { "@type": "GeoCoordinates", "latitude": -22.283, "longitude": -42.531, "addressCountry": "BR", "postalCode": "28610" }, "name": "Nova Friburgo, Rio de Janeiro" }
+        </script>
           <body>
             <div data-testid="CurrentConditionsContainer">
               <h1>Nova Friburgo, Rio de Janeiro, Brazil</h1>
