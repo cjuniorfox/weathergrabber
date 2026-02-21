@@ -10,6 +10,8 @@ from .services.read_weather_service import ReadWeatherService
 from .services.retrieve_statistics_service import RetrieveStatisticsService
 from .services.retrieve_forecast_from_cache_service import RetrieveForecastFromCacheService
 from .services.save_forecast_to_cache_service import SaveForecastToCacheService
+from .services.clear_cache_for_location_service import ClearCacheForLocationService
+from .services.cleanup_old_forecasts_service import CleanupOldForecastsService
 from .services.extract_current_conditions_service import ExtractCurrentConditionsService
 from .services.extract_today_details_service import ExtractTodayDetailsService
 from .services.extract_aqi_service import ExtractAQIService
@@ -40,6 +42,8 @@ class WeatherGrabberApplication:
         self.extract_daily_forecast_oldstyle_service = ExtractDailyForecastOldstyleService()
         self.retrieve_forecast_from_cache_service = RetrieveForecastFromCacheService(self.forecast_repository)
         self.save_forecast_to_cache_service = SaveForecastToCacheService(self.forecast_repository)
+        self.clear_cache_for_location_service = ClearCacheForLocationService(self.forecast_repository)
+        self.cleanup_old_forecasts_service = CleanupOldForecastsService(self.forecast_repository)
         self.retrieve_statistics_service = RetrieveStatisticsService(self.forecast_repository)
         self.weather_forecast_uc = WeatherForecastUC(
                 self.search_location_service,
@@ -54,6 +58,8 @@ class WeatherGrabberApplication:
                 self.extract_daily_forecast_oldstyle_service,
                 self.retrieve_forecast_from_cache_service,
                 self.save_forecast_to_cache_service,
+                self.clear_cache_for_location_service,
+                self.cleanup_old_forecasts_service
             )
         self.statistics_uc = StatisticsUC(self.retrieve_statistics_service)
         
