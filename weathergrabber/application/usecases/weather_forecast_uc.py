@@ -5,6 +5,8 @@ from requests.exceptions import ConnectionError
 from weathergrabber.domain.adapter.params import Params
 from weathergrabber.application.services.search_location_service import SearchLocationService
 from weathergrabber.application.services.read_weather_service import ReadWeatherService
+from weathergrabber.application.services.clear_cache_for_location_service import ClearCacheForLocationService
+from weathergrabber.application.services.cleanup_old_forecasts_service import CleanupOldForecastsService
 from weathergrabber.application.services.extract_current_conditions_service import ExtractCurrentConditionsService
 from weathergrabber.application.services.extract_today_details_service import ExtractTodayDetailsService
 from weathergrabber.application.services.extract_aqi_service import ExtractAQIService
@@ -14,13 +16,10 @@ from weathergrabber.application.services.extract_hourly_forecast_oldstyle_servic
 from weathergrabber.application.services.extract_daily_forecast_service import ExtractDailyForecastService
 from weathergrabber.application.services.extract_daily_forecast_oldstyle_service import ExtractDailyForecastOldstyleService
 from weathergrabber.application.services.retrieve_forecast_from_cache_service import RetrieveForecastFromCacheService
-from weathergrabber.domain.entities.air_quality_index import AirQualityIndex
 from weathergrabber.domain.entities.daily_predictions import DailyPredictions
-from weathergrabber.domain.entities.health_activities import HealthActivities
 from weathergrabber.domain.entities.hourly_predictions import HourlyPredictions
 from weathergrabber.domain.entities.search import Search
 from weathergrabber.domain.entities.forecast import Forecast
-from weathergrabber.domain.entities.today_details import TodayDetails
 from weathergrabber.application.services.save_forecast_to_cache_service import SaveForecastToCacheService
 
 class WeatherForecastUC:
@@ -43,7 +42,9 @@ class WeatherForecastUC:
         extract_daily_forecast_service: ExtractDailyForecastService,
         extract_daily_forecast_oldstyle_service: ExtractDailyForecastOldstyleService,
         retrieve_forecast_from_cache_service: RetrieveForecastFromCacheService,
-        save_forecast_to_cache_service: SaveForecastToCacheService
+        save_forecast_to_cache_service: SaveForecastToCacheService,
+        clear_cache_for_location_service: ClearCacheForLocationService,
+        cleanup_old_forecasts_service: CleanupOldForecastsService
     ):
         self.logger = logging.getLogger(__name__)
         self.search_location_service = search_location_service
@@ -58,7 +59,8 @@ class WeatherForecastUC:
         self.extract_daily_forecast_oldstyle_service = extract_daily_forecast_oldstyle_service
         self.retrieve_forecast_from_cache_service = retrieve_forecast_from_cache_service
         self.save_forecast_to_cache_service = save_forecast_to_cache_service
-
+        self.clear_cache_for_location_service = clear_cache_for_location_service
+        self.cleanup_old_forecasts_service = cleanup_old_forecasts_service
     def execute(self, params: Params) -> Forecast:
         """Execute the weather forecast retrieval use case."""
         self.logger.debug("Starting weather forecast use case")
@@ -91,7 +93,9 @@ class WeatherForecastUC:
             daily_predictions=daily_predictions
         )
 
+        self.clear_cache_for_location_service.execute(location_id)
         self.save_forecast_to_cache_service.execute(forecast)
+        self.cleanup_old_forecasts_service.execute()
 
         self.logger.debug("Forecast data obtained successfully")
         return forecast

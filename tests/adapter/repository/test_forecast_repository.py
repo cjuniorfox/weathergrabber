@@ -240,7 +240,26 @@ class TestForecastRepositoryClearCache:
             cursor = conn.cursor()
             cursor.execute("SELECT COUNT(*) FROM forecasts")
             assert cursor.fetchone()[0] == 0
-
+    
+    def test_clear_cache_for_location(self, temp_db, dummy_forecast):
+        """Test that clear_cache_for_location removes forecasts for specific location."""
+        repo = ForecastRepository(db_path=temp_db)
+        
+        # Save forecasts for multiple locations
+        repo.save_forecast("loc_1", "City 1", dummy_forecast)
+        repo.save_forecast("loc_2", "City 2", dummy_forecast)
+        
+        # Clear cache for loc_1
+        repo.clear_cache_for_location("loc_1")
+        
+        # Verify loc_1 forecasts are removed and loc_2 remains
+        with sqlite3.connect(temp_db) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM forecasts WHERE location_id = 'loc_1'")
+            assert cursor.fetchone()[0] == 0
+            
+            cursor.execute("SELECT COUNT(*) FROM forecasts WHERE location_id = 'loc_2'")
+            assert cursor.fetchone()[0] == 1
 
 class TestForecastRepositoryCacheStats:
     """Tests for cache statistics."""
@@ -428,3 +447,16 @@ class TestForecastRepositoryExceptions:
             repo.cleanup_old_forecasts()
             # Verify error was logged
             assert "Error cleaning up old forecasts" in caplog.text or isinstance(mock_connect.side_effect, sqlite3.Error)
+    
+    def test_clear_cache_for_location_logs_error_on_database_failure(self, temp_db, caplog):
+        """Test that clear_cache_for_location logs error but doesn't raise exception."""
+        repo = ForecastRepository(db_path=temp_db)
+        
+        with patch('sqlite3.connect') as mock_connect:
+            mock_connect.side_effect = sqlite3.Error("Database error on clear for location")
+            
+            # Should not raise, should log error
+            repo.clear_cache_for_location("loc_1")
+            # Verify error was logged
+            assert "Error clearing cache for location_id" in caplog.text or isinstance(mock_connect.side_effect, sqlite3.Error)
+

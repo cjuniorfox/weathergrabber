@@ -22,7 +22,9 @@ def mock_services():
         "extract_daily_forecast_service": MagicMock(),
         "extract_daily_forecast_oldstyle_service": MagicMock(),
         "retrieve_forecast_from_cache_service": MagicMock(),
-        "save_forecast_to_cache_service": MagicMock()
+        "save_forecast_to_cache_service": MagicMock(),
+        "clear_cache_for_location_service": MagicMock(),
+        "cleanup_old_forecasts_service": MagicMock(),
     }
 
 

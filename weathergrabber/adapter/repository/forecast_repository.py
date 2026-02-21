@@ -93,6 +93,17 @@ class ForecastRepository:
                 self.logger.info("Cache cleared successfully")
         except sqlite3.Error as e:
             self.logger.error(f"Error clearing cache: {e}")
+    
+    def clear_cache_for_location(self, location_id: str) -> None:
+        """Clear cached forecasts for a specific location ID."""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("DELETE FROM forecasts WHERE location_id = ?", (location_id,))
+                conn.commit()
+                self.logger.info(f"Cache cleared for location_id: {location_id}")
+        except sqlite3.Error as e:
+            self.logger.error(f"Error clearing cache for location_id {location_id}: {e}")
 
     def get_cache_stats(self) -> dict:
         """Get statistics about the cached forecasts."""
