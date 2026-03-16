@@ -12,6 +12,8 @@ def test_enum_members():
     assert WeatherIconEnum.RAIN.emoji_icon == "🌧️"
     assert WeatherIconEnum.SNOW.name == "snow"
     assert WeatherIconEnum.SNOW.emoji_icon == "❄️"
+    assert WeatherIconEnum.BLOWING_DRIFTING_SNOW.name == "blowing-drifting-snow"
+    assert WeatherIconEnum.BLOWING_DRIFTING_SNOW.emoji_icon == "🌨️"
     assert WeatherIconEnum.SUNRISE.emoji_icon == "🌅"
     assert WeatherIconEnum.SUNSET.emoji_icon == "🌇"
 
@@ -19,6 +21,7 @@ def test_from_name_valid():
     assert WeatherIconEnum.from_name("sunny") == WeatherIconEnum.SUNNY
     assert WeatherIconEnum.from_name("cloudy") == WeatherIconEnum.CLOUDY
     assert WeatherIconEnum.from_name("rain") == WeatherIconEnum.RAIN
+    assert WeatherIconEnum.from_name("blowing-drifting-snow") == WeatherIconEnum.BLOWING_DRIFTING_SNOW
 
 def test_from_name_invalid():
     with pytest.raises(ValueError):
