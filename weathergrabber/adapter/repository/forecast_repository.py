@@ -27,7 +27,7 @@ class ForecastRepository:
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS forecasts (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        location_id TEXT NOT NULL,
+                        location_id TEXT,
                         search_name TEXT,
                         forecast_data TEXT NOT NULL,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -79,6 +79,18 @@ class ForecastRepository:
                 WHERE search_name = ? ORDER BY created_at DESC
                 LIMIT 1
             ''', (search_name,))
+            row = cursor.fetchone()
+            forecast_dict_data = json.loads(row[0]) if row else None
+            return dict_to_forecast(forecast_dict_data) if forecast_dict_data else None
+    
+    def get_where_location_id_is_null(self) -> Optional[Forecast]:
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT forecast_data FROM forecasts
+                WHERE location_id IS NULL ORDER BY created_at DESC
+                LIMIT 1
+            ''')
             row = cursor.fetchone()
             forecast_dict_data = json.loads(row[0]) if row else None
             return dict_to_forecast(forecast_dict_data) if forecast_dict_data else None
