@@ -34,6 +34,20 @@ def dummy_forecast():
         daily_predictions=[]
     )
 
+@pytest.fixture
+def dummy_forecast_null_location():
+    """Create a dummy forecast with null location_id for testing."""
+    search = Search(id=None, search_name="My Own Location")
+    return Forecast(
+        search=search,
+        current_conditions=None,
+        today_details=None,
+        air_quality_index=None,
+        health_activities=None,
+        hourly_predictions=[],
+        daily_predictions=[]
+    )
+
 
 class TestForecastRepositoryInit:
     """Tests for ForecastRepository initialization."""
@@ -148,6 +162,20 @@ class TestForecastRepositoryRetrieve:
         
         retrieved = repo.get_by_location_id("non_existent_id")
         assert retrieved is None
+    
+    def test_get_by_location_id_as_null(self, temp_db, dummy_forecast_null_location):
+        """Test retrieving forecast where location_id is null."""
+        repo = ForecastRepository(db_path=temp_db)
+        
+        repo.save_forecast(
+            location_id=None,
+            search_name="My Own Location",
+            forecast_data=dummy_forecast_null_location
+        )
+        
+        retrieved = repo.get_where_location_id_is_null()
+        assert retrieved is not None
+        assert isinstance(retrieved, Forecast)
 
     def test_get_by_search_name_returns_forecast(self, temp_db, dummy_forecast):
         """Test retrieving forecast by search name."""

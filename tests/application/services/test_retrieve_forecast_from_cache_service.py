@@ -51,14 +51,17 @@ def test_execute_by_search_name_returns_forecast(service, mock_repo, forecast):
     mock_repo.get_by_location_id.assert_not_called()
 
 
-def test_execute_missing_location_raises_value_error(service, mock_repo):
+def test_execute_missing_location_returns_cache(service, mock_repo, forecast):
     params = Params(location=Params.Location(id=None, search_name=None))
+    mock_repo.get_where_location_id_is_null.return_value = forecast
+    
+    result = service.execute(params)
 
-    with pytest.raises(ValueError):
-        service.execute(params)
+    assert result is forecast
 
     mock_repo.get_by_location_id.assert_not_called()
     mock_repo.get_by_search_name.assert_not_called()
+    mock_repo.get_where_location_id_is_null.assert_called_once()
 
 
 def test_execute_not_found_raises_value_error(service, mock_repo):
