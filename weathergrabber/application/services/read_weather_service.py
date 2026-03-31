@@ -16,7 +16,9 @@ class ReadWeatherService:
 
         weather_data = self.weather_api.get_weather(language, location)
 
-        self.logging.debug(f"Weather data retrieved.")
+        weather_data_size_bytes = len(str(weather_data).encode("utf-8"))
+
+        self.logging.debug(f"Weather data retrieved. Size: {weather_data_size_bytes} bytes")
 
         return weather_data
 
