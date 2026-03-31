@@ -44,6 +44,7 @@ class ExtractCurrentConditionsService:
     
     def __location(self, weather_data: PyQuery) -> CityLocation:
         location_str = weather_data.find('script[type="application/ld+json"]').contents().eq(2).text()
+        self.logger.debug(f"Extracted location string: {location_str}")
         location_data = json.loads(location_str)
         address = location_data.get("address", {})
         
